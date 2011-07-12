@@ -1,0 +1,53 @@
+{
+	global: 
+		PPBOX_StartP2PEngine;
+		PPBOX_StopP2PEngine;
+		PPBOX_GetVersion;
+		PPBOX_GetLastError;
+		PPBOX_GetLastErrorMsg;
+		PPBOX_SetConfig;
+		PPBOX_DebugMode;
+		PPBOX_DialogMessage;
+		PPBOX_SubmitMessage;
+
+		PPBOX_Open;
+		PPBOX_AsyncOpen;
+		PPBOX_Pause;
+		PPBOX_Close;
+		PPBOX_GetStreamCount;
+		PPBOX_GetStreamInfo;
+		PPBOX_GetStreamInfoEx;
+		PPBOX_GetDuration;
+		PPBOX_GetWidthHeight;
+		PPBOX_Seek;
+		PPBOX_GetAvcConfig;
+		PPBOX_GetFirstSegHeader;
+		PPBOX_GetSegHeader;
+		PPBOX_GetSegDataSize;
+		PPBOX_GetSegmentCount;
+		PPBOX_GetSegmentInfo;
+		PPBOX_ReadSample;
+		PPBOX_ReadSampleEx;
+		PPBOX_ReadSampleEx2;
+		PPBOX_SetDownloadBufferSize;
+		PPBOX_SetHttpProxy;
+		PPBOX_SetDownloadMaxSpeed;
+		PPBOX_SetPlayBufferTime;
+		PPBOX_GetPlayMsg;
+		PPBOX_GetDownMsg;
+		PPBOX_GetDownSedMsg;
+		
+		Adapter_Open;
+		Adapter_AsyncOpen;
+		Adapter_Pause;
+		Adapter_Resume;
+		Adapter_Close;
+		Adapter_Seek;
+		Adapter_Reset;
+		Adapter_Read;
+		Adapter_GetPlayMsg;
+		Adapter_GetMediaInfo;
+		Adapter_GetPlayTime;
+		
+	local: *;
+};
