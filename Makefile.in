@@ -61,21 +61,10 @@ PROJECT_DEPENDS			:= \
 				/ppbox/live \
 				/ppbox/certify \
 				/ppbox/common \
-				/ppbox/bento4 \
-				/base/util \
-				/base/framework \
-				/base/boost/thread \
-				/base/boost/system \
-				/base/boost/filesystem \
-				/base/boost/date_time \
-				/base/boost/regex \
-				/base/tinyxml \
 				$(PROJECT_DEPENDS)
 
 ## 该项目特定的引用库
 
-PROJECT_DEPEND_LIBRARYS		:= $(PROJECT_DEPEND_LIBRARYS) pthread rt
+PROJECT_DEPEND_LIBRARYS		:= $(PROJECT_DEPEND_LIBRARYS)
 
 PROJECT_VERSION_SCRIPT		:= Ppbox.map
-
-include $(RELETIVE_DIR)/../BootStrap.mk
