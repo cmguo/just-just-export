@@ -46,8 +46,10 @@ extern "C" {
     {
         ppbox_video_avc_packet = 1, 
         ppbox_video_avc_byte_stream = 2, 
-        ppbox_audio_microsoft_wave = 3,
-        ppbox_audio_iso_mp4 = 4,
+        ppbox_video_flv_tag = 3, 
+        ppbox_audio_microsoft_wave = 4, 
+        ppbox_audio_iso_mp4 = 5, 
+        ppbox_audio_flv_tag = 6, 
     };
 
     typedef struct tag_PPBOX_StreamInfo
