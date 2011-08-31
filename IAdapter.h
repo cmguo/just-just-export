@@ -42,7 +42,7 @@ extern "C" {
     PPBOX_DECL PP_int32 Adapter_Read(
                          unsigned char * buffer,
                          PP_uint32 buffer_size,
-                         PP_uint32 & read_size);
+                         PP_uint32 * read_size);
 
     enum Adapter_PlayStatusEnum
     {
@@ -69,15 +69,15 @@ extern "C" {
 
     typedef struct TMediaFileInfo
     {
-        boost::uint32_t duration;
+        PP_uint32 duration;
         // video
-        boost::uint32_t frame_rate;
-        boost::uint32_t width;
-        boost::uint32_t height;
+        PP_uint32 frame_rate;
+        PP_uint32 width;
+        PP_uint32 height;
         // audio
-        boost::uint32_t   channel_count;
-        PP_uint32         sample_size;
-        PP_uint32         sample_rate;
+        PP_uint32   channel_count;
+        PP_uint32   sample_size;
+        PP_uint32   sample_rate;
     }Adapter_Mediainfo;
 
     PPBOX_DECL PP_int32 Adapter_GetMediaInfo(

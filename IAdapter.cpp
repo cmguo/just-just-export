@@ -472,9 +472,9 @@ extern "C" {
     PPBOX_DECL PP_int32 Adapter_Read(
         unsigned char * buffer,
         PP_uint32 buffer_size,
-        PP_uint32 & read_size)
+        PP_uint32 * read_size)
     {
-        return adapter().adapter_read(buffer, buffer_size, read_size);
+        return adapter().adapter_read(buffer, buffer_size, *read_size);
     }
 
     PPBOX_DECL PP_int32 Adapter_GetPlayMsg(
