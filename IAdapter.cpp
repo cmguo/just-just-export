@@ -64,7 +64,7 @@ namespace ppbox
         IAdapter()
             : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxerModule>(global_daemon()))
             , mux_(NULL)
-            , read_tag_(new ppbox::mux::MuxTag)
+            , read_tag_(new ppbox::mux::MuxTagEx)
             , buffer_time_(3000)
         {
         }
@@ -335,7 +335,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                ppbox::mux::MediaFileInfo const & mediainfo = mux_->get_media_info();
+                ppbox::mux::MediaFileInfo const & mediainfo = mux_->media_info();
                 media_info.channel_count = mediainfo.channel_count;
                 media_info.duration      = mediainfo.duration;
                 media_info.frame_rate    = mediainfo.frame_rate;
@@ -352,7 +352,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                time = mux_->get_current_time();
+                time = mux_->current_time();
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -398,7 +398,7 @@ namespace ppbox
     private:
         ppbox::demux::DemuxerModule & demux_mod_;
         ppbox::mux::MuxerBase * mux_;
-        ppbox::mux::MuxTag *  read_tag_;
+        ppbox::mux::MuxTagEx *  read_tag_;
         TagReadPosition tag_read_position_;
         Adapter_Open_Callback open_callback_;
         boost::shared_ptr<Cache> cache_;

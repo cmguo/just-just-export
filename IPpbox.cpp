@@ -9,12 +9,19 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 //#include <ppbox/common/ConfigMgr.h>
 #include <ppbox/common/Debuger.h>
+#ifndef PPBOX_DISABLE_CERTIFY 
 #include <ppbox/certify/Certifier.h>
-#include <ppbox/dac/Dac.h>
+#endif
 #include <ppbox/vod/Vod.h>
+#include <ppbox/dac/Dac.h>
 #include <ppbox/live/Live.h>
 #include <ppbox/demux/DemuxerModule.h>
 using namespace ppbox::common;
+
+#ifdef PPBOX_ENABLE_HTTPD
+#include <ppbox/httpd/HttpServer.h>
+#endif
+
 
 #include <framework/logger/LoggerStreamRecord.h>
 #include <framework/logger/LoggerSection.h>
@@ -33,6 +40,7 @@ FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("Ppbox", 0);
 namespace ppbox
 {
 
+
     class IPpbox
         : public util::daemon::Daemon
     {
@@ -40,6 +48,7 @@ namespace ppbox
         IPpbox()
             : util::daemon::Daemon("ppbox.conf")
         {
+
             char const * default_argv[] = {
                 "++Logger.stream_count=1", 
                 "++Logger.ResolverService=1", 
@@ -62,11 +71,26 @@ namespace ppbox
 
             //util::daemon::use_module<ppbox::common::ConfigMgr>(*this);
             util::daemon::use_module<ppbox::common::Debuger>(*this);
+
+#ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);
+#endif
             util::daemon::use_module<ppbox::dac::Dac>(*this);
+
+#ifndef PPBOX_DISABLE_VOD
             util::daemon::use_module<ppbox::vod::Vod>(*this);
+#endif
+
+#ifndef PPBOX_DISABLE_LIVE
             util::daemon::use_module<ppbox::live::Live>(*this);
+#endif
+
             util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
+
+#ifdef PPBOX_ENABLE_HTTPD
+			util::daemon::use_module<ppbox::httpd::HttpMediaServer>(*this);
+#endif	
+
 
             LOG_S(Logger::kLevelEvent, "Ppbox ready.");
         }
@@ -82,9 +106,11 @@ namespace ppbox
             if (is_started()) {
                 ec = already_start;
             } else {
+#ifndef PPBOX_DISABLE_CERTIFY           
                 ppbox::certify::Certifier & cert = 
                     util::daemon::use_module<ppbox::certify::Certifier>(*this);
                 cert.set_auth_code(gid, pid, auth);
+#endif				
 
                 ppbox::dac::Dac & dac = 
                     util::daemon::use_module<ppbox::dac::Dac>(*this);
@@ -138,15 +164,21 @@ namespace ppbox
             return ppbox::version_string();
         }
 
+
         void set_config(
             char const * module, 
             char const * section, 
             char const * key, 
             char const * value)
         {
-            //ppbox::common::ConfigMgr & config_mgr = 
-            //    util::daemon::use_module<ppbox::common::ConfigMgr>(*this);
-            //config_mgr.set_config(module, section, key, value);
+			if(NULL == section ||
+                NULL == key ||
+                NULL == value)
+			{
+				return;
+			}
+            config().set(section,key,value);
+			
         }
 
         void debug_mode(
