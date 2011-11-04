@@ -54,6 +54,8 @@ PROJECT_LINK_FLAGS		:= $(PROJECT_LINK_FLAGS)
 
 PROJECT_DEPENDS			:= \
 				/ppbox/download \
+				/ppbox/rtspd \
+				/ppbox/httpd \
 				/ppbox/mux \
 				/ppbox/demux \
 				/ppbox/dac \
