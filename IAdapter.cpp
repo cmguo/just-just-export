@@ -5,7 +5,7 @@
 #include "ppbox/ppbox/IAdapter.h"
 using namespace ppbox::error;
 
-#include <ppbox/mux/MuxerBase.h>
+#include <ppbox/mux/Muxer.h>
 #include <ppbox/mux/flv/FlvMux.h>
 #include <ppbox/mux/ts/TsMux.h>
 #include <ppbox/demux/DemuxerModule.h>
@@ -64,17 +64,12 @@ namespace ppbox
         IAdapter()
             : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxerModule>(global_daemon()))
             , mux_(NULL)
-            , read_tag_(new ppbox::mux::MuxTagEx)
             , buffer_time_(3000)
         {
         }
 
         ~IAdapter()
         {
-            if (read_tag_) {
-                delete read_tag_;
-                read_tag_ = NULL;
-            }
         }
 
         error::errors adapter_open(
@@ -247,32 +242,6 @@ namespace ppbox
                 }
 
                 PP_uint32 offset = 0;
-
-                if (TAGHEAD == tag_read_position_.tag_field) {
-                    memcpy(buffer, read_tag_->tag_header_buffer, read_tag_->tag_header_length);
-                    offset = read_tag_->tag_header_length;
-                    tag_read_position_.tag_field = TAGDATA;
-                } else if (TAGDATA == tag_read_position_.tag_field) {
-                    PP_uint32 remain_length = read_tag_->tag_data_length - tag_read_position_.data_position;
-                    if (buffer_size >= remain_length) {
-                        memcpy(buffer,
-                            read_tag_->tag_data_buffer + tag_read_position_.data_position,
-                            remain_length);
-                        tag_read_position_.tag_field = TAGSIZE;
-                        offset = remain_length;
-                    } else {
-                        memcpy(buffer,
-                            read_tag_->tag_data_buffer + tag_read_position_.data_position,
-                            buffer_size);
-                        tag_read_position_.data_position += buffer_size;
-                        offset = buffer_size;
-                    }
-                } else if (TAGSIZE == tag_read_position_.tag_field) {
-                    memcpy(buffer, read_tag_->tag_size_buffer, read_tag_->tag_size_length);
-                    offset = read_tag_->tag_size_length;
-                    tag_read_position_.tag_field = UNDEFINE;
-                }
-                read_size = offset;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -294,7 +263,7 @@ namespace ppbox
                 }
             } else {
                 if (cache_->need_seek_time) {
-                    mux_->get_sample().time = cache_->demuxer->get_cur_time(ec);
+                    //mux_->get_sample().time = cache_->demuxer->get_cur_time(ec);
                     if (ec) {
                         stat.buffer_time = 0;
                         stat.buffering_present = 0;
@@ -309,7 +278,7 @@ namespace ppbox
                 }
                 error_code ec_buf;
                 boost::uint32_t buffer_time = cache_->demuxer->get_end_time(ec, ec_buf);
-                stat.buffer_time = buffer_time > mux_->get_sample().time ? buffer_time - mux_->get_sample().time : 0;
+                //stat.buffer_time = buffer_time > mux_->get_sample().time ? buffer_time - mux_->get_sample().time : 0;
 
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_adapter_closed;
@@ -335,14 +304,14 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                ppbox::mux::MediaFileInfo const & mediainfo = mux_->media_info();
-                media_info.channel_count = mediainfo.channel_count;
+                ppbox::mux::MediaFileInfo const & mediainfo = mux_->mediainfo();
+                media_info.channel_count = mediainfo.stream_count;
                 media_info.duration      = mediainfo.duration;
-                media_info.frame_rate    = mediainfo.frame_rate;
-                media_info.height        = mediainfo.height;
-                media_info.width         = mediainfo.width;
-                media_info.sample_rate   = mediainfo.sample_rate;
-                media_info.sample_size   = mediainfo.sample_size;
+                media_info.frame_rate    = 0;
+                media_info.height        = 0;
+                media_info.width         = 0;
+                media_info.sample_rate   = 0;
+                media_info.sample_size   = 0;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -397,8 +366,8 @@ namespace ppbox
 
     private:
         ppbox::demux::DemuxerModule & demux_mod_;
-        ppbox::mux::MuxerBase * mux_;
-        ppbox::mux::MuxTagEx *  read_tag_;
+        ppbox::mux::Muxer * mux_;
+        ppbox::demux::Sample read_tag_;
         TagReadPosition tag_read_position_;
         Adapter_Open_Callback open_callback_;
         boost::shared_ptr<Cache> cache_;

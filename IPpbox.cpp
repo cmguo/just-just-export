@@ -9,19 +9,22 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 //#include <ppbox/common/ConfigMgr.h>
 #include <ppbox/common/Debuger.h>
+using namespace ppbox::common;
+
 #ifndef PPBOX_DISABLE_CERTIFY 
-#include <ppbox/certify/Certifier.h>
+#  include <ppbox/certify/Certifier.h>
 #endif
 #include <ppbox/vod/Vod.h>
 #include <ppbox/dac/Dac.h>
 #include <ppbox/live/Live.h>
 #include <ppbox/demux/DemuxerModule.h>
-using namespace ppbox::common;
 
 #ifdef PPBOX_ENABLE_HTTPD
-#include <ppbox/httpd/HttpServer.h>
+#  include <ppbox/httpd/HttpManager.h>
 #endif
-
+#ifdef PPBOX_ENABLE_RTSPD
+#  include <ppbox/rtspd/RtspManager.h>
+#endif
 
 #include <framework/logger/LoggerStreamRecord.h>
 #include <framework/logger/LoggerSection.h>
@@ -88,10 +91,11 @@ namespace ppbox
             util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
 
 #ifdef PPBOX_ENABLE_HTTPD
-			util::daemon::use_module<ppbox::httpd::HttpMediaServer>(*this);
+            util::daemon::use_module<ppbox::httpd::HttpManager>(*this);
 #endif	
-
-
+#ifdef PPBOX_ENABLE_RTSPD
+            util::daemon::use_module<ppbox::rtspd::RtspManager>(*this);
+#endif	
             LOG_S(Logger::kLevelEvent, "Ppbox ready.");
         }
 
@@ -171,14 +175,13 @@ namespace ppbox
             char const * key, 
             char const * value)
         {
-			if(NULL == section ||
+            if(NULL == section ||
                 NULL == key ||
                 NULL == value)
-			{
-				return;
-			}
+            {
+                return;
+            }
             config().set(section,key,value);
-			
         }
 
         void debug_mode(

@@ -75,9 +75,9 @@ extern "C" {
         PP_uint32 width;
         PP_uint32 height;
         // audio
-        PP_uint32   channel_count;
-        PP_uint32   sample_size;
-        PP_uint32   sample_rate;
+        PP_uint32 channel_count;
+        PP_uint32 sample_size;
+        PP_uint32 sample_rate;
     }Adapter_Mediainfo;
 
     PPBOX_DECL PP_int32 Adapter_GetMediaInfo(
