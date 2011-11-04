@@ -1,5 +1,7 @@
 // IDemuxer.cpp
 
+#ifndef PPBOX_DISABLE_MUX
+
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IAdapter.h"
@@ -467,3 +469,6 @@ extern "C" {
 #if __cplusplus
 }
 #endif // __cplusplus
+
+#endif
+

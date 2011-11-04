@@ -8,12 +8,24 @@
 #include <framework/system/AutoVersion.h>
 
 #include <ppbox/common/Version.h>
-#include <ppbox/certify/Version.h>
+#ifndef PPBOX_DISABLE_CERTIFY
+#  include <ppbox/certify/Version.h>
+#endif
 #include <ppbox/demux/Version.h>
-#include <ppbox/dac/Version.h>
-#include <ppbox/mux/Version.h>
-#include <ppbox/download/Version.h>
-#include <ppbox/live/Version.h>
-#include <ppbox/vod/Version.h>
+#ifndef PPBOX_DISABLE_DAC
+#  include <ppbox/dac/Version.h>
+#endif
+#ifndef PPBOX_DISABLE_MUX
+#  include <ppbox/mux/Version.h>
+#endif
+#ifndef PPBOX_DISABLE_DOWNLOAD
+#  include <ppbox/download/Version.h>
+#endif
+#ifndef PPBOX_DISABLE_LIVE
+#  include <ppbox/live/Version.h>
+#endif
+#ifndef PPBOX_DISABLE_VOD
+#  include <ppbox/vod/Version.h>
+#endif
 
 #endif // _PPBOX_PPBOX_VERSION_H_

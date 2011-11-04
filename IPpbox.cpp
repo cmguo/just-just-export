@@ -11,13 +11,25 @@ using namespace ppbox::error;
 #include <ppbox/common/Debuger.h>
 using namespace ppbox::common;
 
+#include <ppbox/demux/DemuxerModule.h>
 #ifndef PPBOX_DISABLE_CERTIFY 
 #  include <ppbox/certify/Certifier.h>
 #endif
-#include <ppbox/vod/Vod.h>
-#include <ppbox/dac/Dac.h>
-#include <ppbox/live/Live.h>
-#include <ppbox/demux/DemuxerModule.h>
+#ifndef PPBOX_DISABLE_VOD 
+#  include <ppbox/vod/Vod.h>
+#endif
+#ifndef PPBOX_DISABLE_DAC 
+#  include <ppbox/dac/Dac.h>
+#endif
+#ifndef PPBOX_DISABLE_LIVE 
+#  include <ppbox/live/Live.h>
+#endif
+#ifndef PPBOX_DISABLE_MUX
+#  include <ppbox/mux/MuxerModule.h>
+#endif
+#ifndef PPBOX_DISABLE_HTTPD
+#  include <ppbox/httpd/HttpServer.h>
+#endif
 
 #ifdef PPBOX_ENABLE_HTTPD
 #  include <ppbox/httpd/HttpManager.h>
@@ -78,16 +90,15 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);
 #endif
+#ifndef PPBOX_DISABLE_DAC
             util::daemon::use_module<ppbox::dac::Dac>(*this);
-
+#endif
 #ifndef PPBOX_DISABLE_VOD
             util::daemon::use_module<ppbox::vod::Vod>(*this);
 #endif
-
 #ifndef PPBOX_DISABLE_LIVE
             util::daemon::use_module<ppbox::live::Live>(*this);
 #endif
-
             util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
 
 #ifdef PPBOX_ENABLE_HTTPD

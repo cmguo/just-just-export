@@ -53,6 +53,7 @@ PROJECT_LINK_FLAGS		:= $(PROJECT_LINK_FLAGS)
 ## 该项目依赖的其他项目
 
 PROJECT_DEPENDS			:= \
+				/ppbox/httpd \
 				/ppbox/download \
 				/ppbox/rtspd \
 				/ppbox/httpd \
