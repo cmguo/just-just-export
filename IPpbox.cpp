@@ -27,9 +27,6 @@ using namespace ppbox::common;
 #ifndef PPBOX_DISABLE_MUX
 #  include <ppbox/mux/MuxerModule.h>
 #endif
-#ifndef PPBOX_DISABLE_HTTPD
-#  include <ppbox/httpd/HttpServer.h>
-#endif
 
 #ifdef PPBOX_ENABLE_HTTPD
 #  include <ppbox/httpd/HttpManager.h>
