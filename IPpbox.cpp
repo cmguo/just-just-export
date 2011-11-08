@@ -28,10 +28,10 @@ using namespace ppbox::common;
 #  include <ppbox/mux/MuxerModule.h>
 #endif
 
-#ifdef PPBOX_ENABLE_HTTPD
+#ifndef PPBOX_DISABLE_HTTPD
 #  include <ppbox/httpd/HttpManager.h>
 #endif
-#ifdef PPBOX_ENABLE_RTSPD
+#ifndef PPBOX_DISABLE_RTSPD
 #  include <ppbox/rtspd/RtspManager.h>
 #endif
 
@@ -98,10 +98,10 @@ namespace ppbox
 #endif
             util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
 
-#ifdef PPBOX_ENABLE_HTTPD
+#ifndef PPBOX_DISABLE_HTTPD
             util::daemon::use_module<ppbox::httpd::HttpManager>(*this);
 #endif	
-#ifdef PPBOX_ENABLE_RTSPD
+#ifndef PPBOX_DISABLE_RTSPD
             util::daemon::use_module<ppbox::rtspd::RtspManager>(*this);
 #endif	
             LOG_S(Logger::kLevelEvent, "Ppbox ready.");
