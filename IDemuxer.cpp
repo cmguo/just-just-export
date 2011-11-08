@@ -12,7 +12,7 @@ using namespace ppbox::demux;
 #include <framework/logger/LoggerStreamRecord.h>
 #include <framework/logger/LoggerSection.h>
 #include <framework/system/LogicError.h>
-#include <util/buffers/BufferSize.h>
+#include <util/buffers/BufferCopy.h>
 using namespace framework::logger;
 using namespace framework::timer;
 
@@ -40,6 +40,18 @@ namespace ppbox
             {
             }
 
+
+            boost::uint8_t const * copy_sample_data()
+            {
+                if (sample.data.size() == 1) {
+                    return boost::asio::buffer_cast<boost::uint8_t const *>(sample.data[0]);
+                } else {
+                    sample_buffer.resize(sample.size);
+                    util::buffers::buffer_copy(boost::asio::buffer(sample_buffer), sample.data);
+                    return sample_buffer.size() ? &sample_buffer.at(0) : NULL;
+                }
+            }
+
             size_t close_token;
             Demuxer * demuxer;
 #ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
@@ -52,7 +64,7 @@ namespace ppbox
             ppbox::demux::Sample sample;
             bool paused;
             bool discontinuity;
-            boost::uint8_t * sample_buffer;
+            std::vector<boost::uint8_t> sample_buffer;
         };
 
     public:
@@ -213,28 +225,29 @@ namespace ppbox
             } else {
                 if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
                     info.type = ppbox_video;
-                    info.time_scale = cache_->media_info.time_scale;
                     if (cache_->media_info.sub_type == VIDEO_TYPE_AVC1) {
                         info.sub_type = ppbox_video_avc;
-                        if (cache_->media_info.format_type == MediaInfo::video_avc_packet) {
-                            info.format_type = ppbox_video_avc_packet;
-                        } else if (cache_->media_info.format_type == MediaInfo::video_avc_byte_stream) {
-                            info.format_type = ppbox_video_avc_byte_stream;
-                        } else {
-                            info.format_type = 0;
-                        }
+                    } else {
+                        info.sub_type = 0;
+                    }
+                    if (cache_->media_info.format_type == MediaInfo::video_avc_packet) {
+                        info.format_type = ppbox_video_avc_packet;
+                    } else if (cache_->media_info.format_type == MediaInfo::video_avc_byte_stream) {
+                        info.format_type = ppbox_video_avc_byte_stream;
+                    } else {
+                        info.format_type = 0;
                     }
                 } else {
                     info.type = ppbox_audio;
-                    info.time_scale = cache_->media_info.time_scale;
                     if (cache_->media_info.sub_type == AUDIO_TYPE_MP4A) {
                         info.sub_type = ppbox_audio_aac;
                     } else if (cache_->media_info.sub_type == AUDIO_TYPE_MP1A) {
                         info.sub_type = ppbox_audio_mp3;
                     } else if (cache_->media_info.sub_type == AUDIO_TYPE_WMA2) {
                         info.sub_type = ppbox_audio_wma;
+                    } else {
+                        info.sub_type = 0;
                     }
-
                     // 增加对音频format_type的判断
                     if (cache_->media_info.format_type == MediaInfo::audio_iso_mp4) {
                         info.format_type = ppbox_audio_iso_mp4;
@@ -261,21 +274,23 @@ namespace ppbox
             } else {
                 if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
                     info.type = ppbox_video;
-                    info.time_scale = cache_->media_info.time_scale;
                     info.video_format.frame_rate = cache_->media_info.video_format.frame_rate;
                     info.video_format.height = cache_->media_info.video_format.height;
                     info.video_format.width = cache_->media_info.video_format.width;
                     if (cache_->media_info.sub_type == VIDEO_TYPE_AVC1) {
                         info.sub_type = ppbox_video_avc;
-                        if (cache_->media_info.format_type == MediaInfo::video_avc_packet) {
-                            info.format_type = ppbox_video_avc_packet;
-                        } else if (cache_->media_info.format_type == MediaInfo::video_avc_byte_stream) {
-                            info.format_type = ppbox_video_avc_byte_stream;
-                        }
+                    } else {
+                        info.sub_type = 0;
+                    }
+                    if (cache_->media_info.format_type == MediaInfo::video_avc_packet) {
+                        info.format_type = ppbox_video_avc_packet;
+                    } else if (cache_->media_info.format_type == MediaInfo::video_avc_byte_stream) {
+                        info.format_type = ppbox_video_avc_byte_stream;
+                    } else {
+                        info.format_type = 0;
                     }
                 } else {
                     info.type = ppbox_audio;
-                    info.time_scale = cache_->media_info.time_scale;
                     info.audio_format.sample_rate = cache_->media_info.audio_format.sample_rate;
                     info.audio_format.sample_size = cache_->media_info.audio_format.sample_size;
                     info.audio_format.channel_count = cache_->media_info.audio_format.channel_count;
@@ -285,8 +300,9 @@ namespace ppbox
                         info.sub_type = ppbox_audio_mp3;
                     } else if (cache_->media_info.sub_type == AUDIO_TYPE_WMA2) {
                         info.sub_type = ppbox_audio_wma;
+                    } else {
+                        info.sub_type = 0;
                     }
-
                     // 增加对音频format_type的判断
                     if (cache_->media_info.format_type == MediaInfo::audio_iso_mp4) {
                         info.format_type = ppbox_audio_iso_mp4;
@@ -450,9 +466,8 @@ namespace ppbox
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = cache_->sample.ustime;
-                    sample.decode_timestamp = cache_->sample.dts;
-                    sample.buffer_length = util::buffers::buffer_size(cache_->sample.data);
-                    copy_sample_data(sample.buffer, sample.buffer_length);
+                    sample.buffer_length = cache_->sample.size;
+                    sample.buffer = cache_->copy_sample_data();
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -469,12 +484,14 @@ namespace ppbox
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = cache_->sample.ustime;
-                    sample.decode_timestamp = cache_->sample.dts;
-                    sample.present_timestamp = cache_->sample.pts;
-                    sample.buffer_length = util::buffers::buffer_size(cache_->sample.data);
+                    sample.offset_in_file = cache_->sample.blocks[0].offset;
+                    sample.buffer_length = cache_->sample.size;
+                    sample.duration = cache_->sample.duration;
                     sample.desc_index = cache_->sample.idesc;
+                    sample.decode_time = cache_->sample.dts;
+                    sample.composite_time_delta = cache_->sample.cts_delta;
                     sample.is_sync = cache_->sample.is_sync;
-                    copy_sample_data(sample.buffer, sample.buffer_length);
+                    sample.buffer = cache_->copy_sample_data();
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -491,14 +508,15 @@ namespace ppbox
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) { 
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = cache_->sample.ustime;
-                    sample.decode_timestamp = cache_->sample.dts;
-                    sample.present_timestamp = cache_->sample.pts;
-                    sample.buffer_length = util::buffers::buffer_size(cache_->sample.data);
+                    sample.buffer_length = cache_->sample.size;
+                    sample.duration = cache_->sample.duration;
                     sample.desc_index = cache_->sample.idesc;
+                    sample.decode_time = cache_->sample.dts;
+                    sample.composite_time_delta = cache_->sample.cts_delta;
                     sample.is_sync = cache_->sample.is_sync;
                     sample.is_discontinuity = cache_->discontinuity;
+                    sample.buffer = cache_->copy_sample_data();
                     cache_->discontinuity = false;
-                    copy_sample_data(sample.buffer, sample.buffer_length);
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -629,40 +647,6 @@ namespace ppbox
             ppbox::error::last_error(ec);
             return async_last_error(title, ec);
         }
-
-    private:
-        void copy_sample_data(
-            boost::uint8_t const * buffer,
-            boost::uint32_t & size)
-        {
-            if (cache_->sample_buffer) {
-                free(cache_->sample_buffer);
-                cache_->sample_buffer = NULL;
-            }
-            assert(cache_->sample.data.size() >= 1);
-            if (cache_->sample.data.size() == 1) {
-                size = boost::asio::buffer_size(cache_->sample.data[0]);
-                buffer = boost::asio::buffer_cast<boost::uint8_t const *>(cache_->sample.data[0]);
-            } else if (cache_->sample.data.size() > 1) {
-                size = 0;
-                for (boost::uint32_t i = 0; i < cache_->sample.data.size(); i++) {
-                    size += boost::asio::buffer_size(cache_->sample.data[i]);
-                }
-                cache_->sample_buffer = (boost::uint8_t*)malloc(size);
-                boost::uint32_t offset = 0;
-                for (boost::uint32_t i = 0; i < cache_->sample.data.size(); i++) {
-                    memcpy(cache_->sample_buffer+offset, 
-                        boost::asio::buffer_cast<boost::uint8_t const *>(cache_->sample.data[i]),
-                        boost::asio::buffer_size(cache_->sample.data[i]));
-                    offset = boost::asio::buffer_size(cache_->sample.data[i]);
-                }
-                buffer = cache_->sample_buffer;
-            } else {
-                size = 0;
-                buffer = NULL;
-            }
-        }
-
 
     private:
         ppbox::demux::DemuxerModule & demux_mod_;
