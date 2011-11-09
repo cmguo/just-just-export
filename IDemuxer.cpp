@@ -35,7 +35,6 @@ namespace ppbox
             Cache()
                 : close_token(0)
                 , paused(false)
-                , discontinuity(false)
                 , sample_buffer(NULL)
             {
             }
@@ -63,7 +62,6 @@ namespace ppbox
             std::vector<boost::uint8_t> avc_buf;
             ppbox::demux::Sample sample;
             bool paused;
-            bool discontinuity;
             std::vector<boost::uint8_t> sample_buffer;
         };
 
@@ -147,9 +145,6 @@ namespace ppbox
             error_code ec;
             if (is_open(ec)) {
                 cache_->demuxer->seek(time, ec);
-                if (!ec || ec == boost::asio::error::would_block) {
-                    cache_->discontinuity = true;
-                }
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -490,7 +485,7 @@ namespace ppbox
                     sample.desc_index = cache_->sample.idesc;
                     sample.decode_time = cache_->sample.dts;
                     sample.composite_time_delta = cache_->sample.cts_delta;
-                    sample.is_sync = cache_->sample.is_sync;
+                    sample.is_sync = cache_->sample.flags & Sample::sync;
                     sample.buffer = cache_->copy_sample_data();
                 }
             }
@@ -513,10 +508,9 @@ namespace ppbox
                     sample.desc_index = cache_->sample.idesc;
                     sample.decode_time = cache_->sample.dts;
                     sample.composite_time_delta = cache_->sample.cts_delta;
-                    sample.is_sync = cache_->sample.is_sync;
-                    sample.is_discontinuity = cache_->discontinuity;
+                    sample.is_sync = cache_->sample.flags & Sample::sync;
+                    sample.is_discontinuity = cache_->sample.flags & Sample::discontinuity;
                     sample.buffer = cache_->copy_sample_data();
-                    cache_->discontinuity = false;
                 }
             }
             return last_error(__FUNCTION__, ec);
