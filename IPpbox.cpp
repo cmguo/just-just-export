@@ -97,7 +97,9 @@ namespace ppbox
             util::daemon::use_module<ppbox::live::Live>(*this);
 #endif
             util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
-
+#ifndef PPBOX_DISABLE_MUX
+            util::daemon::use_module<ppbox::mux::MuxerModule>(*this);
+#endif	
 #ifndef PPBOX_DISABLE_HTTPD
             util::daemon::use_module<ppbox::httpd::HttpManager>(*this);
 #endif	
