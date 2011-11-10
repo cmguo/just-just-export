@@ -7,11 +7,11 @@
 #include "ppbox/ppbox/IAdapter.h"
 using namespace ppbox::error;
 
+#include <ppbox/demux/PptvDemuxer.h>
 #include <ppbox/mux/Muxer.h>
 #include <ppbox/mux/flv/FlvMux.h>
 #include <ppbox/mux/ts/TsMux.h>
 #include <ppbox/demux/DemuxerModule.h>
-#include <ppbox/demux/Demuxer.h>
 #include <ppbox/demux/DemuxerError.h>
 
 #include <framework/logger/LoggerStreamRecord.h>
@@ -40,7 +40,7 @@ namespace ppbox
         {
         }
         size_t close_token;
-        ppbox::demux::Demuxer * demuxer;
+        ppbox::demux::PptvDemuxer * demuxer;
         ppbox::demux::MediaInfo media_info;
         boost::uint32_t video_media_index;
         bool paused;
@@ -120,7 +120,7 @@ namespace ppbox
             boost::shared_ptr<Cache> & cache, 
             Adapter_Open_Callback callback, 
             error_code const & ec, 
-            ppbox::demux::Demuxer * demuxer)
+            ppbox::demux::PptvDemuxer * demuxer)
         {
             error_code lec = ec;
             cache->demuxer = demuxer;
