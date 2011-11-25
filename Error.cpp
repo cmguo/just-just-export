@@ -3,7 +3,7 @@
 #include "ppbox/ppbox/Common.h"
 
 #include <ppbox/certify/CertifyError.h>
-#include <ppbox/demux/DemuxerError.h>
+#include <ppbox/demux/base/DemuxerError.h>
 
 #include <util/protocol/http/HttpError.h>
 

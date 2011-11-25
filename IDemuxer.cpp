@@ -5,8 +5,8 @@
 #include "ppbox/ppbox/IDemuxer.h"
 
 #include <ppbox/demux/DemuxerModule.h>
-#include <ppbox/demux/PptvDemuxer.h>
-#include <ppbox/demux/DemuxerError.h>
+#include <ppbox/demux/pptv/PptvDemuxer.h>
+#include <ppbox/demux/base/DemuxerError.h>
 using namespace ppbox::demux;
 
 #include <framework/logger/LoggerStreamRecord.h>
@@ -380,76 +380,6 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-#ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
-
-        error::errors get_first_seg_header(
-            boost::uint8_t const * & buffer, 
-            boost::uint32_t & length)
-        {
-            return get_seg_header(0, buffer, length);
-        }
-
-        error::errors get_seg_header(
-            boost::uint32_t index, 
-            boost::uint8_t const * & buffer, 
-            boost::uint32_t & length)
-        {
-            error_code ec;
-            if (!is_open(ec)) {
-            } else if ((cache_->segment.head_data.empty() || cache_->segment.index != index) 
-                && index == (cache_->segment.index = index) 
-                && cache_->demuxer && cache_->demuxer->get_segment_info(cache_->segment, true, ec)) {
-            } else {
-                length = cache_->segment.head_data.size();
-                buffer = length ? &cache_->segment.head_data.at(0) : NULL;
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors get_seg_mdat_size(
-            boost::uint32_t index, 
-            boost::uint64_t & length)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                SegmentInfo info;
-                if (!cache_->demuxer->get_segment_info(info, false, ec)) {
-                    length = info.file_length - info.head_length;
-                }
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors get_segment_count(
-            boost::uint32_t & count)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                count = cache_->demuxer->get_segment_count(ec);
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors get_segment_info(
-            PPBOX_SegmentInfo & info)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                cache_->segment.index = (size_t(-1));
-                if (!cache_->demuxer->get_segment_info(cache_->segment, true, ec)) {
-                    info.index = cache_->segment.index;
-                    info.duration = cache_->segment.duration;
-                    info.duration_offset = cache_->segment.duration_offset;
-                    info.head_length = cache_->segment.head_data.size();
-                    info.file_length = cache_->segment.file_length;
-                    info.head_buffer = info.file_length ? &cache_->segment.head_data.at(0) : NULL;
-                }
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-#endif
-
         error::errors read_sample(
             PPBOX_Sample & sample)
         {
@@ -719,46 +649,6 @@ extern "C" {
     {
         return demuxer().get_avc_config(*buffer, *length);
     }
-
-#ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
-
-    PPBOX_DECL boost::int32_t PPBOX_GetFirstSegHeader(
-        PP_uchar const * * buffer, 
-        boost::uint32_t * length)
-    {
-        return demuxer().get_first_seg_header(*buffer, *length);
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_GetSegHeader(
-        boost::uint32_t index, 
-        PP_uchar const * * buffer, 
-        boost::uint32_t * length)
-    {
-        return demuxer().get_seg_header(index, *buffer, *length);
-    }
-
-    PPBOX_DECL boost::uint32_t PPBOX_GetSegDataSize(
-        boost::uint32_t index)
-    {
-        boost::uint64_t size = 0;
-        demuxer().get_seg_mdat_size(index, size);
-        return (boost::uint32_t)size;
-    }
-
-    PPBOX_DECL boost::uint32_t PPBOX_GetSegmentCount()
-    {
-        boost::uint32_t n = 0;
-        demuxer().get_segment_count(n);
-        return n;
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_GetSegmentInfo(
-        PPBOX_SegmentInfo * segment_info)
-    {
-        return demuxer().get_segment_info(*segment_info);
-    }
-
-#endif
 
     PPBOX_DECL boost::int32_t PPBOX_ReadSample(
         PPBOX_Sample * sample)

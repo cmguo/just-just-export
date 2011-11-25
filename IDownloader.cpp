@@ -11,9 +11,11 @@ using namespace ppbox::error;
 using namespace ppbox::download;
 
 #include <ppbox/demux/DemuxerModule.h>
-#include <ppbox/demux/PptvDemuxer.h>
+#include <ppbox/demux/pptv/PptvDemuxer.h>
 
 using namespace boost::system;
+
+//#ifndef PPBOX_DISABLE_DOWNLOAD
 
 namespace ppbox
 {

@@ -7,12 +7,12 @@
 #include "ppbox/ppbox/IAdapter.h"
 using namespace ppbox::error;
 
-#include <ppbox/demux/PptvDemuxer.h>
+#include <ppbox/demux/pptv/PptvDemuxer.h>
 #include <ppbox/mux/Muxer.h>
 #include <ppbox/mux/flv/FlvMux.h>
 #include <ppbox/mux/ts/TsMux.h>
 #include <ppbox/demux/DemuxerModule.h>
-#include <ppbox/demux/DemuxerError.h>
+#include <ppbox/demux/base/DemuxerError.h>
 
 #include <framework/logger/LoggerStreamRecord.h>
 #include <framework/logger/LoggerSection.h>
@@ -26,6 +26,8 @@ using namespace framework::string;
 using namespace boost::system;
 
 FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("Ppbox", 0);
+
+//#ifndef PPBOX_DISABLE_MUX
 
 namespace ppbox
 {
