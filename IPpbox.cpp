@@ -9,6 +9,7 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 //#include <ppbox/common/ConfigMgr.h>
 #include <ppbox/common/Debuger.h>
+#include <ppbox/common/DebugProxy.h>
 using namespace ppbox::common;
 
 #include <ppbox/demux/DemuxerModule.h>
@@ -83,6 +84,8 @@ namespace ppbox
 
             //util::daemon::use_module<ppbox::common::ConfigMgr>(*this);
             util::daemon::use_module<ppbox::common::Debuger>(*this);
+            util::daemon::use_module<ppbox::common::DebugProxy>(*this);
+
 
 #ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);
@@ -105,7 +108,7 @@ namespace ppbox
 #endif	
 #ifndef PPBOX_DISABLE_RTSPD
             util::daemon::use_module<ppbox::rtspd::RtspManager>(*this);
-#endif	
+#endif
             LOG_S(Logger::kLevelEvent, "Ppbox ready.");
         }
 
@@ -234,6 +237,16 @@ namespace ppbox
                 util::daemon::use_module<ppbox::dac::Dac>(*this);
             dac.submit_msg(msg, size);
         }
+    
+        void log_dump(
+            PPBOX_OnLogDump callback,
+            boost::uint32_t level)
+        {
+            outerLogStream.set_log_dump(
+                ( ppbox::common::on_logdump_type )(callback), level);
+            framework::logger::global_logger().add_stream(
+                &outerLogStream );
+        }
 
     };
 
@@ -313,6 +326,13 @@ extern "C" {
         PP_int32 size)
     {
         the_ppbox().submit_msg(msg, size);
+    }
+
+    PPBOX_DECL void PPBOX_LogDump(
+        PPBOX_OnLogDump callback,
+        PP_int32 level)
+    {
+        the_ppbox().log_dump(callback, level);
     }
 
 #if __cplusplus

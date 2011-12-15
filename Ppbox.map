@@ -9,6 +9,7 @@
 		PPBOX_DebugMode;
 		PPBOX_DialogMessage;
 		PPBOX_SubmitMessage;
+		PPBOX_LogDump;
 
 		PPBOX_Open;
 		PPBOX_AsyncOpen;

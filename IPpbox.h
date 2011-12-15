@@ -99,6 +99,13 @@ extern "C" {
 
     typedef void (*PPBOX_Callback)(void *, PP_int32);
 
+    typedef void (*PPBOX_OnLogDump)( PP_char const *, PP_int32 );
+
+    PPBOX_DECL void PPBOX_LogDump(
+        PPBOX_OnLogDump callback,
+        PP_int32 level);
+#
+
 #if __cplusplus
 }
 #endif // __cplusplus
