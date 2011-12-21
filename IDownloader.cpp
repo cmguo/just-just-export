@@ -68,7 +68,7 @@ namespace ppbox
             if (!ec) {
                 download_statistic.finish_size = statistic.finish_size;
                 download_statistic.speed       = statistic.speed;
-                download_statistic.total_size  = statistic.total_size;
+                download_statistic.finish_percent  = statistic.finish_percent;
             }
             return last_error(__FUNCTION__, ec);
         }

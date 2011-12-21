@@ -27,7 +27,7 @@ extern "C" {
 
     typedef struct PPboxDownloadStatistic
     {
-        PP_uint64 total_size;
+        float finish_percent;
         PP_uint64 finish_size;
         PP_uint32 speed; // B/s
     }Download_Statistic;
