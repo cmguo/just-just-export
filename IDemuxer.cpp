@@ -5,7 +5,7 @@
 #include "ppbox/ppbox/IDemuxer.h"
 
 #include <ppbox/demux/DemuxerModule.h>
-#include <ppbox/demux/pptv/PptvDemuxer.h>
+#include <ppbox/demux/base/BufferDemuxer.h>
 #include <ppbox/demux/base/DemuxerError.h>
 using namespace ppbox::demux;
 
@@ -52,9 +52,9 @@ namespace ppbox
             }
 
             size_t close_token;
-            PptvDemuxer * demuxer;
+            BufferDemuxer * demuxer;
 #ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
-            ppbox::demux::SegmentInfo segment;
+            //ppbox::demux::SegmentInfo segment;
 #endif
             ppbox::demux::MediaInfo media_info;
             boost::uint32_t video_media_index;
@@ -118,7 +118,7 @@ namespace ppbox
             boost::shared_ptr<Cache> & cache, 
             PPBOX_Open_Callback callback, 
             error_code const & ec, 
-            PptvDemuxer * demuxer)
+            BufferDemuxer * demuxer)
         {
             cache->demuxer = demuxer;
             callback(async_last_error(__FUNCTION__, ec));
