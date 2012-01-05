@@ -1,7 +1,5 @@
 // IDemuxer.cpp
 
-#ifndef PPBOX_DISABLE_MUX
-
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IAdapter.h"
@@ -24,6 +22,8 @@ using namespace framework::string;
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 using namespace boost::system;
+
+#ifndef PPBOX_DISABLE_MUX
 
 FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("Ppbox", 0);
 

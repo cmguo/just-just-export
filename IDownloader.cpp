@@ -14,7 +14,7 @@ using namespace ppbox::download;
 
 using namespace boost::system;
 
-//#ifndef PPBOX_DISABLE_DOWNLOAD
+#ifndef PPBOX_DISABLE_DOWNLOAD
 
 namespace ppbox
 {
