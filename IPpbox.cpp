@@ -129,10 +129,11 @@ namespace ppbox
                 cert.set_auth_code(gid, pid, auth);
 #endif				
 
+#ifndef PPBOX_DISABLE_DAC
                 ppbox::dac::Dac & dac = 
                     util::daemon::use_module<ppbox::dac::Dac>(*this);
                 dac.set_auth_code(gid, pid, auth);
-
+#endif
                 ec = start(1);
             }
 
@@ -233,9 +234,11 @@ namespace ppbox
             char const * msg, 
             boost::int32_t size)
         {
+#ifndef PPBOX_DISABLE_DAC
             ppbox::dac::Dac & dac = 
                 util::daemon::use_module<ppbox::dac::Dac>(*this);
             dac.submit_msg(msg, size);
+#endif
         }
     
         void log_dump(
