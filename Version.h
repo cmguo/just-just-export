@@ -27,5 +27,8 @@
 #ifndef PPBOX_DISABLE_VOD
 #  include <ppbox/vod/Version.h>
 #endif
+#ifndef PPBOX_DISABLE_PEER
+#  include <ppbox/peer/Version.h>
+#endif
 
 #endif // _PPBOX_PPBOX_VERSION_H_

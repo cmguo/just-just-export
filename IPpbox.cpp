@@ -16,9 +16,15 @@ using namespace ppbox::common;
 #ifndef PPBOX_DISABLE_CERTIFY 
 #  include <ppbox/certify/Certifier.h>
 #endif
+
 #ifndef PPBOX_DISABLE_VOD 
 #  include <ppbox/vod/Vod.h>
 #endif
+
+#ifndef PPBOX_DISABLE_PEER
+#  include <ppbox/peer/Peer.h>
+#endif
+
 #ifndef PPBOX_DISABLE_DAC 
 #  include <ppbox/dac/Dac.h>
 #endif
@@ -96,6 +102,11 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_VOD
             util::daemon::use_module<ppbox::vod::Vod>(*this);
 #endif
+
+#ifndef PPBOX_DISABLE_PEER
+            util::daemon::use_module<ppbox::peer::Peer>(*this);
+#endif
+
 #ifndef PPBOX_DISABLE_LIVE
             util::daemon::use_module<ppbox::live::Live>(*this);
 #endif

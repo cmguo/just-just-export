@@ -408,13 +408,13 @@ namespace ppbox
                 }
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = cache_->sample.ustime;
+                    sample.start_time = cache_->sample.time;
                     sample.offset_in_file = cache_->sample.blocks[0].offset;
                     sample.buffer_length = cache_->sample.size;
                     sample.duration = cache_->sample.duration;
                     sample.desc_index = cache_->sample.idesc;
                     sample.decode_time = cache_->sample.dts;
-                    sample.composite_time_delta = cache_->sample.us_delta;
+                    sample.composite_time_delta = cache_->sample.us_delta/1000;
                     sample.is_sync = cache_->sample.flags & Sample::sync;
                     sample.buffer = cache_->copy_sample_data();
                 }
