@@ -1,7 +1,5 @@
 // IDownloader.cpp
 
-#ifndef PPBOX_DISABLE_DOWNLOAD
-
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IDownloader.h"
