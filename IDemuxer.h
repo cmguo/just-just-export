@@ -293,6 +293,35 @@ extern "C" {
     PPBOX_DECL PP_int32 PPBOX_GetDownSedMsg(
         PPBOX_DownloadSpeedMsg* download_spped_Msg);
 
+    typedef struct tag_InsertMedia
+    {
+        PP_uint32 id;
+        PP_uint64 insert_time;      // 插入的时间点
+        PP_uint64 media_duration;   // 影片时长
+        PP_uint64 media_size;       // 影片大小
+        PP_uint64 head_size;        // 文件头部大小
+        PP_uint32 report;
+        PP_char const * url;        // 影片URL
+        PP_char const * report_begin_url;
+        PP_char const * report_end_url;
+    } InsertMedia;
+
+    // 插入一个广告分段
+    PPBOX_DECL PP_int32 PPBOX_InsertMedia(
+        PP_uint32 count, 
+        InsertMedia const * medias);
+
+    typedef struct tag_InsertMediaEvent
+    {
+        PP_uint32 media_id;
+        PP_uint64 event_time;
+        PP_uint16 event_type;
+        PP_uint32 argment;
+    } InsertMediaEvent;
+
+    PPBOX_DECL PP_int32 PPBOX_GetInsertMediaEvent(
+        InsertMediaEvent * event);
+
 #if __cplusplus
 }
 #endif // __cplusplus

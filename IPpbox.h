@@ -104,7 +104,6 @@ extern "C" {
     PPBOX_DECL void PPBOX_LogDump(
         PPBOX_OnLogDump callback,
         PP_int32 level);
-#
 
 #if __cplusplus
 }
