@@ -37,6 +37,8 @@
 		PPBOX_GetPlayMsg;
 		PPBOX_GetDownMsg;
 		PPBOX_GetDownSedMsg;
+		PPBOX_InsertMedia;
+		PPBOX_GetInsertMediaEvent;
 		
 		Adapter_Open;
 		Adapter_AsyncOpen;
