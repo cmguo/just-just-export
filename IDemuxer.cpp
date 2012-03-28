@@ -558,23 +558,21 @@ namespace ppbox
             InsertMedia const * medias)
         {
             error_code ec = error_code();
-            if ( is_open( ec ) ) {
-                for ( size_t i = 0; i < count; ++i ) {
-                    demux_mod_.insert_media( 
-                        medias[i].id,
-                        medias[i].insert_time,
-                        medias[i].media_duration,
-                        medias[i].media_size,
-                        medias[i].head_size,
-                        medias[i].report,
-                        medias[i].url,
-                        medias[i].report_begin_url,
-                        medias[i].report_end_url,
-                        ec);
+            for ( size_t i = 0; i < count; ++i ) {
+                demux_mod_.insert_media( 
+                    medias[i].id,
+                    medias[i].insert_time,
+                    medias[i].media_duration,
+                    medias[i].media_size,
+                    medias[i].head_size,
+                    medias[i].report,
+                    medias[i].url,
+                    medias[i].report_begin_url,
+                    medias[i].report_end_url,
+                    ec);
 
-                    // 出现错误就停止插入后面的广告
-                    if ( ec ) break;
-                }
+                // 出现错误就停止插入后面的广告
+                if ( ec ) break;
             }
 
             return last_error( __FUNCTION__, ec );
@@ -584,12 +582,10 @@ namespace ppbox
             InsertMediaEvent & event )
         {
             error_code ec = error_code();
-            if ( is_open( ec ) ) {
-                const ppbox::demux::InsertMediaInfo & meidainfo = demux_mod_.get_insert_media( event.media_id, ec );
-                if ( !ec ) {
-                    event.event_type = meidainfo.event_type;
-                    event.argment = meidainfo.argment;
-                }
+            const ppbox::demux::InsertMediaInfo & meidainfo = demux_mod_.get_insert_media( event.media_id, ec );
+            if ( !ec ) {
+                event.event_type = meidainfo.event_type;
+                event.argment = meidainfo.argment;
             }
 
             return last_error( __FUNCTION__, ec );
