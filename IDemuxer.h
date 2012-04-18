@@ -16,7 +16,7 @@ extern "C" {
     typedef void (*PPBOX_Open_Callback)(PP_int32);
 
     PPBOX_DECL void PPBOX_AsyncOpen(
-        PP_char const * playlink, 
+        PP_char const *  , 
         PPBOX_Open_Callback callback);
 
     //暂停
@@ -307,20 +307,20 @@ extern "C" {
     } InsertMedia;
 
     // 插入一个广告分段
-    PPBOX_DECL PP_int32 PPBOX_InsertMedia(
-        PP_uint32 count, 
-        InsertMedia const * medias);
+    //PPBOX_DECL PP_int32 PPBOX_InsertMedia(
+    //    PP_uint32 count, 
+    //    InsertMedia const * medias);
 
-    typedef struct tag_InsertMediaEvent
-    {
-        PP_uint32 media_id;
-        PP_uint64 event_time;
-        PP_uint16 event_type;
-        PP_uint32 argment;
-    } InsertMediaEvent;
+    //typedef struct tag_InsertMediaEvent
+    //{
+    //    PP_uint32 media_id;
+    //    PP_uint64 event_time;
+    //    PP_uint16 event_type;
+    //    PP_uint32 argment;
+    //} InsertMediaEvent;
 
-    PPBOX_DECL PP_int32 PPBOX_GetInsertMediaEvent(
-        InsertMediaEvent * event);
+    //PPBOX_DECL PP_int32 PPBOX_GetInsertMediaEvent(
+    //    InsertMediaEvent * event);
 
 #if __cplusplus
 }

@@ -553,43 +553,43 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors insert_media(
-            boost::uint32_t count,
-            InsertMedia const * medias)
-        {
-            error_code ec = error_code();
-            for ( size_t i = 0; i < count; ++i ) {
-                demux_mod_.insert_media( 
-                    medias[i].id,
-                    medias[i].insert_time,
-                    medias[i].media_duration,
-                    medias[i].media_size,
-                    medias[i].head_size,
-                    medias[i].report,
-                    medias[i].url,
-                    medias[i].report_begin_url,
-                    medias[i].report_end_url,
-                    ec);
+        //error::errors insert_media(
+        //    boost::uint32_t count,
+        //    InsertMedia const * medias)
+        //{
+        //    error_code ec = error_code();
+        //    for ( size_t i = 0; i < count; ++i ) {
+        //        demux_mod_.insert_media( 
+        //            medias[i].id,
+        //            medias[i].insert_time,
+        //            medias[i].media_duration,
+        //            medias[i].media_size,
+        //            medias[i].head_size,
+        //            medias[i].report,
+        //            medias[i].url,
+        //            medias[i].report_begin_url,
+        //            medias[i].report_end_url,
+        //            ec);
 
-                // 出现错误就停止插入后面的广告
-                if ( ec ) break;
-            }
+        //        // 出现错误就停止插入后面的广告
+        //        if ( ec ) break;
+        //    }
 
-            return last_error( __FUNCTION__, ec );
-        }
+        //    return last_error( __FUNCTION__, ec );
+        //}
 
-        error::errors get_insert_media_event(
-            InsertMediaEvent & event )
-        {
-            error_code ec = error_code();
-            const ppbox::demux::InsertMediaInfo & meidainfo = demux_mod_.get_insert_media( event.media_id, ec );
-            if ( !ec ) {
-                event.event_type = meidainfo.event_type;
-                event.argment = meidainfo.argment;
-            }
+        //error::errors get_insert_media_event(
+        //    InsertMediaEvent & event )
+        //{
+        //    error_code ec = error_code();
+        //    const ppbox::demux::InsertMediaInfo & meidainfo = demux_mod_.get_insert_media( event.media_id, ec );
+        //    if ( !ec ) {
+        //        event.event_type = meidainfo.event_type;
+        //        event.argment = meidainfo.argment;
+        //    }
 
-            return last_error( __FUNCTION__, ec );
-        }
+        //    return last_error( __FUNCTION__, ec );
+        //}
 
         static error::errors async_last_error(
             char const * log_title, 
@@ -757,19 +757,19 @@ extern "C" {
         return demuxer().get_download_speed(*download_spped_Msg);
     }
 
-    boost::int32_t PPBOX_InsertMedia(
-        boost::uint32_t count, 
-        InsertMedia const * medias)
-    {
-        return demuxer().insert_media( 
-             count, medias);
-    }
+    //boost::int32_t PPBOX_InsertMedia(
+    //    boost::uint32_t count, 
+    //    InsertMedia const * medias)
+    //{
+    //    return demuxer().insert_media( 
+    //         count, medias);
+    //}
 
-    boost::int32_t PPBOX_GetInsertMediaEvent(
-        InsertMediaEvent * event)
-    {
-        return demuxer().get_insert_media_event( *event );
-    }
+    //boost::int32_t PPBOX_GetInsertMediaEvent(
+    //    InsertMediaEvent * event)
+    //{
+    //    return demuxer().get_insert_media_event( *event );
+    //}
 
 #if __cplusplus
 }
