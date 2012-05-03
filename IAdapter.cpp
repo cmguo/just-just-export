@@ -310,7 +310,7 @@ namespace ppbox
             if (is_open(ec)) {
                 ppbox::mux::MediaFileInfo const & mediainfo = mux_->mediainfo();
                 media_info.channel_count = mediainfo.stream_count;
-                media_info.duration      = mediainfo.duration;
+                media_info.duration      = mediainfo.duration_info.total;
                 media_info.frame_rate    = 0;
                 media_info.height        = 0;
                 media_info.width         = 0;
