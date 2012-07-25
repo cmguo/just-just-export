@@ -11,6 +11,7 @@ using namespace ppbox::error;
 #include <ppbox/mux/ts/TsMux.h>
 #include <ppbox/demux/DemuxerModule.h>
 #include <ppbox/demux/base/DemuxerError.h>
+#include <ppbox/demux/source/SourceError.h>
 
 #include <framework/logger/LoggerStreamRecord.h>
 #include <framework/logger/LoggerSection.h>
@@ -287,7 +288,7 @@ namespace ppbox
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_adapter_closed;
                 } else {
-                    if (stat.buffer_time >= buffer_time_ || ec_buf == boost::asio::error::eof) {
+                    if (stat.buffer_time >= buffer_time_ || ec_buf == ppbox::demux::source_error::no_more_segment) {
                         stat.buffering_present = 100;
                         stat.play_status = ppbox_adapter_playing;
                     } else {

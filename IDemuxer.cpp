@@ -7,6 +7,7 @@
 #include <ppbox/demux/DemuxerModule.h>
 #include <ppbox/demux/base/BufferDemuxer.h>
 #include <ppbox/demux/base/DemuxerError.h>
+#include <ppbox/demux/source/SourceError.h>
 using namespace ppbox::demux;
 
 #include <framework/logger/LoggerStreamRecord.h>
@@ -391,7 +392,7 @@ namespace ppbox
                 }
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = cache_->sample.ustime;
+                    sample.start_time = cache_->sample.time;
                     sample.buffer_length = cache_->sample.size;
                     sample.buffer = cache_->copy_sample_data();
                 }
@@ -467,7 +468,7 @@ namespace ppbox
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_closed;
                 } else {
-                    if (stat.buffer_time >= buffer_time_ || ec_buf == boost::asio::error::eof) {
+                    if (stat.buffer_time >= buffer_time_ || ec_buf == ppbox::demux::source_error::no_more_segment) {
                         stat.buffering_present = 100;
                         stat.play_status = ppbox_playing;
                     } else if (buffer_time_ != 0) {
