@@ -2,6 +2,7 @@
 	global: 
 		PPBOX_StartP2PEngine;
 		PPBOX_StopP2PEngine;
+		PPBOX_GetPort;
 		PPBOX_GetVersion;
 		PPBOX_GetLastError;
 		PPBOX_GetLastErrorMsg;

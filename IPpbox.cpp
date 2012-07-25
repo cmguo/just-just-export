@@ -9,6 +9,7 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 //#include <ppbox/common/ConfigMgr.h>
 #include <ppbox/common/Debuger.h>
+#include <ppbox/common/PortManager.h>
 #ifndef PPBOX_DISABLE_DEBUGPROXY
 #include <ppbox/common/DebugProxy.h>
 #endif
@@ -78,6 +79,8 @@ namespace ppbox
                 "++LogStream0.roll=true", 
                 "++LogStream0.level=5", 
                 "++LogStream0.size=102400", 
+                "++RtspManager.addr=0.0.0.0:5054+", 
+                "++HttpManager.addr=0.0.0.0:9006+", 
             };
             parse_cmdline(sizeof(default_argv) / sizeof(default_argv[0]), default_argv);
 
@@ -92,6 +95,7 @@ namespace ppbox
 
             //util::daemon::use_module<ppbox::common::ConfigMgr>(*this);
             util::daemon::use_module<ppbox::common::Debuger>(*this);
+            util::daemon::use_module<ppbox::common::PortManager>(*this);
 #ifndef PPBOX_DISABLE_DEBUGPROXY
             util::daemon::use_module<ppbox::common::DebugProxy>(*this);
 #endif
@@ -116,16 +120,40 @@ namespace ppbox
             util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
             util::daemon::use_module<ppbox::mux::MuxerModule>(*this);
-#endif	
+#endif
 #ifndef PPBOX_DISABLE_HTTPD
             util::daemon::use_module<ppbox::httpd::HttpManager>(*this);
-#endif	
+#endif
 #ifndef PPBOX_DISABLE_RTSPD
             util::daemon::use_module<ppbox::rtspd::RtspManager>(*this);
 #endif
             LOG_S(Logger::kLevelEvent, "Ppbox ready.");
         }
 
+        boost::uint16_t get_port(char const* module)
+        {
+            boost::uint16_t port = 0;
+            std::string strModule(module);
+            if(strModule == "rtsp")
+            {
+                std::string netName("0.0.0.0:0");
+                config().get("RtspManager","addr",netName);
+                framework::network::NetName tmpNet(netName);
+                port = tmpNet.port();
+            }
+            else if(strModule == "http")
+            {
+                std::string netName("0.0.0.0:0");
+                config().get("HttpManager","addr",netName);
+                framework::network::NetName tmpNet(netName);
+                port = tmpNet.port();
+            }
+            else
+            {
+            }
+            LOG_S(Logger::kLevelAlarm,"[get_port] Module:" << strModule<<" port:"<<port);
+            return port;
+        }
         error::errors start_p2p_engine(
             char const * gid, 
             char const * pid, 
@@ -254,7 +282,7 @@ namespace ppbox
             dac.submit_msg(msg, size);
 #endif
         }
-    
+
         void log_dump(
             PPBOX_OnLogDump callback,
             boost::uint32_t level)
@@ -264,7 +292,6 @@ namespace ppbox
             framework::logger::global_logger().add_stream(
                 &outerLogStream );
         }
-
     };
 
     util::daemon::Daemon & global_daemon()
@@ -292,6 +319,12 @@ extern "C" {
         char const * auth)
     {
         return the_ppbox().start_p2p_engine(gid, pid, auth);
+    }
+
+    PPBOX_DECL PP_uint16 PPBOX_GetPort(
+        PP_char const * moduleName)
+    {
+        return the_ppbox().get_port(moduleName);
     }
 
     PPBOX_DECL void PPBOX_StopP2PEngine()

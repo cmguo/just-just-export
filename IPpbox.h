@@ -53,6 +53,12 @@ extern "C" {
         PP_char const * pid, 
         PP_char const * auth);
 
+    //函数: 获取模块服务的端口号 如 PPBOX_GetPort("rtsp")  PPBOX_GetPort("http")
+    //返回值: 对应服务端口号 > 0端口号 <=0 失败
+    //modeName : 模块名，如rtsp http
+    PPBOX_DECL PP_uint16 PPBOX_GetPort(
+        PP_char const * moduleName);
+
     PPBOX_DECL void PPBOX_StopP2PEngine();
 
     //获得错误码
