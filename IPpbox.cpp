@@ -256,7 +256,7 @@ namespace ppbox
         {
             ppbox::common::Debuger & debuger = 
                 util::daemon::use_module<ppbox::common::Debuger>(*this);
-            static MessageList msgs;
+            static std::vector<Message> msgs;
             msgs.clear();
             debuger.get_debug_msg(msgs, size, module, level);
 
