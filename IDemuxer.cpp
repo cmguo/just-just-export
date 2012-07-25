@@ -45,7 +45,8 @@ namespace ppbox
                 if (sample.data.size() == 1) {
                     return boost::asio::buffer_cast<boost::uint8_t const *>(sample.data[0]);
                 } else {
-                    sample_buffer.resize(sample.size);
+                    if (sample_buffer.size() < sample.size)
+                        sample_buffer.resize(sample.size);
                     util::buffers::buffer_copy(boost::asio::buffer(sample_buffer), sample.data);
                     return sample_buffer.size() ? &sample_buffer.at(0) : NULL;
                 }

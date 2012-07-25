@@ -9,7 +9,9 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 //#include <ppbox/common/ConfigMgr.h>
 #include <ppbox/common/Debuger.h>
+#ifndef PPBOX_DISABLE_DEBUGPROXY
 #include <ppbox/common/DebugProxy.h>
+#endif
 using namespace ppbox::common;
 
 #include <ppbox/demux/DemuxerModule.h>
@@ -90,8 +92,9 @@ namespace ppbox
 
             //util::daemon::use_module<ppbox::common::ConfigMgr>(*this);
             util::daemon::use_module<ppbox::common::Debuger>(*this);
+#ifndef PPBOX_DISABLE_DEBUGPROXY
             util::daemon::use_module<ppbox::common::DebugProxy>(*this);
-
+#endif
 
 #ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);

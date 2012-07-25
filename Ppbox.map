@@ -11,6 +11,10 @@
 		PPBOX_SubmitMessage;
 		PPBOX_LogDump;
 
+		PPBOX_DownloadClose;
+		PPBOX_DownloadOpen;
+		PPBOX_GetDownloadInfo;
+
 		PPBOX_Open;
 		PPBOX_AsyncOpen;
 		PPBOX_Pause;

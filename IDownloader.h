@@ -10,74 +10,31 @@ extern "C" {
 #endif // __cplusplus
 
     // refine
-    typedef void * PPBOX_Download_Hander;
-
-    typedef struct tag_PPBOX_frame // IN
-    {
-        PP_uint32 stream_index;     // 流的编号
-        PP_uint32 start_time;       // Sample对应的时间戳
-        PP_uint32 buffer_length;    // Frame的大小
-        PP_uchar const * buffer;    // Frame的内容
-    } PPBOX_Frame;
+	typedef void * PPBOX_Download_Handle;
+    typedef void(*PPBOX_Download_Callback)(PP_int32);
+	static const PPBOX_Download_Handle PPBOX_INVALID_DOWNLOAD_HANDLE = NULL;
 
     //打开一个下载用例
-    PPBOX_DECL PP_int32 FileDownloadOpenItem(
+    PPBOX_DECL PPBOX_Download_Handle PPBOX_DownloadOpen(
                 char const * playlink,
                 char const * format,
                 char const * save_filename,
-                PPBOX_Download_Hander * handle);
+				PPBOX_Download_Callback resp);
 
     //关闭指定的下载用例
-    PPBOX_DECL void FileDownloadCloseItem(PPBOX_Download_Hander hander);
+    PPBOX_DECL void PPBOX_DownloadClose(PPBOX_Download_Handle hander);
 
-    //获取当前下载队列中下载实例的个数
-    PPBOX_DECL PP_uint32 GetFileDownloadItemCount();
-
-    typedef struct PPboxDownloadStatistic
+    typedef struct tag_PPBOX_DownloadStatistic
     {
         PP_uint64 total_size;
         PP_uint64 finish_size;
-        PP_uint32 speed; // B/s
-    }Download_Statistic;
+        PP_uint32 speed; 
+    } PPBOX_DownloadStatistic;
 
     // 获取指定下载用例的实时统计信息
-    PPBOX_DECL PP_int32 GetFileDownloadItemInfo(
-        PPBOX_Download_Hander hander,
-        Download_Statistic * stat);
-
-    // 设置下载参数，name表式要设置项，value表示值
-    PPBOX_DECL PP_int32 SetParamenter(char const * name, char const * value);
-
-    // 获取错误码
-    PPBOX_DECL PP_int32 DownloadLastError(PPBOX_Download_Hander hander);
-
-
-    // record
-    PPBOX_DECL PP_int32 RecordCreate(void);
-
-    PPBOX_DECL void SetPoolSize(PP_uint32 size);
-
-    PPBOX_DECL void SetAudioInfo(
-        PP_uint32 index,
-        PP_uint32 sample_rate,
-        PP_uint32 channel_count,
-        PP_uint32 sample_size,
-        PP_uint32 time_scale,
-        char * const spec_buffer,
-        PP_uint32 buffer_size);
-
-    PPBOX_DECL void SetVideoInfo(
-        boost::uint32_t index,
-        boost::uint32_t width,
-        boost::uint32_t height,
-        boost::uint32_t frame_rate,
-        boost::uint32_t time_scale,
-        char * const spec_buffer,
-        PP_uint32 buffer_size);
-
-    PPBOX_DECL void Push(PPBOX_Frame const * frame);
-
-    PPBOX_DECL void Destory(void);
+    PPBOX_DECL PP_int32 PPBOX_GetDownloadInfo(
+        PPBOX_Download_Handle hander,
+        PPBOX_DownloadStatistic * stat);
 
 #if __cplusplus
 }

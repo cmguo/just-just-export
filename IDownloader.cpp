@@ -6,10 +6,11 @@
 using namespace ppbox::error;
 
 #include <ppbox/download/Manager.h>
+#include <ppbox/download/Record.h>
 using namespace ppbox::download;
 
 #include <ppbox/demux/DemuxerModule.h>
-
+#include <ppbox/demux/Demuxer.h>
 using namespace boost::system;
 
 #ifndef PPBOX_DISABLE_DOWNLOAD
@@ -28,68 +29,51 @@ namespace ppbox
         ~IDownloader()
         {
         }
+        
+	    static	void download_open_callback(
+			PPBOX_Download_Callback resp,
+            error_code const & ec)
+		{
+			if (NULL != resp) {
+			    resp(async_last_error(__FUNCTION__, ec));
+			} else {
+			    async_last_error(__FUNCTION__, ec);
+			}
+		}
 
-        error::errors Download_Open(
+        PPBOX_Download_Handle download_open(
                       char const * playlink,
                       char const * format,
                       char const * filename,
-                      PPBOX_Download_Hander & download_hander)
+					  PPBOX_Download_Callback resp)
         {
             error_code ec;
-            DownloadHander hander = NULL;
-            download_manager_.add(playlink, format, store_path_.c_str(), filename, hander, ec);
-            download_hander = (PPBOX_Download_Hander)hander;
+            Downloader* hander = download_manager_.add(playlink, format, filename, ec, 
+					boost::bind(&IDownloader::download_open_callback, resp, _1 ));
+            return  (PPBOX_Download_Handle)hander;
+        }
+
+        error::errors download_close(
+				PPBOX_Download_Handle const hander)
+        {
+            error_code ec;
+            download_manager_.del((Downloader*)hander, ec);
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors Download_Close(PPBOX_Download_Hander const hander)
-        {
-            error_code ec;
-            download_manager_.del((DownloadHander)hander, ec);
-            return last_error(__FUNCTION__, ec);
-        }
-
-        //refine
-        boost::uint32_t Download_Get_Count(void)
-        {
-            return download_manager_.get_downloader_count();
-        }
-
-        error::errors Download_Get_Statistic(PPBOX_Download_Hander const hander,
-                                             Download_Statistic & download_statistic)
+        error::errors download_get_statistic(
+            PPBOX_Download_Handle const hander,
+            PPBOX_DownloadStatistic & download_statistic)
         {
             error_code ec;
 
             DownloadStatistic statistic;
-            download_manager_.get_download_statictis((DownloadHander)hander, statistic, ec);
+            download_manager_.get_download_statictis((Downloader*)hander, statistic, ec);
             if (!ec) {
                 download_statistic.finish_size = statistic.finish_size;
                 download_statistic.speed       = statistic.speed;
                 download_statistic.total_size  = statistic.total_size;
             }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors Download_SetParamenter(char const * name,
-                                             char const * value)
-        {
-            error_code ec;
-            std::string para_name = name;
-            std::string para_value = value;
-            if ("storage" == para_name) {
-                store_path_ = para_value;
-            } else {
-                ec = other_error;
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors Download_LastError(PPBOX_Download_Hander const handle)
-        {
-            error_code ec;
-
-            ec = download_manager_.get_last_error((DownloadHander)handle);
-
             return last_error(__FUNCTION__, ec);
         }
 
@@ -101,9 +85,9 @@ namespace ppbox
             return async_last_error(title, ec);
         }
 
-        error::errors async_last_error(
+        static error::errors async_last_error(
             char const * title, 
-            error_code & ec) const
+            error_code const & ec) 
         {
             if (ec && ec != boost::asio::error::would_block) {
                 std::cout << title << ": " << ec.message() << std::endl;
@@ -113,7 +97,6 @@ namespace ppbox
 
     private:
         ppbox::download::Manager & download_manager_;
-        std::string store_path_;
     };
 
 }
@@ -128,47 +111,32 @@ static ppbox::IDownloader & downloader()
 extern "C" {
 #endif // __cplusplus
 
+
     //打开一个下载用例
-    PPBOX_DECL PP_int32 FileDownloadOpenItem(
+    PPBOX_DECL PPBOX_Download_Handle PPBOX_DownloadOpen(
         char const * playlink,
         char const * format,
         char const * save_filename,
-        PPBOX_Download_Hander * hander)
+		PPBOX_Download_Callback resp)
     {
-        return downloader().Download_Open(playlink, format, save_filename, *hander);
+        return downloader().download_open(playlink, format, save_filename, resp);
     }
 
     //关闭指定的下载用例
-    PPBOX_DECL void FileDownloadCloseItem(PPBOX_Download_Hander hander)
+    PPBOX_DECL void PPBOX_DownloadClose(
+        PPBOX_Download_Handle hander)
     {
-        downloader().Download_Close(hander);
-    }
-
-    //获取当前下载队列中下载实例的个数
-    PPBOX_DECL PP_uint32 GetFileDownloadItemCount()
-    {
-        return downloader().Download_Get_Count();
+        downloader().download_close(hander);
     }
 
     // 获取指定下载用例的实时统计信息
-    PPBOX_DECL PP_int32 GetFileDownloadItemInfo(
-        PPBOX_Download_Hander hander,
-        Download_Statistic * stat)
+    PPBOX_DECL PP_int32 PPBOX_GetDownloadInfo(
+        PPBOX_Download_Handle hander,
+        PPBOX_DownloadStatistic * stat)
     {
-        return downloader().Download_Get_Statistic(hander, *stat);
+        return downloader().download_get_statistic(hander, *stat);
     }
 
-    // 设置下载参数，name表式要设置项，value表示值
-    PPBOX_DECL PP_int32 SetParamenter(char const * name, char const * value)
-    {
-        return downloader().Download_SetParamenter(name, value);
-    }
-
-    // 获取错误码
-    PPBOX_DECL PP_int32 DownloadLastError(PPBOX_Download_Hander hander)
-    {
-        return downloader().Download_LastError(hander);
-    }
 
 #if __cplusplus
 }
