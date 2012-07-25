@@ -351,7 +351,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                ppbox::cdn::DurationInfo info;
+                ppbox::common::DurationInfo info;
                 cache_->demuxer->get_duration(info, ec);
                 duration = (boost::uint32_t)info.total;
             }
