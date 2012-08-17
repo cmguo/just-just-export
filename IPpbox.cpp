@@ -20,6 +20,8 @@ using namespace ppbox::common;
 #  include <ppbox/certify/Certifier.h>
 #endif
 
+#include <ppbox/cdn/Cdn.h>
+
 #ifndef PPBOX_DISABLE_VOD 
 #  include <ppbox/vod/Vod.h>
 #endif
@@ -103,6 +105,7 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);
 #endif
+            util::daemon::use_module<ppbox::cdn::Cdn>(*this);
 #ifndef PPBOX_DISABLE_DAC
             util::daemon::use_module<ppbox::dac::Dac>(*this);
 #endif

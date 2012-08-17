@@ -7,7 +7,7 @@
 #include <ppbox/demux/DemuxerModule.h>
 #include <ppbox/demux/base/BufferDemuxer.h>
 #include <ppbox/demux/base/DemuxerError.h>
-#include <ppbox/demux/source/SourceError.h>
+#include <ppbox/demux/base/SourceError.h>
 using namespace ppbox::demux;
 
 #include <framework/logger/LoggerStreamRecord.h>

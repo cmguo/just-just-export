@@ -11,7 +11,7 @@ using namespace ppbox::error;
 #include <ppbox/mux/ts/TsMux.h>
 #include <ppbox/demux/DemuxerModule.h>
 #include <ppbox/demux/base/DemuxerError.h>
-#include <ppbox/demux/source/SourceError.h>
+#include <ppbox/demux/base/SourceError.h>
 
 #include <framework/logger/LoggerStreamRecord.h>
 #include <framework/logger/LoggerSection.h>

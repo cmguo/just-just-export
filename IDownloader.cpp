@@ -6,11 +6,9 @@
 using namespace ppbox::error;
 
 #include <ppbox/download/Manager.h>
-#include <ppbox/download/Record.h>
 using namespace ppbox::download;
 
-#include <ppbox/demux/DemuxerModule.h>
-#include <ppbox/demux/Demuxer.h>
+#include <boost/bind.hpp>
 using namespace boost::system;
 
 #ifndef PPBOX_DISABLE_DOWNLOAD
