@@ -13,7 +13,7 @@ using namespace ppbox::error;
 #include <ppbox/demux/base/DemuxerError.h>
 #include <ppbox/demux/base/SourceError.h>
 
-#include <framework/logger/LoggerStreamRecord.h>
+#include <framework/logger/StreamRecord.h>
 #include <framework/logger/LoggerSection.h>
 #include <framework/system/LogicError.h>
 #include <framework/string/Algorithm.h>
@@ -344,7 +344,7 @@ namespace ppbox
             error_code & ec) const
         {
             if (ec && ec != boost::asio::error::would_block) {
-                LOG_S(Logger::kLevelAlarm, title << ": " << ec.message());
+                LOG_WARN(title << ": " << ec.message());
             }
             return ppbox::error::last_error_enum(ec);
         }

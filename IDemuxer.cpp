@@ -10,7 +10,8 @@
 #include <ppbox/demux/base/SourceError.h>
 using namespace ppbox::demux;
 
-#include <framework/logger/LoggerStreamRecord.h>
+#include <framework/logger/Logger.h>
+#include <framework/logger/StreamRecord.h>
 #include <framework/logger/LoggerSection.h>
 #include <framework/system/LogicError.h>
 #include <util/buffers/BufferCopy.h>
@@ -81,7 +82,7 @@ namespace ppbox
             char const * playlink)
         {
             LOG_SECTION();
-            LOG_S(Logger::kLevelEvent, "open playlink: " << playlink);
+            LOG_INFO("open playlink: " << playlink);
 
             error_code ec;
             if (cache_) {
@@ -99,7 +100,7 @@ namespace ppbox
             PPBOX_Open_Callback callback)
         {
             LOG_SECTION();
-            LOG_S(Logger::kLevelEvent, "async_open playlink: " << playlink);
+            LOG_INFO("async_open playlink: " << playlink);
 
             error_code ec;
             if (cache_) {
@@ -141,7 +142,7 @@ namespace ppbox
             boost::uint32_t time)
         {
             LOG_SECTION();
-            LOG_S(Logger::kLevelEvent, "seek time: " << time);
+            LOG_INFO("seek time: " << time);
 
             error_code ec;
             if (is_open(ec)) {
@@ -153,7 +154,7 @@ namespace ppbox
         error::errors pause()
         {
             LOG_SECTION();
-            LOG_S(Logger::kLevelEvent, "pause");
+            LOG_INFO("pause");
 
             error_code ec;
             if (is_open(ec)) {
@@ -167,7 +168,7 @@ namespace ppbox
         error::errors resume()
         {
             LOG_SECTION();
-            LOG_S(Logger::kLevelEvent, "resume");
+            LOG_INFO("resume");
 
             error_code ec;
             if (is_open(ec)) {
@@ -181,7 +182,7 @@ namespace ppbox
         error::errors close()
         {
             LOG_SECTION();
-            LOG_S(Logger::kLevelEvent, "close");
+            LOG_INFO("close");
 
             error_code ec;
             if (cache_) {
@@ -600,7 +601,7 @@ namespace ppbox
             error_code const & ec)
         {
             if (ec && ec != boost::asio::error::would_block) {
-                LOG_S(Logger::kLevelAlarm, log_title << ": " << ec.message());
+                LOG_WARN(log_title << ": " << ec.message());
             }
             return ppbox::error::last_error_enum(ec);
         }

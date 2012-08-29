@@ -47,7 +47,7 @@ using namespace ppbox::common;
 #  include <ppbox/rtspd/RtspManager.h>
 #endif
 
-#include <framework/logger/LoggerStreamRecord.h>
+#include <framework/logger/StreamRecord.h>
 #include <framework/logger/LoggerSection.h>
 #include <framework/process/MessageQueue.h>
 #include <framework/process/Process.h>
@@ -130,7 +130,7 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_RTSPD
             util::daemon::use_module<ppbox::rtspd::RtspManager>(*this);
 #endif
-            LOG_S(Logger::kLevelEvent, "Ppbox ready.");
+            LOG_INFO("Ppbox ready.");
         }
 
         boost::uint16_t get_port(char const* module)
@@ -154,7 +154,7 @@ namespace ppbox
             else
             {
             }
-            LOG_S(Logger::kLevelAlarm,"[get_port] Module:" << strModule<<" port:"<<port);
+            LOG_WARN("[get_port] Module:" << strModule<<" port:"<<port);
             return port;
         }
         error::errors start_p2p_engine(
@@ -204,7 +204,7 @@ namespace ppbox
             error_code const & ec) const
         {
             if (ec && ec != boost::asio::error::would_block) {
-                LOG_S(Logger::kLevelAlarm, log_title << ": " << ec.message());
+                LOG_WARN(log_title << ": " << ec.message());
             }
             ppbox::error::last_error(ec);
             return ppbox::error::last_error_enum(ec);
