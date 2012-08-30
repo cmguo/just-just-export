@@ -48,7 +48,7 @@ using namespace ppbox::common;
 #endif
 
 #include <framework/logger/StreamRecord.h>
-#include <framework/logger/LoggerSection.h>
+#include <framework/logger/Section.h>
 #include <framework/process/MessageQueue.h>
 #include <framework/process/Process.h>
 #include <framework/filesystem/Path.h>
@@ -86,7 +86,7 @@ namespace ppbox
             };
             parse_cmdline(sizeof(default_argv) / sizeof(default_argv[0]), default_argv);
 
-            framework::logger::global_logger().load_config(config());
+            framework::logger::load_config(global_logger(), config());
 
             ppbox::common::log_versions();
 

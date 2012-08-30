@@ -14,7 +14,7 @@ using namespace ppbox::error;
 #include <ppbox/demux/base/SourceError.h>
 
 #include <framework/logger/StreamRecord.h>
-#include <framework/logger/LoggerSection.h>
+#include <framework/logger/Section.h>
 #include <framework/system/LogicError.h>
 #include <framework/string/Algorithm.h>
 using namespace framework::logger;

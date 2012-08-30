@@ -12,7 +12,7 @@ using namespace ppbox::demux;
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
-#include <framework/logger/LoggerSection.h>
+#include <framework/logger/Section.h>
 #include <framework/system/LogicError.h>
 #include <util/buffers/BufferCopy.h>
 using namespace framework::logger;
