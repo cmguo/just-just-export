@@ -157,6 +157,7 @@ namespace ppbox
             LOG_WARN("[get_port] Module:" << strModule<<" port:"<<port);
             return port;
         }
+
         error::errors start_p2p_engine(
             char const * gid, 
             char const * pid, 
@@ -290,10 +291,10 @@ namespace ppbox
             PPBOX_OnLogDump callback,
             boost::uint32_t level)
         {
-            outerLogStream.set_log_dump(
-                ( ppbox::common::on_logdump_type )(callback), level);
-            framework::logger::global_logger().add_stream(
-                &outerLogStream );
+            ppbox::common::Debuger & debuger = 
+                util::daemon::use_module<ppbox::common::Debuger>(*this);
+            debuger.set_log_hook(
+                ( ppbox::common::Debuger::on_logdump_type )(callback), level);
         }
     };
 
