@@ -7,6 +7,7 @@
 using namespace ppbox::error;
 
 #include <ppbox/common/CommonModule.h>
+#include <ppbox/common/Version.h>
 //#include <ppbox/common/ConfigMgr.h>
 #include <ppbox/common/Debuger.h>
 #include <ppbox/common/PortManager.h>
@@ -21,10 +22,6 @@ using namespace ppbox::common;
 #endif
 
 #include <ppbox/cdn/Cdn.h>
-
-#ifndef PPBOX_DISABLE_VOD 
-#  include <ppbox/vod/Vod.h>
-#endif
 
 #ifndef PPBOX_DISABLE_PEER
 #  include <ppbox/peer/Peer.h>
@@ -74,13 +71,11 @@ namespace ppbox
         {
 
             char const * default_argv[] = {
-                "++Logger.stream_count=1", 
-                "++Logger.ResolverService=1", 
-                "++LogStream0.file=$LOG/ppbox.log", 
-                "++LogStream0.append=true", 
-                "++LogStream0.roll=true", 
-                "++LogStream0.level=5", 
-                "++LogStream0.size=102400", 
+                "++framework.logger.Stream.0.file=$LOG/ppbox.log", 
+                "++framework.logger.Stream.0.append=true", 
+                "++framework.logger.Stream.0.roll=true", 
+                "++framework.logger.Stream.0.level=5", 
+                "++framework.logger.Stream.0.size=102400", 
                 "++RtspManager.addr=0.0.0.0:5054+", 
                 "++HttpManager.addr=0.0.0.0:9006+", 
             };
@@ -101,7 +96,6 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_DEBUGPROXY
             util::daemon::use_module<ppbox::common::DebugProxy>(*this);
 #endif
-
 #ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);
 #endif
@@ -109,14 +103,9 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_DAC
             util::daemon::use_module<ppbox::dac::Dac>(*this);
 #endif
-#ifndef PPBOX_DISABLE_VOD
-            util::daemon::use_module<ppbox::vod::Vod>(*this);
-#endif
-
 #ifndef PPBOX_DISABLE_PEER
-            util::daemon::use_module<ppbox::peer::Peer>(*this);
+            util::daemon::use_module<ppbox::peer::PeerModule>(*this);
 #endif
-
 #ifndef PPBOX_DISABLE_LIVE
             util::daemon::use_module<ppbox::live::Live>(*this);
 #endif

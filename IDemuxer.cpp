@@ -58,7 +58,7 @@ namespace ppbox
 #ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
             //ppbox::demux::SegmentInfo segment;
 #endif
-            ppbox::demux::MediaInfo media_info;
+            ppbox::demux::StreamInfo media_info;
             boost::uint32_t video_media_index;
             std::vector<boost::uint8_t> media_type_buffer;
             std::vector<boost::uint8_t> avc_buf;
@@ -207,7 +207,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                count = cache_->demuxer->get_media_count(ec);
+                count = cache_->demuxer->get_stream_count(ec);
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -218,7 +218,7 @@ namespace ppbox
         {
             error_code ec;
             if (!is_open(ec)) {
-            } else if (cache_->demuxer->get_media_info(index, cache_->media_info, ec)) {
+            } else if (cache_->demuxer->get_stream_info(index, cache_->media_info, ec)) {
             } else {
                 if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
                     info.type = ppbox_video;
@@ -227,9 +227,9 @@ namespace ppbox
                     } else {
                         info.sub_type = 0;
                     }
-                    if (cache_->media_info.format_type == MediaInfo::video_avc_packet) {
+                    if (cache_->media_info.format_type == StreamInfo::video_avc_packet) {
                         info.format_type = ppbox_video_avc_packet;
-                    } else if (cache_->media_info.format_type == MediaInfo::video_avc_byte_stream) {
+                    } else if (cache_->media_info.format_type == StreamInfo::video_avc_byte_stream) {
                         info.format_type = ppbox_video_avc_byte_stream;
                     } else {
                         info.format_type = 0;
@@ -246,9 +246,9 @@ namespace ppbox
                         info.sub_type = 0;
                     }
                     // 增加对音频format_type的判断
-                    if (cache_->media_info.format_type == MediaInfo::audio_iso_mp4) {
+                    if (cache_->media_info.format_type == StreamInfo::audio_iso_mp4) {
                         info.format_type = ppbox_audio_iso_mp4;
-                    } else if (cache_->media_info.format_type == MediaInfo::audio_microsoft_wave) {
+                    } else if (cache_->media_info.format_type == StreamInfo::audio_microsoft_wave) {
                         info.format_type = ppbox_audio_microsoft_wave;
                     } else {
                         info.format_type = 0;
@@ -267,7 +267,7 @@ namespace ppbox
         {
             error_code ec;
             if (!is_open(ec)) {
-            } else if(cache_->demuxer->get_media_info(index, cache_->media_info, ec)) {
+            } else if(cache_->demuxer->get_stream_info(index, cache_->media_info, ec)) {
             } else {
                 if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
                     info.type = ppbox_video;
@@ -279,9 +279,9 @@ namespace ppbox
                     } else {
                         info.sub_type = 0;
                     }
-                    if (cache_->media_info.format_type == MediaInfo::video_avc_packet) {
+                    if (cache_->media_info.format_type == StreamInfo::video_avc_packet) {
                         info.format_type = ppbox_video_avc_packet;
-                    } else if (cache_->media_info.format_type == MediaInfo::video_avc_byte_stream) {
+                    } else if (cache_->media_info.format_type == StreamInfo::video_avc_byte_stream) {
                         info.format_type = ppbox_video_avc_byte_stream;
                     } else {
                         info.format_type = 0;
@@ -301,9 +301,9 @@ namespace ppbox
                         info.sub_type = 0;
                     }
                     // 增加对音频format_type的判断
-                    if (cache_->media_info.format_type == MediaInfo::audio_iso_mp4) {
+                    if (cache_->media_info.format_type == StreamInfo::audio_iso_mp4) {
                         info.format_type = ppbox_audio_iso_mp4;
-                    } else if (cache_->media_info.format_type == MediaInfo::audio_microsoft_wave) {
+                    } else if (cache_->media_info.format_type == StreamInfo::audio_microsoft_wave) {
                         info.format_type = ppbox_audio_microsoft_wave;
                     } else {
                         info.format_type = 0;
@@ -324,13 +324,13 @@ namespace ppbox
             if (!is_open(ec)) {
             } else if (cache_->avc_buf.empty()) {
                 boost::uint32_t stream_count = 
-                    cache_->demuxer->get_media_count(ec);
+                    cache_->demuxer->get_stream_count(ec);
                 for (boost::uint32_t i = 0; i < stream_count; ++i) {
-                    if (cache_->demuxer->get_media_info(i, cache_->media_info, ec)) {
+                    if (cache_->demuxer->get_stream_info(i, cache_->media_info, ec)) {
                         break;
                     } else if (cache_->media_info.type == MEDIA_TYPE_VIDE 
                         && cache_->media_info.sub_type == VIDEO_TYPE_AVC1
-                        && cache_->media_info.format_type == MediaInfo::video_avc_packet) {
+                        && cache_->media_info.format_type == StreamInfo::video_avc_packet) {
                             cache_->avc_buf = cache_->media_info.format_data;
                             break;
                     }
@@ -354,9 +354,9 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                ppbox::data::DurationInfo info;
-                cache_->demuxer->get_duration(info, ec);
-                duration = (boost::uint32_t)info.total;
+                ppbox::data::MediaInfo info;
+                cache_->demuxer->get_media_info(info, ec);
+                duration = (boost::uint32_t)info.duration;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -367,11 +367,11 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                boost::uint32_t stream_count = cache_->demuxer->get_media_count(ec);
+                boost::uint32_t stream_count = cache_->demuxer->get_stream_count(ec);
                 if (!ec) {
                     ec = framework::system::logic_error::no_data;
                     for (boost::uint32_t i = 0; i < stream_count; ++i) {
-                        if (cache_->demuxer->get_media_info(i, cache_->media_info, ec)) {
+                        if (cache_->demuxer->get_stream_info(i, cache_->media_info, ec)) {
                             break;
                         } else if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
                             width = cache_->media_info.video_format.width;
