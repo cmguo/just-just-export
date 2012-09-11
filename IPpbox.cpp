@@ -101,7 +101,7 @@ namespace ppbox
 #endif
             util::daemon::use_module<ppbox::cdn::Cdn>(*this);
 #ifndef PPBOX_DISABLE_DAC
-            util::daemon::use_module<ppbox::dac::Dac>(*this);
+            util::daemon::use_module<ppbox::dac::DacModule>(*this);
 #endif
 #ifndef PPBOX_DISABLE_PEER
             util::daemon::use_module<ppbox::peer::PeerModule>(*this);
@@ -165,8 +165,8 @@ namespace ppbox
 #endif				
 
 #ifndef PPBOX_DISABLE_DAC
-                ppbox::dac::Dac & dac = 
-                    util::daemon::use_module<ppbox::dac::Dac>(*this);
+                ppbox::dac::DacModule & dac = 
+                    util::daemon::use_module<ppbox::dac::DacModule>(*this);
                 dac.set_auth_code(gid, pid, auth);
 #endif
                 ec = start(1);
@@ -270,9 +270,9 @@ namespace ppbox
             boost::int32_t size)
         {
 #ifndef PPBOX_DISABLE_DAC
-            ppbox::dac::Dac & dac = 
-                util::daemon::use_module<ppbox::dac::Dac>(*this);
-            dac.submit_msg(msg, size);
+            ppbox::dac::DacModule & dac = 
+                util::daemon::use_module<ppbox::dac::DacModule>(*this);
+            dac.submit_log(msg, size);
 #endif
         }
 
