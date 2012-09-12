@@ -28,7 +28,7 @@ using namespace ppbox::common;
 #endif
 
 #ifndef PPBOX_DISABLE_DAC 
-#  include <ppbox/dac/Dac.h>
+#  include <ppbox/dac/DacModule.h>
 #endif
 #ifndef PPBOX_DISABLE_LIVE 
 #  include <ppbox/live/Live.h>
