@@ -10,7 +10,7 @@ using namespace ppbox::error;
 #include <ppbox/mux/flv/FlvMux.h>
 #include <ppbox/mux/ts/TsMux.h>
 #include <ppbox/demux/DemuxModule.h>
-#include <ppbox/demux/base/DemuxerError.h>
+#include <ppbox/demux/base/DemuxError.h>
 #include <ppbox/demux/base/SourceError.h>
 
 #include <framework/logger/StreamRecord.h>
