@@ -34,7 +34,7 @@ using namespace ppbox::common;
 #  include <ppbox/live/Live.h>
 #endif
 #ifndef PPBOX_DISABLE_MUX
-#  include <ppbox/mux/MuxerModule.h>
+#  include <ppbox/mux/MuxModule.h>
 #endif
 
 #ifndef PPBOX_DISABLE_HTTPD
@@ -111,7 +111,7 @@ namespace ppbox
 #endif
             util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
-            util::daemon::use_module<ppbox::mux::MuxerModule>(*this);
+            util::daemon::use_module<ppbox::mux::MuxModule>(*this);
 #endif
 #ifndef PPBOX_DISABLE_HTTPD
             util::daemon::use_module<ppbox::httpd::HttpManager>(*this);
