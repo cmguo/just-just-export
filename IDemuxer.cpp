@@ -4,7 +4,7 @@
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IDemuxer.h"
 
-#include <ppbox/demux/DemuxerModule.h>
+#include <ppbox/demux/DemuxModule.h>
 #include <ppbox/demux/base/BufferDemuxer.h>
 #include <ppbox/demux/base/DemuxerError.h>
 #include <ppbox/demux/base/SourceError.h>
@@ -69,7 +69,7 @@ namespace ppbox
 
     public:
         IDemuxer()
-            : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxerModule>(global_daemon()))
+            : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxModule>(global_daemon()))
             , buffer_time_(3000)
         {
         }
@@ -615,7 +615,7 @@ namespace ppbox
         }
 
     private:
-        ppbox::demux::DemuxerModule & demux_mod_;
+        ppbox::demux::DemuxModule & demux_mod_;
         boost::uint32_t buffer_time_;
         boost::shared_ptr<Cache> cache_;
     };

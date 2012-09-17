@@ -16,7 +16,7 @@ using namespace ppbox::error;
 #endif
 using namespace ppbox::common;
 
-#include <ppbox/demux/DemuxerModule.h>
+#include <ppbox/demux/DemuxModule.h>
 #ifndef PPBOX_DISABLE_CERTIFY 
 #  include <ppbox/certify/Certifier.h>
 #endif
@@ -109,7 +109,7 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_LIVE
             util::daemon::use_module<ppbox::live::Live>(*this);
 #endif
-            util::daemon::use_module<ppbox::demux::DemuxerModule>(*this);
+            util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
             util::daemon::use_module<ppbox::mux::MuxerModule>(*this);
 #endif

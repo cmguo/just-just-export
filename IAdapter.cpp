@@ -9,7 +9,7 @@ using namespace ppbox::error;
 #include <ppbox/mux/Muxer.h>
 #include <ppbox/mux/flv/FlvMux.h>
 #include <ppbox/mux/ts/TsMux.h>
-#include <ppbox/demux/DemuxerModule.h>
+#include <ppbox/demux/DemuxModule.h>
 #include <ppbox/demux/base/DemuxerError.h>
 #include <ppbox/demux/base/SourceError.h>
 
@@ -67,7 +67,7 @@ namespace ppbox
     {
     public:
         IAdapter()
-            : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxerModule>(global_daemon()))
+            : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxModule>(global_daemon()))
             , mux_(NULL)
             , buffer_time_(3000)
         {
@@ -370,7 +370,7 @@ namespace ppbox
         }
 
     private:
-        ppbox::demux::DemuxerModule & demux_mod_;
+        ppbox::demux::DemuxModule & demux_mod_;
         ppbox::mux::Muxer * mux_;
         ppbox::demux::Sample read_tag_;
         TagReadPosition tag_read_position_;
