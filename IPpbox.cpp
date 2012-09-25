@@ -24,7 +24,7 @@ using namespace ppbox::common;
 #include <ppbox/cdn/Cdn.h>
 
 #ifndef PPBOX_DISABLE_PEER
-#  include <ppbox/peer/Peer.h>
+#  include <ppbox/peer/PeerModule.h>
 #endif
 
 #ifndef PPBOX_DISABLE_DAC 
