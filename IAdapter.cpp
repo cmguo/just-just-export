@@ -6,9 +6,9 @@
 using namespace ppbox::error;
 
 #include <ppbox/demux/base/BufferDemuxer.h>
-#include <ppbox/mux/Muxer.h>
-#include <ppbox/mux/flv/FlvMux.h>
-#include <ppbox/mux/ts/TsMux.h>
+#include <ppbox/mux/MuxerBase.h>
+#include <ppbox/mux/flv/FlvMuxer.h>
+#include <ppbox/mux/ts/TsMuxer.h>
 #include <ppbox/demux/DemuxModule.h>
 #include <ppbox/demux/base/DemuxError.h>
 #include <ppbox/demux/base/SourceError.h>
@@ -353,11 +353,11 @@ namespace ppbox
         void opem_mux(void)
         {
             if (strncasecmp(format_, "flv")) {
-                mux_ = new ppbox::mux::FlvMux;
+                mux_ = new ppbox::mux::FlvMuxer;
             } else if (strncasecmp(format_, "ts")) {
-                mux_ = new ppbox::mux::TsMux;
+                mux_ = new ppbox::mux::TsMuxer;
             } else {
-                mux_ = new ppbox::mux::FlvMux;
+                mux_ = new ppbox::mux::FlvMuxer;
             }
         }
 
@@ -371,7 +371,7 @@ namespace ppbox
 
     private:
         ppbox::demux::DemuxModule & demux_mod_;
-        ppbox::mux::Muxer * mux_;
+        ppbox::mux::MuxerBase * mux_;
         ppbox::demux::Sample read_tag_;
         TagReadPosition tag_read_position_;
         Adapter_Open_Callback open_callback_;
