@@ -331,17 +331,17 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors last_error(
+        static error::errors last_error(
             char const * title, 
-            error_code & ec) const
+            error_code const & ec)
         {
             ppbox::error::last_error(ec);
             return async_last_error(title, ec);
         }
 
-        error::errors async_last_error(
+        static error::errors async_last_error(
             char const * title, 
-            error_code & ec) const
+            error_code const & ec)
         {
             if (ec && ec != boost::asio::error::would_block) {
                 LOG_WARN(title << ": " << ec.message());

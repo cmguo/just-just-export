@@ -606,9 +606,9 @@ namespace ppbox
             return ppbox::error::last_error_enum(ec);
         }
 
-        error::errors last_error(
+        static error::errors last_error(
             char const * title, 
-            error_code const & ec) const
+            error_code const & ec)
         {
             ppbox::error::last_error(ec);
             return async_last_error(title, ec);

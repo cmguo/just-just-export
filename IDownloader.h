@@ -10,16 +10,16 @@ extern "C" {
 #endif // __cplusplus
 
     // refine
-	typedef void * PPBOX_Download_Handle;
+    typedef void * PPBOX_Download_Handle;
     typedef void(*PPBOX_Download_Callback)(PP_int32);
-	static const PPBOX_Download_Handle PPBOX_INVALID_DOWNLOAD_HANDLE = NULL;
+    static const PPBOX_Download_Handle PPBOX_INVALID_DOWNLOAD_HANDLE = NULL;
 
     //打开一个下载用例
     PPBOX_DECL PPBOX_Download_Handle PPBOX_DownloadOpen(
                 char const * playlink,
                 char const * format,
                 char const * save_filename,
-				PPBOX_Download_Callback resp);
+                PPBOX_Download_Callback resp);
 
     //关闭指定的下载用例
     PPBOX_DECL void PPBOX_DownloadClose(PPBOX_Download_Handle hander);

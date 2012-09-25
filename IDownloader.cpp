@@ -28,31 +28,31 @@ namespace ppbox
         {
         }
         
-	    static	void download_open_callback(
-			PPBOX_Download_Callback resp,
+        static void download_open_callback(
+            PPBOX_Download_Callback resp,
             error_code const & ec)
-		{
-			if (NULL != resp) {
-			    resp(async_last_error(__FUNCTION__, ec));
-			} else {
-			    async_last_error(__FUNCTION__, ec);
-			}
-		}
+        {
+            if (NULL != resp) {
+                resp(async_last_error(__FUNCTION__, ec));
+            } else {
+                async_last_error(__FUNCTION__, ec);
+            }
+        }
 
         PPBOX_Download_Handle download_open(
-                      char const * playlink,
-                      char const * format,
-                      char const * filename,
-					  PPBOX_Download_Callback resp)
+            char const * playlink,
+            char const * format,
+            char const * filename,
+            PPBOX_Download_Callback resp)
         {
             error_code ec;
             Downloader* hander = download_manager_.add(playlink, format, filename, ec, 
-					boost::bind(&IDownloader::download_open_callback, resp, _1 ));
+                    boost::bind(&IDownloader::download_open_callback, resp, _1 ));
             return  (PPBOX_Download_Handle)hander;
         }
 
         error::errors download_close(
-				PPBOX_Download_Handle const hander)
+            PPBOX_Download_Handle const hander)
         {
             error_code ec;
             download_manager_.del((Downloader*)hander, ec);
@@ -75,9 +75,9 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors last_error(
+        static error::errors last_error(
             char const * title, 
-            error_code & ec) const
+            error_code const & ec)
         {
             ppbox::error::last_error(ec);
             return async_last_error(title, ec);
@@ -115,7 +115,7 @@ extern "C" {
         char const * playlink,
         char const * format,
         char const * save_filename,
-		PPBOX_Download_Callback resp)
+        PPBOX_Download_Callback resp)
     {
         return downloader().download_open(playlink, format, save_filename, resp);
     }
