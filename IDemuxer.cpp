@@ -536,13 +536,6 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors set_download_max_speed(
-            boost::uint32_t speed)
-        {
-            error_code ec;
-            return last_error(__FUNCTION__, ec);
-        }
-
         error::errors set_play_buffer_time(
             boost::uint32_t buffer_time)
         {

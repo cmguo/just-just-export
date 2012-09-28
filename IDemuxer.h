@@ -205,12 +205,6 @@ extern "C" {
     PPBOX_DECL void PPBOX_SetDownloadBufferSize(
         PP_uint32 length);
 
-    PPBOX_DECL void PPBOX_SetHttpProxy(
-        PP_char const * addr);
-
-    PPBOX_DECL void PPBOX_SetDownloadMaxSpeed(
-        PP_uint32 speed);
-
     //设置播放缓冲区的缓冲时间 (随时可以调用)
     // 主要用于计算播放状态，如果不调用这个函数，默认3s
     // 如果 下载缓冲区数据的总时间 < 播放缓冲时间 则 处于 buffering 状态
