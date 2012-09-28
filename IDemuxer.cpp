@@ -5,10 +5,12 @@
 #include "ppbox/ppbox/IDemuxer.h"
 
 #include <ppbox/demux/DemuxModule.h>
-#include <ppbox/demux/base/BufferDemuxer.h>
+#include <ppbox/demux/base/SegmentDemuxer.h>
+#include <ppbox/demux/base/SegmentBuffer.h>
 #include <ppbox/demux/base/DemuxError.h>
 #include <ppbox/demux/base/SourceError.h>
 using namespace ppbox::demux;
+using namespace ppbox::avformat;
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
@@ -54,7 +56,7 @@ namespace ppbox
             }
 
             size_t close_token;
-            BufferDemuxer * demuxer;
+            SegmentDemuxer * demuxer;
 #ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
             //ppbox::demux::SegmentInfo segment;
 #endif
@@ -120,7 +122,7 @@ namespace ppbox
             boost::shared_ptr<Cache> & cache, 
             PPBOX_Open_Callback callback, 
             error_code const & ec, 
-            BufferDemuxer * demuxer)
+            SegmentDemuxer * demuxer)
         {
             cache->demuxer = demuxer;
             callback(async_last_error(__FUNCTION__, ec));
@@ -139,7 +141,7 @@ namespace ppbox
         }
 
         error::errors seek(
-            boost::uint32_t time)
+            boost::uint64_t time)
         {
             LOG_SECTION();
             LOG_INFO("seek time: " << time);
@@ -394,7 +396,7 @@ namespace ppbox
                 }
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = cache_->sample.time;
+                    sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.buffer_length = cache_->sample.size;
                     sample.buffer = cache_->copy_sample_data();
                 }
@@ -412,7 +414,7 @@ namespace ppbox
                 }
                 if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = cache_->sample.time;
+                    sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.offset_in_file = cache_->sample.blocks[0].offset;
                     sample.buffer_length = cache_->sample.size;
                     sample.duration = cache_->sample.duration;
@@ -466,7 +468,7 @@ namespace ppbox
                 }
             } else {
                 error_code ec_buf;
-                stat.buffer_time = cache_->demuxer->get_buffer_time(ec, ec_buf);
+                stat.buffer_time = (boost::uint32_t)cache_->demuxer->get_buffer_time(ec, ec_buf);
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_closed;
                 } else {
@@ -495,7 +497,7 @@ namespace ppbox
             error_code ec;
             stat.length = sizeof(stat);
             if (is_open(ec)) {
-                BufferStatistic const & buffer_stat = cache_->demuxer->buffer_stat();
+                BufferStatistic const & buffer_stat = cache_->demuxer->buffer().stat();
                 memset(&stat, 0, sizeof(stat));
                 stat.length = sizeof(stat);
                 stat.start_time = (boost::uint32_t)buffer_stat.start_time;
@@ -511,7 +513,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                BufferStatistic const & buffer_stat = cache_->demuxer->buffer_stat();
+                BufferStatistic const & buffer_stat = cache_->demuxer->buffer().stat();
                 memset(&stat, 0, sizeof(stat));
                 stat.length = sizeof(stat);
                 time_t now = time(NULL);
@@ -538,15 +540,6 @@ namespace ppbox
             boost::uint32_t speed)
         {
             error_code ec;
-            demux_mod_.set_download_max_speed(speed);
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors set_http_proxy(
-            char const * addr)
-        {
-            error_code ec;
-            demux_mod_.set_http_proxy(addr);
             return last_error(__FUNCTION__, ec);
         }
 
@@ -724,18 +717,6 @@ extern "C" {
         boost::uint32_t length)
     {
         demuxer().set_download_buffer_size(length);
-    }
-
-    PPBOX_DECL void PPBOX_SetDownloadMaxSpeed(
-        boost::uint32_t speed)
-    {
-        demuxer().set_download_max_speed(speed);
-    }
-
-    PPBOX_DECL void PPBOX_SetHttpProxy(
-        char const * addr)
-    {
-        demuxer().set_http_proxy(addr);
     }
 
     PPBOX_DECL void PPBOX_SetPlayBufferTime(
