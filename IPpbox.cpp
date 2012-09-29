@@ -21,7 +21,7 @@ using namespace ppbox::common;
 #  include <ppbox/certify/Certifier.h>
 #endif
 
-#include <ppbox/cdn/Cdn.h>
+#include <ppbox/cdn/CdnModule.h>
 
 #ifndef PPBOX_DISABLE_PEER
 #  include <ppbox/peer/PeerModule.h>
@@ -31,7 +31,7 @@ using namespace ppbox::common;
 #  include <ppbox/dac/DacModule.h>
 #endif
 #ifndef PPBOX_DISABLE_LIVE 
-#  include <ppbox/live/Live.h>
+#  include <ppbox/live/LiveModule.h>
 #endif
 #ifndef PPBOX_DISABLE_MUX
 #  include <ppbox/mux/MuxModule.h>
@@ -99,7 +99,7 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_CERTIFY
             util::daemon::use_module<ppbox::certify::Certifier>(*this);
 #endif
-            util::daemon::use_module<ppbox::cdn::Cdn>(*this);
+            util::daemon::use_module<ppbox::cdn::CdnModule>(*this);
 #ifndef PPBOX_DISABLE_DAC
             util::daemon::use_module<ppbox::dac::DacModule>(*this);
 #endif
@@ -107,7 +107,7 @@ namespace ppbox
             util::daemon::use_module<ppbox::peer::PeerModule>(*this);
 #endif
 #ifndef PPBOX_DISABLE_LIVE
-            util::daemon::use_module<ppbox::live::Live>(*this);
+            util::daemon::use_module<ppbox::live::LiveModule>(*this);
 #endif
             util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
