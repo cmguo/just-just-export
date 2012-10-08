@@ -92,7 +92,8 @@ namespace ppbox
             } else {
                 boost::shared_ptr<Cache> cache(new Cache);
                 cache_ = cache;
-                cache->demuxer = demux_mod_.open(playlink, cache->close_token, ec);
+                framework::string::Url play_link(playlink);
+                cache->demuxer = demux_mod_.open(play_link, cache->close_token, ec);
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -109,7 +110,8 @@ namespace ppbox
                 ec = ppbox::demux::error::already_open;
             } else {
                 cache_.reset(new Cache);
-                demux_mod_.async_open(playlink, cache_->close_token, 
+                framework::string::Url play_link(playlink);
+                demux_mod_.async_open(play_link, cache_->close_token, 
                     boost::bind(&IDemuxer::open_call_back, cache_, callback, _1, _2));
             }
             if (ec) {
