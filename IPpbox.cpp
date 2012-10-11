@@ -56,7 +56,7 @@ using namespace framework::process;
 #include <boost/thread/thread.hpp>
 using namespace boost::system;
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("Ppbox", 0);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IPpbox", Debug);
 
 namespace ppbox
 {

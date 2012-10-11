@@ -8,7 +8,9 @@
 #include <ppbox/demux/base/SegmentDemuxer.h>
 #include <ppbox/demux/base/SegmentBuffer.h>
 #include <ppbox/demux/base/DemuxError.h>
-#include <ppbox/demux/base/SourceError.h>
+#include <ppbox/data/SegmentSource.h>
+#include <ppbox/data/SourceError.h>
+using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::avformat;
 
@@ -26,7 +28,7 @@ using namespace boost::system;
 
 extern void pool_dump();
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("Ppbox", 0);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDemuxer", Debug);
 
 namespace ppbox
 {
@@ -474,7 +476,7 @@ namespace ppbox
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_closed;
                 } else {
-                    if (stat.buffer_time >= buffer_time_ || ec_buf == ppbox::demux::source_error::no_more_segment) {
+                    if (stat.buffer_time >= buffer_time_ || ec_buf == ppbox::data::source_error::no_more_segment) {
                         stat.buffering_present = 100;
                         stat.play_status = ppbox_playing;
                     } else if (buffer_time_ != 0) {
@@ -499,7 +501,7 @@ namespace ppbox
             error_code ec;
             stat.length = sizeof(stat);
             if (is_open(ec)) {
-                BufferStatistic const & buffer_stat = cache_->demuxer->buffer().stat();
+                DataStatistic const & buffer_stat = cache_->demuxer->buffer().source().buffer_stat();
                 memset(&stat, 0, sizeof(stat));
                 stat.length = sizeof(stat);
                 stat.start_time = (boost::uint32_t)buffer_stat.start_time;
@@ -515,7 +517,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                BufferStatistic const & buffer_stat = cache_->demuxer->buffer().stat();
+                DataStatistic const & buffer_stat = cache_->demuxer->buffer().source().buffer_stat();
                 memset(&stat, 0, sizeof(stat));
                 stat.length = sizeof(stat);
                 time_t now = time(NULL);
