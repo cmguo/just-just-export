@@ -5,7 +5,8 @@
 #include "ppbox/ppbox/IDownloader.h"
 using namespace ppbox::error;
 
-#include <ppbox/download/Manager.h>
+#include <ppbox/download/DownloadModule.h>
+#include <ppbox/download/Downloader.h>
 using namespace ppbox::download;
 
 #include <boost/bind.hpp>
@@ -20,7 +21,7 @@ namespace ppbox
     {
     public:
         IDownloader()
-            : download_manager_(util::daemon::use_module<ppbox::download::Manager>(global_daemon()))
+            : download_manager_(util::daemon::use_module<ppbox::download::DownloadModule>(global_daemon()))
         {
         }
 
@@ -46,7 +47,10 @@ namespace ppbox
             PPBOX_Download_Callback resp)
         {
             error_code ec;
-            Downloader* hander = download_manager_.add(playlink, format, filename, ec, 
+            framework::string::Url url(std::string("file:///") + filename);
+            url.param("playlink", playlink);
+            url.param("format", format);
+            Downloader* hander = download_manager_.open(url, 
                     boost::bind(&IDownloader::download_open_callback, resp, _1 ));
             return  (PPBOX_Download_Handle)hander;
         }
@@ -55,22 +59,22 @@ namespace ppbox
             PPBOX_Download_Handle const hander)
         {
             error_code ec;
-            download_manager_.del((Downloader*)hander, ec);
+            download_manager_.close((Downloader*)hander, ec);
             return last_error(__FUNCTION__, ec);
         }
 
         error::errors download_get_statistic(
             PPBOX_Download_Handle const hander,
-            PPBOX_DownloadStatistic & download_statistic)
+            PPBOX_DownloadStatistic & statistic)
         {
             error_code ec;
-
-            DownloadStatistic statistic;
-            download_manager_.get_download_statictis((Downloader*)hander, statistic, ec);
+            Downloader * downloader = (Downloader *)hander;
+            DownloadStatistic stat;
+            downloader->get_statictis(stat, ec);
             if (!ec) {
-                download_statistic.finish_size = statistic.finish_size;
-                download_statistic.speed       = statistic.speed;
-                download_statistic.total_size  = statistic.total_size;
+                statistic.finish_size = stat.finish_size;
+                statistic.speed = stat.speed;
+                statistic.total_size  = stat.total_size;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -94,7 +98,7 @@ namespace ppbox
         }
 
     private:
-        ppbox::download::Manager & download_manager_;
+        ppbox::download::DownloadModule & download_manager_;
     };
 
 }

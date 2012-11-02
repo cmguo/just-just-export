@@ -17,6 +17,8 @@ using namespace ppbox::error;
 using namespace ppbox::common;
 
 #include <ppbox/demux/DemuxModule.h>
+#include <ppbox/merge/MergeModule.h>
+
 #ifndef PPBOX_DISABLE_CERTIFY 
 #  include <ppbox/certify/Certifier.h>
 #endif
@@ -38,10 +40,10 @@ using namespace ppbox::common;
 #endif
 
 #ifndef PPBOX_DISABLE_HTTPD
-#  include <ppbox/httpd/HttpManager.h>
+#  include <ppbox/httpd/HttpdModule.h>
 #endif
 #ifndef PPBOX_DISABLE_RTSPD
-#  include <ppbox/rtspd/RtspManager.h>
+#  include <ppbox/rtspd/RtspdModule.h>
 #endif
 
 #include <framework/logger/StreamRecord.h>
@@ -56,11 +58,10 @@ using namespace framework::process;
 #include <boost/thread/thread.hpp>
 using namespace boost::system;
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IPpbox", Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IPpbox", framework::logger::Debug);
 
 namespace ppbox
 {
-
 
     class IPpbox
         : public util::daemon::Daemon
@@ -110,14 +111,15 @@ namespace ppbox
             util::daemon::use_module<ppbox::live::LiveModule>(*this);
 #endif
             util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
+            util::daemon::use_module<ppbox::merge::MergeModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
             util::daemon::use_module<ppbox::mux::MuxModule>(*this);
 #endif
 #ifndef PPBOX_DISABLE_HTTPD
-            util::daemon::use_module<ppbox::httpd::HttpManager>(*this);
+            util::daemon::use_module<ppbox::httpd::HttpdModule>(*this);
 #endif
 #ifndef PPBOX_DISABLE_RTSPD
-            util::daemon::use_module<ppbox::rtspd::RtspManager>(*this);
+            util::daemon::use_module<ppbox::rtspd::RtspdModule>(*this);
 #endif
             LOG_INFO("Ppbox ready.");
         }

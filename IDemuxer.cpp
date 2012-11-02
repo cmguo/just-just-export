@@ -6,9 +6,9 @@
 
 #include <ppbox/demux/DemuxModule.h>
 #include <ppbox/demux/base/SegmentDemuxer.h>
-#include <ppbox/demux/base/SegmentBuffer.h>
 #include <ppbox/demux/base/DemuxError.h>
 #include <ppbox/data/SegmentSource.h>
+#include <ppbox/data/SegmentBuffer.h>
 #include <ppbox/data/SourceError.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
