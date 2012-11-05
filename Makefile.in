@@ -56,11 +56,13 @@ PROJECT_DEPENDS			:= \
 				/ppbox/httpd \
 				/ppbox/download \
 				/ppbox/rtspd \
-				/ppbox/httpd \
+				/ppbox/dispatch \
+				/ppbox/data \
+				/ppbox/merge \
 				/ppbox/mux \
 				/ppbox/demux \
 				/ppbox/dac \
-				/ppbox/vod \
+				/ppbox/cdn \
 				/ppbox/peer \
 				/ppbox/live \
 				/ppbox/certify \
