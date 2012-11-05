@@ -45,17 +45,5 @@
 		PPBOX_InsertMedia;
 		PPBOX_GetInsertMediaEvent;
 		
-		Adapter_Open;
-		Adapter_AsyncOpen;
-		Adapter_Pause;
-		Adapter_Resume;
-		Adapter_Close;
-		Adapter_Seek;
-		Adapter_Reset;
-		Adapter_Read;
-		Adapter_GetPlayMsg;
-		Adapter_GetMediaInfo;
-		Adapter_GetPlayTime;
-		
 	local: *;
 };

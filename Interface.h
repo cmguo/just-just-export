@@ -5,7 +5,6 @@
 
 #include "ppbox/ppbox/IPpbox.h"
 #include "ppbox/ppbox/IDemuxer.h"
-#include "ppbox/ppbox/IAdapter.h"
 #include "ppbox/ppbox/IDownloader.h"
 
 #endif // _PPBOX_PPBOX_INTERFACE_H_
