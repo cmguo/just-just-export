@@ -16,6 +16,7 @@ using namespace ppbox::error;
 #endif
 using namespace ppbox::common;
 
+#include <ppbox/data/DataModule.h>
 #include <ppbox/demux/DemuxModule.h>
 #include <ppbox/merge/MergeModule.h>
 
@@ -110,6 +111,7 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_LIVE
             util::daemon::use_module<ppbox::live::LiveModule>(*this);
 #endif
+            util::daemon::use_module<ppbox::data::DataModule>(*this);
             util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
             util::daemon::use_module<ppbox::merge::MergeModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
