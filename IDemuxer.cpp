@@ -5,11 +5,10 @@
 #include "ppbox/ppbox/IDemuxer.h"
 
 #include <ppbox/demux/DemuxModule.h>
-#include <ppbox/demux/base/SegmentDemuxer.h>
+#include <ppbox/demux/base/DemuxerBase.h>
 #include <ppbox/demux/base/DemuxError.h>
-#include <ppbox/data/SegmentSource.h>
-#include <ppbox/data/SegmentBuffer.h>
-#include <ppbox/data/SourceError.h>
+#include <ppbox/data/base/SourceError.h>
+#include <ppbox/data/base/DataStatistic.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::avformat;
@@ -58,7 +57,7 @@ namespace ppbox
             }
 
             size_t close_token;
-            SegmentDemuxer * demuxer;
+            DemuxerBase * demuxer;
 #ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
             //ppbox::demux::SegmentInfo segment;
 #endif
@@ -126,7 +125,7 @@ namespace ppbox
             boost::shared_ptr<Cache> & cache, 
             PPBOX_Open_Callback callback, 
             error_code const & ec, 
-            SegmentDemuxer * demuxer)
+            DemuxerBase * demuxer)
         {
             cache->demuxer = demuxer;
             callback(async_last_error(__FUNCTION__, ec));
@@ -398,7 +397,7 @@ namespace ppbox
                 if (cache_->paused) {
                     cache_->paused = false;
                 }
-                if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
+                if (!cache_->demuxer->get_sample(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.buffer_length = cache_->sample.size;
@@ -416,7 +415,7 @@ namespace ppbox
                 if (cache_->paused) {
                     cache_->paused = false;
                 }
-                if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) {
+                if (!cache_->demuxer->get_sample(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.offset_in_file = cache_->sample.blocks[0].offset;
@@ -440,7 +439,7 @@ namespace ppbox
                 if (cache_->paused) {
                     cache_->paused = false;
                 }
-                if (!cache_->demuxer->get_sample_buffered(cache_->sample, ec)) { 
+                if (!cache_->demuxer->get_sample(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = cache_->sample.ustime;
                     sample.buffer_length = cache_->sample.size;
@@ -449,7 +448,7 @@ namespace ppbox
                     sample.decode_time = cache_->sample.dts;
                     sample.composite_time_delta = cache_->sample.us_delta;
                     sample.is_sync = cache_->sample.flags & Sample::sync;
-                    sample.is_discontinuity = cache_->sample.flags & Sample::discontinuity;
+                    sample.is_discontinuity = (cache_->sample.flags & Sample::discontinuity) != 0;
                     sample.buffer = cache_->copy_sample_data();
                 }
             }
@@ -472,7 +471,7 @@ namespace ppbox
                 }
             } else {
                 error_code ec_buf;
-                stat.buffer_time = (boost::uint32_t)cache_->demuxer->get_buffer_time(ec, ec_buf);
+                //stat.buffer_time = (boost::uint32_t)cache_->demuxer->get_buffer_time(ec, ec_buf);
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_closed;
                 } else {
@@ -501,13 +500,14 @@ namespace ppbox
             error_code ec;
             stat.length = sizeof(stat);
             if (is_open(ec)) {
-                DataStatistic const & buffer_stat = cache_->demuxer->buffer().source().buffer_stat();
+                DataStatistic data_stat;
+                cache_->demuxer->get_data_stat(data_stat, ec);
                 memset(&stat, 0, sizeof(stat));
                 stat.length = sizeof(stat);
-                stat.start_time = (boost::uint32_t)buffer_stat.start_time;
-                stat.total_download_bytes = (boost::uint32_t)buffer_stat.total_bytes;
-                stat.http_download_bytes = (boost::uint32_t)buffer_stat.total_bytes;
-                stat.download_duration_in_sec = (boost::uint32_t)(time(NULL) - buffer_stat.start_time);
+                stat.start_time = (boost::uint32_t)data_stat.start_time;
+                stat.total_download_bytes = (boost::uint32_t)data_stat.total_bytes;
+                stat.http_download_bytes = (boost::uint32_t)data_stat.total_bytes;
+                stat.download_duration_in_sec = (boost::uint32_t)(time(NULL) - data_stat.start_time);
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -517,17 +517,18 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                DataStatistic const & buffer_stat = cache_->demuxer->buffer().source().buffer_stat();
+                DataStatistic data_stat;
+                cache_->demuxer->get_data_stat(data_stat, ec);
                 memset(&stat, 0, sizeof(stat));
                 stat.length = sizeof(stat);
                 time_t now = time(NULL);
-                if (now > buffer_stat.start_time) {
-                    stat.avg_download_speed = (boost::uint32_t)(buffer_stat.total_bytes / (now - buffer_stat.start_time));
+                if (now > data_stat.start_time) {
+                    stat.avg_download_speed = (boost::uint32_t)(data_stat.total_bytes / (now - data_stat.start_time));
                 }
-                stat.second_download_speed = buffer_stat.speeds[0].cur_speed;
-                stat.recent_download_speed = buffer_stat.speeds[1].cur_speed;
-                stat.now_download_speed = buffer_stat.speeds[2].cur_speed;
-                stat.minute_download_speed = buffer_stat.speeds[3].cur_speed;
+                stat.second_download_speed = data_stat.speeds[0].cur_speed;
+                stat.recent_download_speed = data_stat.speeds[1].cur_speed;
+                stat.now_download_speed = data_stat.speeds[2].cur_speed;
+                stat.minute_download_speed = data_stat.speeds[3].cur_speed;
             }
             return last_error(__FUNCTION__, ec);
         }
