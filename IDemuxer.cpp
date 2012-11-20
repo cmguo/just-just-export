@@ -7,10 +7,13 @@
 #include <ppbox/demux/DemuxModule.h>
 #include <ppbox/demux/base/DemuxerBase.h>
 #include <ppbox/demux/base/DemuxError.h>
+#include <ppbox/mux/MuxModule.h>
+#include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/SourceError.h>
 #include <ppbox/data/base/DataStatistic.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
+using namespace ppbox::mux;
 using namespace ppbox::avformat;
 
 #include <framework/logger/Logger.h>
@@ -58,6 +61,7 @@ namespace ppbox
 
             size_t close_token;
             DemuxerBase * demuxer;
+            MuxerBase * muxer;
 #ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
             //ppbox::demux::SegmentInfo segment;
 #endif
@@ -72,7 +76,8 @@ namespace ppbox
 
     public:
         IDemuxer()
-            : demux_mod_(util::daemon::use_module<ppbox::demux::DemuxModule>(global_daemon()))
+            : demux_mod_(util::daemon::use_module<DemuxModule>(global_daemon()))
+            , mux_mod_(util::daemon::use_module<MuxModule>(global_daemon()))
             , buffer_time_(3000)
         {
         }
@@ -84,8 +89,15 @@ namespace ppbox
         error::errors open(
             char const * playlink)
         {
+            return open(playlink, "raw");
+        }
+
+        error::errors open(
+            char const * playlink, 
+            char const * format)
+        {
             LOG_SECTION();
-            LOG_INFO("open playlink: " << playlink);
+            LOG_INFO("open playlink: " << playlink << ", format: " << format);
 
             error_code ec;
             if (cache_) {
@@ -95,6 +107,9 @@ namespace ppbox
                 cache_ = cache;
                 framework::string::Url play_link(playlink);
                 cache->demuxer = demux_mod_.open(play_link, cache->close_token, ec);
+                if (!ec) {
+                    cache->muxer = mux_mod_.open(cache->demuxer, format, ec);
+                }
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -103,8 +118,16 @@ namespace ppbox
             char const * playlink, 
             PPBOX_Open_Callback callback)
         {
+            async_open(playlink, "", callback);
+        }
+
+        void async_open(
+            char const * playlink, 
+            char const * format, 
+            PPBOX_Open_Callback callback)
+        {
             LOG_SECTION();
-            LOG_INFO("async_open playlink: " << playlink);
+            LOG_INFO("async_open playlink: " << playlink << ", format: " << format);
 
             error_code ec;
             if (cache_) {
@@ -113,7 +136,7 @@ namespace ppbox
                 cache_.reset(new Cache);
                 framework::string::Url play_link(playlink);
                 demux_mod_.async_open(play_link, cache_->close_token, 
-                    boost::bind(&IDemuxer::open_call_back, cache_, callback, _1, _2));
+                    boost::bind(&IDemuxer::open_call_back, this, cache_, std::string(format), callback, _1, _2));
             }
             if (ec) {
                 boost::thread th(boost::bind(callback, async_last_error(__FUNCTION__, ec)));
@@ -121,13 +144,17 @@ namespace ppbox
             }
         }
 
-        static void open_call_back(
+        void open_call_back(
             boost::shared_ptr<Cache> & cache, 
+            std::string const & format, 
             PPBOX_Open_Callback callback, 
-            error_code const & ec, 
+            error_code ec, 
             DemuxerBase * demuxer)
         {
             cache->demuxer = demuxer;
+            if (!ec) {
+                cache->muxer = mux_mod_.open(cache->demuxer, format, ec);
+            }
             callback(async_last_error(__FUNCTION__, ec));
         }
 
@@ -397,7 +424,7 @@ namespace ppbox
                 if (cache_->paused) {
                     cache_->paused = false;
                 }
-                if (!cache_->demuxer->get_sample(cache_->sample, ec)) {
+                if (cache_->muxer->read(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.buffer_length = cache_->sample.size;
@@ -415,7 +442,7 @@ namespace ppbox
                 if (cache_->paused) {
                     cache_->paused = false;
                 }
-                if (!cache_->demuxer->get_sample(cache_->sample, ec)) {
+                if (cache_->muxer->read(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.offset_in_file = cache_->sample.blocks[0].offset;
@@ -439,7 +466,7 @@ namespace ppbox
                 if (cache_->paused) {
                     cache_->paused = false;
                 }
-                if (!cache_->demuxer->get_sample(cache_->sample, ec)) {
+                if (cache_->muxer->read(cache_->sample, ec)) {
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = cache_->sample.ustime;
                     sample.buffer_length = cache_->sample.size;
@@ -549,44 +576,6 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        //error::errors insert_media(
-        //    boost::uint32_t count,
-        //    InsertMedia const * medias)
-        //{
-        //    error_code ec = error_code();
-        //    for ( size_t i = 0; i < count; ++i ) {
-        //        demux_mod_.insert_media( 
-        //            medias[i].id,
-        //            medias[i].insert_time,
-        //            medias[i].media_duration,
-        //            medias[i].media_size,
-        //            medias[i].head_size,
-        //            medias[i].report,
-        //            medias[i].url,
-        //            medias[i].report_begin_url,
-        //            medias[i].report_end_url,
-        //            ec);
-
-        //        // 出现错误就停止插入后面的广告
-        //        if ( ec ) break;
-        //    }
-
-        //    return last_error( __FUNCTION__, ec );
-        //}
-
-        //error::errors get_insert_media_event(
-        //    InsertMediaEvent & event )
-        //{
-        //    error_code ec = error_code();
-        //    const ppbox::demux::InsertMediaInfo & meidainfo = demux_mod_.get_insert_media( event.media_id, ec );
-        //    if ( !ec ) {
-        //        event.event_type = meidainfo.event_type;
-        //        event.argment = meidainfo.argment;
-        //    }
-
-        //    return last_error( __FUNCTION__, ec );
-        //}
-
         static error::errors async_last_error(
             char const * log_title, 
             error_code const & ec)
@@ -606,7 +595,8 @@ namespace ppbox
         }
 
     private:
-        ppbox::demux::DemuxModule & demux_mod_;
+        DemuxModule & demux_mod_;
+        MuxModule & mux_mod_;
         boost::uint32_t buffer_time_;
         boost::shared_ptr<Cache> cache_;
     };
@@ -633,6 +623,21 @@ extern "C" {
         PPBOX_Open_Callback callback)
     {
         demuxer().async_open(playlink, callback);
+    }
+
+    PPBOX_DECL PP_int32 PPBOX_OpenEx(
+        PP_char const * playlink, 
+        PP_char const * format)
+    {
+        return demuxer().open(playlink, format);
+    }
+
+    PPBOX_DECL void PPBOX_AsyncOpenEx(
+        PP_char const * playlink, 
+        PP_char const * format, 
+        PPBOX_Open_Callback callback)
+    {
+        demuxer().async_open(playlink, format, callback);
     }
 
     PPBOX_DECL boost::uint32_t PPBOX_GetStreamCount()
