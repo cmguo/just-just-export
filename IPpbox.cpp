@@ -17,6 +17,7 @@ using namespace ppbox::error;
 using namespace ppbox::common;
 
 #include <ppbox/data/DataModule.h>
+#include <ppbox/avformat/AvformatModule.h>
 #include <ppbox/demux/DemuxModule.h>
 #include <ppbox/merge/MergeModule.h>
 
@@ -112,6 +113,7 @@ namespace ppbox
             util::daemon::use_module<ppbox::live::LiveModule>(*this);
 #endif
             util::daemon::use_module<ppbox::data::DataModule>(*this);
+            util::daemon::use_module<ppbox::avformat::AvformatModule>(*this);
             util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
             util::daemon::use_module<ppbox::merge::MergeModule>(*this);
 #ifndef PPBOX_DISABLE_MUX
