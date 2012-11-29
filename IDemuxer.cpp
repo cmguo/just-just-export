@@ -286,7 +286,6 @@ namespace ppbox
                         info.format_type = 0;
                     }
                 }
-                //info.format_type = cache_->media_info.format_type;
                 info.format_size = cache_->media_info.format_data.size();
                 info.format_buffer = info.format_size ? &cache_->media_info.format_data.at(0) : NULL;
             }
@@ -341,7 +340,6 @@ namespace ppbox
                         info.format_type = 0;
                     }
                 }
-                // info.format_type = cache_->media_info.format_type;
                 info.format_size = cache_->media_info.format_data.size();
                 info.format_buffer = info.format_size ? &cache_->media_info.format_data.at(0) : NULL;
             }
@@ -388,7 +386,7 @@ namespace ppbox
             if (is_open(ec)) {
                 ppbox::data::MediaInfo info;
                 cache_->demuxer->get_media_info(info, ec);
-                duration = (boost::uint32_t)info.duration;
+                duration = ec ? 0 : (boost::uint32_t)info.duration;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -497,12 +495,14 @@ namespace ppbox
                     stat.play_status = ppbox_closed;
                 }
             } else {
-                error_code ec_buf;
-                //stat.buffer_time = (boost::uint32_t)cache_->demuxer->get_buffer_time(ec, ec_buf);
+                cache_->demuxer->fill_data(ec);
+                ppbox::data::StreamStatus status;
+                cache_->demuxer->get_stream_status(status, ec);
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_closed;
                 } else {
-                    if (stat.buffer_time >= buffer_time_ || ec_buf == ppbox::data::source_error::no_more_segment) {
+                    stat.buffer_time = status.time_range.buf - status.time_range.pos;
+                    if (stat.buffer_time >= buffer_time_ || status.buf_ec == ppbox::data::source_error::no_more_segment) {
                         stat.buffering_present = 100;
                         stat.play_status = ppbox_playing;
                     } else if (buffer_time_ != 0) {
@@ -514,7 +514,7 @@ namespace ppbox
                     }
                     // 在缓冲状态，缓冲的错误码更有参考意义
                     if (stat.play_status == ppbox_buffering) {
-                        ec = ec_buf;
+                        ec = status.buf_ec;
                     }
                 }
             }
