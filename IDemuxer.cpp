@@ -21,7 +21,6 @@ using namespace ppbox::avformat;
 #include <framework/logger/Section.h>
 #include <framework/system/LogicError.h>
 #include <util/buffers/BufferCopy.h>
-using namespace framework::logger;
 using namespace framework::timer;
 
 #include <boost/bind.hpp>
@@ -30,7 +29,7 @@ using namespace boost::system;
 
 extern void pool_dump();
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDemuxer", Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDemuxer", framework::logger::Debug);
 
 namespace ppbox
 {
