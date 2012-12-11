@@ -26,6 +26,7 @@ typedef boost::int32_t PP_int32;
 typedef boost::uint16_t PP_uint16;
 typedef boost::uint32_t PP_uint32;
 typedef boost::uint64_t PP_uint64;
+typedef PP_int32 PP_err;
 
 enum PPBOX_ErrorEnum
 {
@@ -47,6 +48,8 @@ enum PPBOX_ErrorEnum
 #if __cplusplus
 extern "C" {
 #endif // __cplusplus
+
+    typedef void * PPBOX_HANDLE;
 
     PPBOX_DECL PP_int32 PPBOX_StartP2PEngine(
         PP_char const * gid, 
@@ -110,6 +113,14 @@ extern "C" {
     PPBOX_DECL void PPBOX_LogDump(
         PPBOX_OnLogDump callback,
         PP_int32 level);
+
+    PPBOX_DECL PPBOX_HANDLE PPBOX_CreateTimer(
+        PP_uint32 delay, 
+        void * user_data, 
+        PPBOX_Callback callback);
+
+    PPBOX_DECL PP_err PPBOX_DeleteTimer(
+        PPBOX_HANDLE timer);
 
 #if __cplusplus
 }

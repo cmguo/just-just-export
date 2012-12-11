@@ -291,6 +291,27 @@ namespace ppbox
             debuger.set_log_hook(
                 ( ppbox::common::Debuger::on_logdump_type )(callback), level);
         }
+
+        PPBOX_HANDLE create_timer(
+            PP_uint32 delay, 
+            void * user_data, 
+            PPBOX_Callback callback)
+        {
+            boost::asio::deadline_timer * timer2 = new boost::asio::deadline_timer(io_svc());
+            timer2->expires_from_now(boost::posix_time::milliseconds(delay));
+            timer2->async_wait(boost::bind(callback, user_data, boost::bind(last_error_enum, _1)));
+            return timer2;
+        }
+
+        error::errors delete_timer(
+            PPBOX_HANDLE timer)
+        {
+            boost::system::error_code ec;
+            boost::asio::deadline_timer * timer2 = (boost::asio::deadline_timer *)timer;
+            timer2->cancel(ec);
+            delete timer2;
+            return last_error(__FUNCTION__, ec);
+        }
     };
 
     util::daemon::Daemon & global_daemon()
@@ -383,6 +404,21 @@ extern "C" {
     {
         the_ppbox().log_dump(callback, level);
     }
+
+    PPBOX_DECL PPBOX_HANDLE PPBOX_CreateTimer(
+        PP_uint32 delay, 
+        void * user_data, 
+        PPBOX_Callback callback)
+    {
+        return the_ppbox().create_timer(delay, user_data, callback);
+    }
+
+    PPBOX_DECL PP_err PPBOX_DeleteTimer(
+        PPBOX_HANDLE timer)
+    {
+        return the_ppbox().delete_timer(timer);
+    }
+
 
 #if __cplusplus
 }

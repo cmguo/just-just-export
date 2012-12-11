@@ -61,13 +61,9 @@ namespace ppbox
             size_t close_token;
             DemuxerBase * demuxer;
             MuxerBase * muxer;
-#ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
-            //ppbox::demux::SegmentInfo segment;
-#endif
             ppbox::demux::StreamInfo media_info;
             boost::uint32_t video_media_index;
             std::vector<boost::uint8_t> media_type_buffer;
-            std::vector<boost::uint8_t> avc_buf;
             ppbox::demux::Sample sample;
             bool paused;
             std::vector<boost::uint8_t> sample_buffer;
@@ -105,9 +101,11 @@ namespace ppbox
                 boost::shared_ptr<Cache> cache(new Cache);
                 cache_ = cache;
                 framework::string::Url play_link(playlink);
-                cache->demuxer = demux_mod_.open(play_link, cache->close_token, ec);
+                framework::string::Url config(std::string("config:///interface?") + format);
+                cache->demuxer = demux_mod_.open(play_link, config, cache->close_token, ec);
                 if (!ec) {
-                    cache->muxer = mux_mod_.open(cache->demuxer, format, ec);
+                    framework::string::Url play_link(playlink);
+                    cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -134,8 +132,9 @@ namespace ppbox
             } else {
                 cache_.reset(new Cache);
                 framework::string::Url play_link(playlink);
-                demux_mod_.async_open(play_link, cache_->close_token, 
-                    boost::bind(&IDemuxer::open_call_back, this, cache_, std::string(format), callback, _1, _2));
+                framework::string::Url config(std::string("config:///interface?") + format);
+                demux_mod_.async_open(play_link, config, cache_->close_token, 
+                    boost::bind(&IDemuxer::open_call_back, this, cache_, config, callback, _1, _2));
             }
             if (ec) {
                 boost::thread th(boost::bind(callback, async_last_error(__FUNCTION__, ec)));
@@ -145,14 +144,14 @@ namespace ppbox
 
         void open_call_back(
             boost::shared_ptr<Cache> & cache, 
-            std::string const & format, 
+            framework::string::Url const & config, 
             PPBOX_Open_Callback callback, 
             error_code ec, 
             DemuxerBase * demuxer)
         {
             cache->demuxer = demuxer;
             if (!ec) {
-                cache->muxer = mux_mod_.open(cache->demuxer, format, ec);
+                cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
             }
             callback(async_last_error(__FUNCTION__, ec));
         }
@@ -345,39 +344,6 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_avc_config(
-            boost::uint8_t const * & buffer, 
-            boost::uint32_t & length)
-        {
-            error_code ec;
-            if (!is_open(ec)) {
-            } else if (cache_->avc_buf.empty()) {
-                boost::uint32_t stream_count = 
-                    cache_->demuxer->get_stream_count(ec);
-                for (boost::uint32_t i = 0; i < stream_count; ++i) {
-                    if (cache_->demuxer->get_stream_info(i, cache_->media_info, ec)) {
-                        break;
-                    } else if (cache_->media_info.type == MEDIA_TYPE_VIDE 
-                        && cache_->media_info.sub_type == VIDEO_TYPE_AVC1
-                        && cache_->media_info.format_type == StreamInfo::video_avc_packet) {
-                            cache_->avc_buf = cache_->media_info.format_data;
-                            break;
-                    }
-                }
-                if (!ec && cache_->avc_buf.empty()) {
-                    ec = framework::system::logic_error::no_data;
-                } else {
-                    buffer = &cache_->avc_buf.at(0);
-                    length = cache_->avc_buf.size();
-                }
-            } else {
-                buffer = &cache_->avc_buf.at(0);
-                length = cache_->avc_buf.size();
-                ec.clear();
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
         error::errors get_duration(
             boost::uint32_t & duration)
         {
@@ -500,7 +466,7 @@ namespace ppbox
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = ppbox_closed;
                 } else {
-                    stat.buffer_time = status.time_range.buf - status.time_range.pos;
+                    stat.buffer_time = (boost::uint32_t)(status.time_range.buf - status.time_range.pos);
                     if (stat.buffer_time >= buffer_time_ || status.buf_ec == ppbox::data::source_error::no_more_segment) {
                         stat.buffering_present = 100;
                         stat.play_status = ppbox_playing;
@@ -678,13 +644,6 @@ extern "C" {
         boost::uint32_t start_time)
     {
         return demuxer().seek(start_time);
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_GetAvcConfig(
-        boost::uint8_t const * * buffer, 
-        boost::uint32_t * length)
-    {
-        return demuxer().get_avc_config(*buffer, *length);
     }
 
     PPBOX_DECL boost::int32_t PPBOX_ReadSample(

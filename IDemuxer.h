@@ -118,42 +118,6 @@ extern "C" {
     PPBOX_DECL PP_int32 PPBOX_Seek(
         PP_uint32 start_time);
 
-    //获得AVC音频编码的AVCDecoderConfigurationRecord参数
-    PPBOX_DECL PP_int32 PPBOX_GetAvcConfig(
-        PP_uchar const * * buffer, 
-        PP_uint32 * length);
-
-#ifdef PPBOX_DEMUX_RETURN_SEGMENT_INFO
-
-    PPBOX_DECL PP_int32 PPBOX_GetFirstSegHeader(
-        PP_uchar const * * buffer, 
-        PP_uint32 * length);
-
-    PPBOX_DECL PP_int32 PPBOX_GetSegHeader(
-        PP_uint32 index, 
-        PP_uchar const * * buffer, 
-        PP_uint32 * length);
-
-    PPBOX_DECL PP_uint32 PPBOX_GetSegDataSize(
-        PP_uint32 index);
-
-    typedef struct tag_PPBOX_SegmentInfo
-    {
-        PP_uint32 index;
-        PP_uint32 duration;
-        PP_uint32 duration_offset;
-        PP_uint32 head_length;
-        PP_uint64 file_length;
-        PP_uchar const * head_buffer;
-    } PPBOX_SegmentInfo;
-
-    PPBOX_DECL PP_uint32 PPBOX_GetSegmentCount();
-
-    PPBOX_DECL PP_int32 PPBOX_GetSegmentInfo(
-        PPBOX_SegmentInfo * segment_info);
-
-#endif
-
     typedef struct tag_PPBOX_Sample
     {
         PP_uint32 stream_index;     // 流的编号
