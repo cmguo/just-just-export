@@ -84,7 +84,7 @@ namespace ppbox
         error::errors open(
             char const * playlink)
         {
-            return open(playlink, "raw");
+            return open(playlink, "format=raw");
         }
 
         error::errors open(

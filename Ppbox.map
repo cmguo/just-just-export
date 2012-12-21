@@ -18,6 +18,8 @@
 
 		PPBOX_Open;
 		PPBOX_AsyncOpen;
+		PPBOX_OpenEx;
+		PPBOX_AsyncOpenEx;
 		PPBOX_Pause;
 		PPBOX_Close;
 		PPBOX_GetStreamCount;
