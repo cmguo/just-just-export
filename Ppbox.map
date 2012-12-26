@@ -11,6 +11,8 @@
 		PPBOX_DialogMessage;
 		PPBOX_SubmitMessage;
 		PPBOX_LogDump;
+		PPBOX_ScheduleCallback;
+		PPBOX_CancelCallback;
 
 		PPBOX_DownloadClose;
 		PPBOX_DownloadOpen;

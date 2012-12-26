@@ -114,13 +114,13 @@ extern "C" {
         PPBOX_OnLogDump callback,
         PP_int32 level);
 
-    PPBOX_DECL PPBOX_HANDLE PPBOX_CreateTimer(
+    PPBOX_DECL PPBOX_HANDLE PPBOX_ScheduleCallback(
         PP_uint32 delay, 
         void * user_data, 
         PPBOX_Callback callback);
 
-    PPBOX_DECL PP_err PPBOX_DeleteTimer(
-        PPBOX_HANDLE timer);
+    PPBOX_DECL PP_err PPBOX_CancelCallback(
+        PPBOX_HANDLE handle);
 
 #if __cplusplus
 }

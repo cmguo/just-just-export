@@ -413,7 +413,7 @@ namespace ppbox
                     sample.duration = cache_->sample.duration;
                     sample.desc_index = 0;
                     sample.decode_time = cache_->sample.dts;
-                    sample.composite_time_delta = cache_->sample.us_delta/1000;
+                    sample.composite_time_delta = cache_->sample.cts_delta;
                     sample.is_sync = cache_->sample.flags & Sample::sync;
                     sample.buffer = cache_->copy_sample_data();
                 }
@@ -436,7 +436,8 @@ namespace ppbox
                     sample.duration = cache_->sample.duration;
                     sample.desc_index = 0;
                     sample.decode_time = cache_->sample.dts;
-                    sample.composite_time_delta = cache_->sample.us_delta;
+                    //sample.composite_time_delta = cache_->sample.us_delta;
+                    sample.composite_time_delta = cache_->sample.cts_delta;
                     sample.is_sync = cache_->sample.flags & Sample::sync;
                     sample.is_discontinuity = (cache_->sample.flags & Sample::discontinuity) != 0;
                     sample.buffer = cache_->copy_sample_data();

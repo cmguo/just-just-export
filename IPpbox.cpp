@@ -405,7 +405,7 @@ extern "C" {
         the_ppbox().log_dump(callback, level);
     }
 
-    PPBOX_DECL PPBOX_HANDLE PPBOX_CreateTimer(
+    PPBOX_DECL PPBOX_HANDLE PPBOX_ScheduleCallback(
         PP_uint32 delay, 
         void * user_data, 
         PPBOX_Callback callback)
@@ -413,7 +413,7 @@ extern "C" {
         return the_ppbox().create_timer(delay, user_data, callback);
     }
 
-    PPBOX_DECL PP_err PPBOX_DeleteTimer(
+    PPBOX_DECL PP_err PPBOX_CancelCallback(
         PPBOX_HANDLE timer)
     {
         return the_ppbox().delete_timer(timer);
