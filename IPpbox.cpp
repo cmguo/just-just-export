@@ -9,6 +9,7 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 #include <ppbox/common/Version.h>
 //#include <ppbox/common/ConfigMgr.h>
+#include <ppbox/common/ScheduleManager.h>
 #include <ppbox/common/Debuger.h>
 #include <ppbox/common/PortManager.h>
 #ifndef PPBOX_DISABLE_DEBUGPROXY
@@ -292,24 +293,24 @@ namespace ppbox
                 ( ppbox::common::Debuger::on_logdump_type )(callback), level);
         }
 
-        PPBOX_HANDLE create_timer(
+        PPBOX_HANDLE schedule_callback(
             PP_uint32 delay, 
             void * user_data, 
             PPBOX_Callback callback)
         {
-            boost::asio::deadline_timer * timer2 = new boost::asio::deadline_timer(io_svc());
-            timer2->expires_from_now(boost::posix_time::milliseconds(delay));
-            timer2->async_wait(boost::bind(callback, user_data, boost::bind(last_error_enum, _1)));
-            return timer2;
+            ppbox::common::ScheduleManager & scheduler = 
+                util::daemon::use_module<ppbox::common::ScheduleManager>(*this);
+            return scheduler.schedule_callback(delay, user_data, 
+                boost::bind(callback, _1, boost::bind(last_error_enum, _2)));
         }
 
-        error::errors delete_timer(
-            PPBOX_HANDLE timer)
+        error::errors schedule_callback(
+            PPBOX_HANDLE handle)
         {
+            ppbox::common::ScheduleManager & scheduler = 
+                util::daemon::use_module<ppbox::common::ScheduleManager>(*this);
             boost::system::error_code ec;
-            boost::asio::deadline_timer * timer2 = (boost::asio::deadline_timer *)timer;
-            timer2->cancel(ec);
-            delete timer2;
+            scheduler.cancel_callback(handle, ec);
             return last_error(__FUNCTION__, ec);
         }
     };
@@ -410,13 +411,13 @@ extern "C" {
         void * user_data, 
         PPBOX_Callback callback)
     {
-        return the_ppbox().create_timer(delay, user_data, callback);
+        return the_ppbox().schedule_callback(delay, user_data, callback);
     }
 
     PPBOX_DECL PP_err PPBOX_CancelCallback(
         PPBOX_HANDLE timer)
     {
-        return the_ppbox().delete_timer(timer);
+        return the_ppbox().schedule_callback(timer);
     }
 
 
