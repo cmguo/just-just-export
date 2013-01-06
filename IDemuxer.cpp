@@ -96,7 +96,7 @@ namespace ppbox
 
             error_code ec;
             if (cache_) {
-                ec = ppbox::demux::error::already_open;
+                ec = ppbox::error::already_open;
             } else {
                 boost::shared_ptr<Cache> cache(new Cache);
                 cache_ = cache;
@@ -128,7 +128,7 @@ namespace ppbox
 
             error_code ec;
             if (cache_) {
-                ec = ppbox::demux::error::already_open;
+                ec = ppbox::error::already_open;
             } else {
                 cache_.reset(new Cache);
                 framework::string::Url play_link(playlink);
@@ -163,7 +163,7 @@ namespace ppbox
                 ec.clear();
                 return true;
             } else {
-                ec = ppbox::demux::error::not_open;
+                ec = ppbox::error::not_open;
                 return false;
             }
         }
@@ -227,7 +227,7 @@ namespace ppbox
                 cache_->demuxer = NULL;
                 cache_.reset();
             } else {
-                ec = ppbox::demux::error::not_open;
+                ec = ppbox::error::not_open;
             }
             return last_error(__FUNCTION__, ec);
         }
