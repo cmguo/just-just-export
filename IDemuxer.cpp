@@ -115,13 +115,22 @@ namespace ppbox
             char const * playlink, 
             PPBOX_Open_Callback callback)
         {
-            async_open(playlink, "", callback);
+            async_open(playlink, "", boost::bind(callback, _1));
         }
 
         void async_open(
             char const * playlink, 
             char const * format, 
-            PPBOX_Open_Callback callback)
+			void * user_data, 
+            PPBOX_Callback callback)
+        {
+            async_open(playlink, format, boost::bind(callback, user_data, _1));
+        }
+
+        void async_open(
+            char const * playlink, 
+            char const * format, 
+            boost::function<void (error::errors)> const & callback)
         {
             LOG_SECTION();
             LOG_INFO("async_open playlink: " << playlink << ", format: " << format);
@@ -137,15 +146,15 @@ namespace ppbox
                     boost::bind(&IDemuxer::open_call_back, this, cache_, config, callback, _1, _2));
             }
             if (ec) {
-                boost::thread th(boost::bind(callback, async_last_error(__FUNCTION__, ec)));
-                (void)th;
+				global_daemon().io_svc().post(
+					boost::bind(callback, async_last_error(__FUNCTION__, ec)));
             }
         }
 
         void open_call_back(
             boost::shared_ptr<Cache> & cache, 
             framework::string::Url const & config, 
-            PPBOX_Open_Callback callback, 
+            boost::function<void (error::errors)> const & callback, 
             error_code ec, 
             DemuxerBase * demuxer)
         {
@@ -601,9 +610,10 @@ extern "C" {
     PPBOX_DECL void PPBOX_AsyncOpenEx(
         PP_char const * playlink, 
         PP_char const * format, 
-        PPBOX_Open_Callback callback)
+		void * user_data, 
+        PPBOX_Callback callback)
     {
-        demuxer().async_open(playlink, format, callback);
+        demuxer().async_open(playlink, format, user_data, callback);
     }
 
     PPBOX_DECL boost::uint32_t PPBOX_GetStreamCount()

@@ -26,7 +26,8 @@ extern "C" {
     PPBOX_DECL void PPBOX_AsyncOpenEx(
         PP_char const * playlink, 
         PP_char const * format, 
-        PPBOX_Open_Callback callback);
+		void * user_data, 
+        PPBOX_Callback callback);
 
     //ÔÝÍ£
     PPBOX_DECL PP_int32 PPBOX_Pause();
