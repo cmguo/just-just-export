@@ -115,7 +115,7 @@ namespace ppbox
             char const * playlink, 
             PPBOX_Open_Callback callback)
         {
-            async_open(playlink, "", boost::bind(callback, _1));
+            async_open(playlink, "format=raw", boost::bind(callback, _1));
         }
 
         void async_open(
