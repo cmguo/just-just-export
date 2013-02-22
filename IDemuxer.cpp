@@ -185,7 +185,7 @@ namespace ppbox
 
             error_code ec;
             if (is_open(ec)) {
-                cache_->demuxer->seek(time, ec);
+                cache_->muxer->time_seek(time, ec);
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -226,6 +226,9 @@ namespace ppbox
             error_code ec;
             if (cache_) {
                 while (true) {
+                    if (cache_->muxer) {
+                        mux_mod_.close(cache_->muxer, ec);
+                    }
                     demux_mod_.close(cache_->close_token, ec);
                     if (ec == framework::system::logic_error::item_not_exist) {
                         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
