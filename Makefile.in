@@ -56,6 +56,8 @@ PROJECT_DEPENDS			:= \
 				/ppbox/httpd \
 				/ppbox/download \
 				/ppbox/rtspd \
+				/ppbox/mmspd \
+				/ppbox/rtmpd \
 				/ppbox/dispatch \
 				/ppbox/data \
 				/ppbox/merge \
