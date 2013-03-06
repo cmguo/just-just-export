@@ -51,6 +51,9 @@ using namespace ppbox::common;
 #ifndef PPBOX_DISABLE_MMSPD
 #  include <ppbox/mmspd/MmspdModule.h>
 #endif
+#ifndef PPBOX_DISABLE_RTMPD
+#  include <ppbox/rtmpd/RtmpdModule.h>
+#endif
 
 #include <framework/logger/StreamRecord.h>
 #include <framework/logger/Section.h>
@@ -131,6 +134,9 @@ namespace ppbox
 #endif
 #ifndef PPBOX_DISABLE_MMSPD
             util::daemon::use_module<ppbox::mmspd::MmspdModule>(*this);
+#endif
+#ifndef PPBOX_DISABLE_RTMPD
+            util::daemon::use_module<ppbox::rtmpd::RtmpdModule>(*this);
 #endif
             LOG_INFO("Ppbox ready.");
         }
