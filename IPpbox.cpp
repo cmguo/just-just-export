@@ -17,43 +17,12 @@ using namespace ppbox::error;
 #endif
 using namespace ppbox::common;
 
-#include <ppbox/data/DataModule.h>
-#include <ppbox/avformat/AvformatModule.h>
-#include <ppbox/demux/DemuxModule.h>
-#include <ppbox/merge/MergeModule.h>
+#include "ppbox/ppbox/Core.h"
+#include "ppbox/ppbox/Input.h"
+#include "ppbox/ppbox/Output.h"
+#include "ppbox/ppbox/Server.h"
+#include "ppbox/ppbox/P2p.h"
 
-#ifndef PPBOX_DISABLE_CERTIFY 
-#  include <ppbox/certify/Certifier.h>
-#endif
-
-#include <ppbox/cdn/CdnModule.h>
-
-#ifndef PPBOX_DISABLE_PEER
-#  include <ppbox/peer/PeerModule.h>
-#endif
-
-#ifndef PPBOX_DISABLE_DAC 
-#  include <ppbox/dac/DacModule.h>
-#endif
-#ifndef PPBOX_DISABLE_LIVE 
-#  include <ppbox/live/LiveModule.h>
-#endif
-#ifndef PPBOX_DISABLE_MUX
-#  include <ppbox/mux/MuxModule.h>
-#endif
-
-#ifndef PPBOX_DISABLE_HTTPD
-#  include <ppbox/httpd/HttpdModule.h>
-#endif
-#ifndef PPBOX_DISABLE_RTSPD
-#  include <ppbox/rtspd/RtspdModule.h>
-#endif
-#ifndef PPBOX_DISABLE_MMSPD
-#  include <ppbox/mmspd/MmspdModule.h>
-#endif
-#ifndef PPBOX_DISABLE_RTMPD
-#  include <ppbox/rtmpd/RtmpdModule.h>
-#endif
 
 #include <framework/logger/StreamRecord.h>
 #include <framework/logger/Section.h>
@@ -86,8 +55,6 @@ namespace ppbox
                 "++framework.logger.Stream.0.roll=true", 
                 "++framework.logger.Stream.0.level=5", 
                 "++framework.logger.Stream.0.size=102400", 
-                "++RtspManager.addr=0.0.0.0:5054+", 
-                "++HttpManager.addr=0.0.0.0:9006+", 
             };
             parse_cmdline(sizeof(default_argv) / sizeof(default_argv[0]), default_argv);
 
@@ -106,38 +73,16 @@ namespace ppbox
 #ifndef PPBOX_DISABLE_DEBUGPROXY
             util::daemon::use_module<ppbox::common::DebugProxy>(*this);
 #endif
-#ifndef PPBOX_DISABLE_CERTIFY
-            util::daemon::use_module<ppbox::certify::Certifier>(*this);
-#endif
-            util::daemon::use_module<ppbox::cdn::CdnModule>(*this);
-#ifndef PPBOX_DISABLE_DAC
-            util::daemon::use_module<ppbox::dac::DacModule>(*this);
-#endif
-#ifndef PPBOX_DISABLE_PEER
-            util::daemon::use_module<ppbox::peer::PeerModule>(*this);
-#endif
-#ifndef PPBOX_DISABLE_LIVE
-            util::daemon::use_module<ppbox::live::LiveModule>(*this);
-#endif
-            util::daemon::use_module<ppbox::data::DataModule>(*this);
-            util::daemon::use_module<ppbox::avformat::AvformatModule>(*this);
-            util::daemon::use_module<ppbox::demux::DemuxModule>(*this);
-            util::daemon::use_module<ppbox::merge::MergeModule>(*this);
-#ifndef PPBOX_DISABLE_MUX
-            util::daemon::use_module<ppbox::mux::MuxModule>(*this);
-#endif
-#ifndef PPBOX_DISABLE_HTTPD
-            util::daemon::use_module<ppbox::httpd::HttpdModule>(*this);
-#endif
-#ifndef PPBOX_DISABLE_RTSPD
-            util::daemon::use_module<ppbox::rtspd::RtspdModule>(*this);
-#endif
-#ifndef PPBOX_DISABLE_MMSPD
-            util::daemon::use_module<ppbox::mmspd::MmspdModule>(*this);
-#endif
-#ifndef PPBOX_DISABLE_RTMPD
-            util::daemon::use_module<ppbox::rtmpd::RtmpdModule>(*this);
-#endif
+            core_init(*this);
+
+            input_init(*this);
+
+            output_init(*this);
+
+            server_init(*this);
+
+            p2p_init(*this);
+
             LOG_INFO("Ppbox ready.");
         }
 
