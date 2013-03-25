@@ -185,6 +185,7 @@ namespace ppbox
 
             error_code ec;
             if (is_open(ec)) {
+                cache_->demuxer->free_sample(cache_->sample, ec);
                 cache_->muxer->time_seek(time, ec);
             }
             return last_error(__FUNCTION__, ec);
@@ -403,30 +404,6 @@ namespace ppbox
                     sample.stream_index = cache_->sample.itrack;
                     sample.start_time = (boost::uint32_t)cache_->sample.time;
                     sample.buffer_length = cache_->sample.size;
-                    sample.buffer = cache_->copy_sample_data();
-                }
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors read_sample_ex(
-            PPBOX_SampleEx & sample)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                if (cache_->paused) {
-                    cache_->paused = false;
-                }
-                if (cache_->muxer->read(cache_->sample, ec)) {
-                    sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = (boost::uint32_t)cache_->sample.time;
-                    sample.offset_in_file = cache_->sample.blocks[0].offset;
-                    sample.buffer_length = cache_->sample.size;
-                    sample.duration = cache_->sample.duration;
-                    sample.desc_index = 0;
-                    sample.decode_time = cache_->sample.dts;
-                    sample.composite_time_delta = cache_->sample.cts_delta;
-                    sample.is_sync = cache_->sample.flags & Sample::sync;
                     sample.buffer = cache_->copy_sample_data();
                 }
             }
@@ -664,12 +641,6 @@ extern "C" {
         PPBOX_Sample * sample)
     {
         return demuxer().read_sample(*sample);
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_ReadSampleEx(
-        PPBOX_SampleEx * sample)
-    {
-        return demuxer().read_sample_ex(*sample);
     }
 
     PPBOX_DECL boost::int32_t PPBOX_ReadSampleEx2(
