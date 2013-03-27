@@ -47,7 +47,7 @@ namespace ppbox
             PPBOX_Download_Callback resp)
         {
             error_code ec;
-            framework::string::Url url(std::string("file:///") + filename);
+            framework::string::Url url(filename);
             url.param("playlink", playlink);
             url.param("format", format);
             Downloader* hander = download_manager_.open(url, 
