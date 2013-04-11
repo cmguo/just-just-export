@@ -41,8 +41,9 @@ namespace ppbox
         {
             Cache()
                 : close_token(0)
+                , demuxer(NULL)
+                , muxer(NULL)
                 , paused(false)
-                , sample_buffer(NULL)
             {
             }
 
