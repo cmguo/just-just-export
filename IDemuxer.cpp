@@ -230,6 +230,9 @@ namespace ppbox
                     if (cache_->muxer) {
                         mux_mod_.close(cache_->muxer, ec);
                     }
+                    if (cache_->demuxer) {
+                        cache_->demuxer->free_sample(cache_->sample, ec);
+                    }
                     demux_mod_.close(cache_->close_token, ec);
                     if (ec == framework::system::logic_error::item_not_exist) {
                         boost::this_thread::sleep(boost::posix_time::milliseconds(100));
