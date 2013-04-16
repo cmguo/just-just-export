@@ -11,6 +11,7 @@
 #include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/SourceError.h>
 #include <ppbox/data/base/DataStatistic.h>
+#include <ppbox/avformat/Format.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::mux;
@@ -274,9 +275,9 @@ namespace ppbox
                     } else {
                         info.sub_type = 0;
                     }
-                    if (cache_->media_info.format_type == StreamInfo::video_avc_packet) {
+                    if (cache_->media_info.format_type == FormatType::video_avc_packet) {
                         info.format_type = ppbox_video_avc_packet;
-                    } else if (cache_->media_info.format_type == StreamInfo::video_avc_byte_stream) {
+                    } else if (cache_->media_info.format_type == FormatType::video_avc_byte_stream) {
                         info.format_type = ppbox_video_avc_byte_stream;
                     } else {
                         info.format_type = 0;
@@ -293,10 +294,8 @@ namespace ppbox
                         info.sub_type = 0;
                     }
                     // 增加对音频format_type的判断
-                    if (cache_->media_info.format_type == StreamInfo::audio_iso_mp4) {
+                    if (cache_->media_info.format_type == FormatType::audio_iso_mp4) {
                         info.format_type = ppbox_audio_iso_mp4;
-                    } else if (cache_->media_info.format_type == StreamInfo::audio_microsoft_wave) {
-                        info.format_type = ppbox_audio_microsoft_wave;
                     } else {
                         info.format_type = 0;
                     }
@@ -325,9 +324,9 @@ namespace ppbox
                     } else {
                         info.sub_type = 0;
                     }
-                    if (cache_->media_info.format_type == StreamInfo::video_avc_packet) {
+                    if (cache_->media_info.format_type == FormatType::video_avc_packet) {
                         info.format_type = ppbox_video_avc_packet;
-                    } else if (cache_->media_info.format_type == StreamInfo::video_avc_byte_stream) {
+                    } else if (cache_->media_info.format_type == FormatType::video_avc_byte_stream) {
                         info.format_type = ppbox_video_avc_byte_stream;
                     } else {
                         info.format_type = 0;
@@ -347,10 +346,8 @@ namespace ppbox
                         info.sub_type = 0;
                     }
                     // 增加对音频format_type的判断
-                    if (cache_->media_info.format_type == StreamInfo::audio_iso_mp4) {
+                    if (cache_->media_info.format_type == FormatType::audio_iso_mp4) {
                         info.format_type = ppbox_audio_iso_mp4;
-                    } else if (cache_->media_info.format_type == StreamInfo::audio_microsoft_wave) {
-                        info.format_type = ppbox_audio_microsoft_wave;
                     } else {
                         info.format_type = 0;
                     }
