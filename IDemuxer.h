@@ -50,6 +50,7 @@ extern "C" {
         ppbox_audio_aac = 2, 
         ppbox_audio_mp3 = 3, 
         ppbox_audio_wma = 4,
+        ppbox_video_wmv = 5,
     };
 
     enum PPBOX_StreamFormatTypeEnum
