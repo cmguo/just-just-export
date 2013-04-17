@@ -323,6 +323,8 @@ namespace ppbox
                     info.video_format.width = cache_->media_info.video_format.width;
                     if (cache_->media_info.sub_type == VIDEO_TYPE_AVC1) {
                         info.sub_type = ppbox_video_avc;
+                    } else if (cache_->media_info.sub_type == VIDEO_TYPE_WMV3) {
+                        info.sub_type = ppbox_video_wmv;
                     } else {
                         info.sub_type = 0;
                     }
