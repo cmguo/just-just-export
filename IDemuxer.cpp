@@ -261,100 +261,26 @@ namespace ppbox
         }
 
         error::errors get_stream_info(
-            boost::int32_t index, 
-            PPBOX_StreamInfo & info)
-        {
-            error_code ec;
-            if (!is_open(ec)) {
-            } else if (cache_->demuxer->get_stream_info(index, cache_->media_info, ec)) {
-            } else {
-                if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
-                    info.type = ppbox_video;
-                    if (cache_->media_info.sub_type == VIDEO_TYPE_AVC1) {
-                        info.sub_type = ppbox_video_avc;
-                    } else if (cache_->media_info.sub_type == VIDEO_TYPE_WMV3) {
-                        info.sub_type = ppbox_video_wmv;
-                    } else {
-                        info.sub_type = 0;
-                    }
-                    if (cache_->media_info.format_type == FormatType::video_avc_packet) {
-                        info.format_type = ppbox_video_avc_packet;
-                    } else if (cache_->media_info.format_type == FormatType::video_avc_byte_stream) {
-                        info.format_type = ppbox_video_avc_byte_stream;
-                    } else {
-                        info.format_type = 0;
-                    }
-                } else {
-                    info.type = ppbox_audio;
-                    if (cache_->media_info.sub_type == AUDIO_TYPE_MP4A) {
-                        info.sub_type = ppbox_audio_aac;
-                    } else if (cache_->media_info.sub_type == AUDIO_TYPE_MP1A) {
-                        info.sub_type = ppbox_audio_mp3;
-                    } else if (cache_->media_info.sub_type == AUDIO_TYPE_WMA2) {
-                        info.sub_type = ppbox_audio_wma;
-                    } else {
-                        info.sub_type = 0;
-                    }
-                    // 增加对音频format_type的判断
-                    if (cache_->media_info.format_type == FormatType::audio_iso_mp4) {
-                        info.format_type = ppbox_audio_iso_mp4;
-                    } else {
-                        info.format_type = 0;
-                    }
-                }
-                info.format_size = cache_->media_info.format_data.size();
-                info.format_buffer = info.format_size ? &cache_->media_info.format_data.at(0) : NULL;
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors get_stream_info_ex(
             boost::int32_t index,
-            PPBOX_StreamInfoEx & info)
+            PPBOX_StreamInfo & info)
         {
             error_code ec;
             if (!is_open(ec)) {
             } else if(cache_->demuxer->get_stream_info(index, cache_->media_info, ec)) {
             } else {
-                if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
-                    info.type = ppbox_video;
+                info.type = cache_->media_info.type;
+                info.sub_type = cache_->media_info.sub_type;
+                info.time_scale = cache_->media_info.time_scale;
+                info.bitrate = cache_->media_info.bitrate;
+                info.format_type = cache_->media_info.format_type;
+                if (cache_->media_info.type == StreamType::VIDE) {
                     info.video_format.frame_rate = cache_->media_info.video_format.frame_rate;
                     info.video_format.height = cache_->media_info.video_format.height;
                     info.video_format.width = cache_->media_info.video_format.width;
-                    if (cache_->media_info.sub_type == VIDEO_TYPE_AVC1) {
-                        info.sub_type = ppbox_video_avc;
-                    } else if (cache_->media_info.sub_type == VIDEO_TYPE_WMV3) {
-                        info.sub_type = ppbox_video_wmv;
-                    } else {
-                        info.sub_type = 0;
-                    }
-                    if (cache_->media_info.format_type == FormatType::video_avc_packet) {
-                        info.format_type = ppbox_video_avc_packet;
-                    } else if (cache_->media_info.format_type == FormatType::video_avc_byte_stream) {
-                        info.format_type = ppbox_video_avc_byte_stream;
-                    } else {
-                        info.format_type = 0;
-                    }
-                } else {
-                    info.type = ppbox_audio;
+                } else if (cache_->media_info.type == StreamType::AUDI) {
                     info.audio_format.sample_rate = cache_->media_info.audio_format.sample_rate;
                     info.audio_format.sample_size = cache_->media_info.audio_format.sample_size;
                     info.audio_format.channel_count = cache_->media_info.audio_format.channel_count;
-                    if (cache_->media_info.sub_type == AUDIO_TYPE_MP4A) {
-                        info.sub_type = ppbox_audio_aac;
-                    } else if (cache_->media_info.sub_type == AUDIO_TYPE_MP1A) {
-                        info.sub_type = ppbox_audio_mp3;
-                    } else if (cache_->media_info.sub_type == AUDIO_TYPE_WMA2) {
-                        info.sub_type = ppbox_audio_wma;
-                    } else {
-                        info.sub_type = 0;
-                    }
-                    // 增加对音频format_type的判断
-                    if (cache_->media_info.format_type == FormatType::audio_iso_mp4) {
-                        info.format_type = ppbox_audio_iso_mp4;
-                    } else {
-                        info.format_type = 0;
-                    }
                 }
                 info.format_size = cache_->media_info.format_data.size();
                 info.format_buffer = info.format_size ? &cache_->media_info.format_data.at(0) : NULL;
@@ -374,29 +300,6 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_width_height(
-            boost::uint32_t & width, 
-            boost::uint32_t & height)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                boost::uint32_t stream_count = cache_->demuxer->get_stream_count(ec);
-                if (!ec) {
-                    ec = framework::system::logic_error::no_data;
-                    for (boost::uint32_t i = 0; i < stream_count; ++i) {
-                        if (cache_->demuxer->get_stream_info(i, cache_->media_info, ec)) {
-                            break;
-                        } else if (cache_->media_info.type == MEDIA_TYPE_VIDE) {
-                            width = cache_->media_info.video_format.width;
-                            height = cache_->media_info.video_format.height;
-                            ec = boost::system::error_code();
-                        }
-                    }
-                }
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
         error::errors read_sample(
             PPBOX_Sample & sample)
         {
@@ -406,34 +309,13 @@ namespace ppbox
                     cache_->paused = false;
                 }
                 if (cache_->muxer->read(cache_->sample, ec)) {
-                    sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = (boost::uint32_t)cache_->sample.time;
-                    sample.buffer_length = cache_->sample.size;
-                    sample.buffer = cache_->copy_sample_data();
-                }
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        error::errors read_sample_ex2(
-            PPBOX_SampleEx2 & sample)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                if (cache_->paused) {
-                    cache_->paused = false;
-                }
-                if (cache_->muxer->read(cache_->sample, ec)) {
-                    sample.stream_index = cache_->sample.itrack;
-                    sample.start_time = cache_->sample.ustime;
-                    sample.buffer_length = cache_->sample.size;
-                    sample.duration = cache_->sample.duration;
-                    sample.desc_index = 0;
+                    sample.itrack = cache_->sample.itrack;
+                    sample.flags = cache_->sample.flags;
+                    sample.time = cache_->sample.ustime;
                     sample.decode_time = cache_->sample.dts;
-                    //sample.composite_time_delta = cache_->sample.us_delta;
-                    sample.composite_time_delta = cache_->sample.cts_delta;
-                    sample.is_sync = cache_->sample.flags & Sample::sync;
-                    sample.is_discontinuity = (cache_->sample.flags & Sample::discontinuity) != 0;
+                    sample.composite_time_delta = cache_->sample.us_delta;
+                    sample.duration = cache_->sample.duration;
+                    sample.length = cache_->sample.size;
                     sample.buffer = cache_->copy_sample_data();
                 }
             }
@@ -572,7 +454,7 @@ static ppbox::IDemuxer & demuxer()
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL boost::int32_t PPBOX_Open(
+    PPBOX_DECL PP_err PPBOX_Open(
         char const * playlink)
     {
         return demuxer().open(playlink);
@@ -585,7 +467,7 @@ extern "C" {
         demuxer().async_open(playlink, callback);
     }
 
-    PPBOX_DECL PP_int32 PPBOX_OpenEx(
+    PPBOX_DECL PP_err PPBOX_OpenEx(
         PP_char const * playlink, 
         PP_char const * format)
     {
@@ -608,18 +490,11 @@ extern "C" {
         return n;
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_GetStreamInfo(
+    PPBOX_DECL PP_err PPBOX_GetStreamInfo(
         boost::uint32_t index, 
         PPBOX_StreamInfo * stream_info)
     {
         return demuxer().get_stream_info(index, *stream_info);
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_GetStreamInfoEx(
-        boost::uint32_t index, 
-        PPBOX_StreamInfoEx * stream_info)
-    {
-        return demuxer().get_stream_info_ex(index, *stream_info);
     }
 
     PPBOX_DECL boost::uint32_t PPBOX_GetDuration()
@@ -629,29 +504,16 @@ extern "C" {
         return n;
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_GetWidthHeight(
-        boost::uint32_t * pwidth, 
-        boost::uint32_t * pheight)
-    {
-        return demuxer().get_width_height(*pwidth, *pheight);
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_Seek(
+    PPBOX_DECL PP_err PPBOX_Seek(
         boost::uint32_t start_time)
     {
         return demuxer().seek(start_time);
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_ReadSample(
+    PPBOX_DECL PP_err PPBOX_ReadSample(
         PPBOX_Sample * sample)
     {
         return demuxer().read_sample(*sample);
-    }
-
-    PPBOX_DECL boost::int32_t PPBOX_ReadSampleEx2(
-        PPBOX_SampleEx2 *sample)
-    {
-        return demuxer().read_sample_ex2(*sample);
     }
 
     PPBOX_DECL void PPBOX_Close()
@@ -659,7 +521,7 @@ extern "C" {
         demuxer().close();
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_Pause()
+    PPBOX_DECL PP_err PPBOX_Pause()
     {
         return demuxer().pause();
     }
@@ -676,19 +538,19 @@ extern "C" {
         demuxer().set_play_buffer_time(time);
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_GetPlayMsg(
+    PPBOX_DECL PP_err PPBOX_GetPlayMsg(
         PPBOX_PlayStatistic * statistic_Msg)
     {
         return demuxer().get_play_stat(*statistic_Msg);
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_GetDownMsg(
+    PPBOX_DECL PP_err PPBOX_GetDownMsg(
         PPBOX_DownloadMsg* download_Msg)
     {
         return demuxer().get_download_stat(*download_Msg);
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_GetDownSedMsg(
+    PPBOX_DECL PP_err PPBOX_GetDownSedMsg(
         PPBOX_DownloadSpeedMsg* download_spped_Msg)
     {
         return demuxer().get_download_speed(*download_spped_Msg);
