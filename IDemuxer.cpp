@@ -311,12 +311,13 @@ namespace ppbox
                 if (cache_->muxer->read(cache_->sample, ec)) {
                     sample.itrack = cache_->sample.itrack;
                     sample.flags = cache_->sample.flags;
-                    sample.time = cache_->sample.ustime;
+                    sample.time = cache_->sample.time;
                     sample.decode_time = cache_->sample.dts;
-                    sample.composite_time_delta = cache_->sample.us_delta;
+                    sample.composite_time_delta = cache_->sample.cts_delta;
                     sample.duration = cache_->sample.duration;
-                    sample.length = cache_->sample.size;
+                    sample.size = cache_->sample.size;
                     sample.buffer = cache_->copy_sample_data();
+                    sample.context = cache_->sample.context;
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -332,30 +333,30 @@ namespace ppbox
                 stat.buffer_time = 0;
                 stat.buffering_present = 0;
                 if (ec == boost::asio::error::would_block) {
-                    stat.play_status = cache_->paused ? ppbox_paused : ppbox_buffering;
+                    stat.play_status = cache_->paused ? PPBOX_PlayStatus::paused : PPBOX_PlayStatus::buffering;
                 } else {
-                    stat.play_status = ppbox_closed;
+                    stat.play_status = PPBOX_PlayStatus::closed;
                 }
             } else {
                 cache_->demuxer->fill_data(ec);
                 ppbox::data::StreamStatus status;
                 cache_->demuxer->get_stream_status(status, ec);
                 if (ec && ec != boost::asio::error::would_block) {
-                    stat.play_status = ppbox_closed;
+                    stat.play_status = PPBOX_PlayStatus::closed;
                 } else {
                     stat.buffer_time = (boost::uint32_t)(status.time_range.buf - status.time_range.pos);
                     if (stat.buffer_time >= buffer_time_ || status.buf_ec == ppbox::data::source_error::no_more_segment) {
                         stat.buffering_present = 100;
-                        stat.play_status = ppbox_playing;
+                        stat.play_status = PPBOX_PlayStatus::playing;
                     } else if (buffer_time_ != 0) {
                         stat.buffering_present = stat.buffer_time * 100 / buffer_time_;
-                        stat.play_status = ppbox_buffering;
+                        stat.play_status = PPBOX_PlayStatus::buffering;
                     }
                     if (cache_->paused) {
-                        stat.play_status = ppbox_paused;
+                        stat.play_status = PPBOX_PlayStatus::paused;
                     }
                     // 在缓冲状态，缓冲的错误码更有参考意义
-                    if (stat.play_status == ppbox_buffering) {
+                    if (stat.play_status == PPBOX_PlayStatus::buffering) {
                         ec = status.buf_ec;
                     }
                 }

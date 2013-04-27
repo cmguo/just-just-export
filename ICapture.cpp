@@ -84,7 +84,7 @@ namespace ppbox
         error::errors set_stream(
             PPBOX_HANDLE handle, 
             boost::uint32_t index, 
-		    PPBOX_CaptureStream const & stream)
+		    PPBOX_StreamInfo const & stream)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
@@ -117,19 +117,19 @@ namespace ppbox
 
         error::errors put_sample(
             PPBOX_HANDLE handle, 
-		    PPBOX_CaptureSample const & sample)
+		    PPBOX_Sample const & sample)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
             CaptureSample data;
             data.itrack = sample.itrack;
             data.flags = sample.flags;
-            data.dts = sample.dts;
-            data.cts_delta = sample.cts_delta;
+            data.dts = sample.decode_time;
+            data.cts_delta = sample.composite_time_delta;
             data.duration = sample.duration;
-            data.context = sample.context;
             data.size = sample.size;
-            data.cbuf = sample.cbuf;
+            data.buffer = sample.buffer;
+            data.context = sample.context;
             capture->put_sample(data, ec);
             return last_error(__FUNCTION__, ec);
         }
@@ -189,14 +189,14 @@ extern "C" {
     PPBOX_DECL PP_err PPBOX_CaptureSetStream(
         PPBOX_HANDLE handle, 
         boost::uint32_t index, 
-		PPBOX_CaptureStream const * stream)
+		PPBOX_StreamInfo const * stream)
     {
         return capture().set_stream(handle, index, *stream);
     }
 
     PPBOX_DECL PP_err PPBOX_CapturePutSample(
         PPBOX_HANDLE handle, 
-		PPBOX_CaptureSample const * sample)
+		PPBOX_Sample const * sample)
     {
         return capture().put_sample(handle, *sample);
     }

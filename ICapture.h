@@ -10,36 +10,10 @@
 extern "C" {
 #endif // __cplusplus
 
-    struct PPBOX_CaptureBuffer
-    {
-        PP_uchar const * data;
-        PP_uint32 len;
-    };
-
-    typedef PPBOX_StreamInfo PPBOX_CaptureStream;
-
-    enum PPBOX_SampleFlagsEnum
-    {
-        ppbox_sample_sync = 1, 
-        ppbox_sample_discontinuity = 2, 
-    };
-
-    struct PPBOX_CaptureSample
-    {
-        PP_uint32 itrack;
-        PP_uint32 flags;
-        PP_uint64 dts;
-        PP_uint32 cts_delta;
-        PP_uint32 duration;
-        PP_uint32 size;
-        PP_uint32 cbuf;
-        void const * context;
-    };
-
     struct PPBOX_CaptureConfigData
     {
         PP_uint32 stream_count;
-        bool (*get_sample_buffers)(void const *, PPBOX_CaptureBuffer *);
+        bool (*get_sample_buffers)(void const *, PPBOX_SampleBuffer *);
         bool (*free_sample)(void const *);
     };
 
@@ -55,11 +29,11 @@ extern "C" {
     PPBOX_DECL PP_err PPBOX_CaptureSetStream(
         PPBOX_HANDLE handle, 
         PP_uint32 index, 
-		PPBOX_CaptureStream const * stream);
+		PPBOX_StreamInfo const * stream);
 
     PPBOX_DECL PP_err PPBOX_CapturePutSample(
         PPBOX_HANDLE handle, 
-        PPBOX_CaptureSample const * sample);
+        PPBOX_Sample const * sample);
 
     PPBOX_DECL PP_err PPBOX_CaptureDestroy(
         PPBOX_HANDLE handle);

@@ -16,21 +16,21 @@ extern "C" {
     typedef ppbox::avformat::AudioSubType PPBOX_AudioSubType;
     typedef ppbox::avformat::FormatType PPBOX_FormatType;
 
-    typedef struct tag_PPBOX_VideoInfo
+    struct PPBOX_VideoInfo
     {
         PP_uint32 width;
         PP_uint32 height;
         PP_uint32 frame_rate;
-    } PPBOX_VideoInfo;
+    };
 
-    typedef struct tag_PPBOX_AudioInfo
+    struct PPBOX_AudioInfo
     {
         PP_uint32 channel_count;
         PP_uint32 sample_size;
         PP_uint32 sample_rate;
-    } PPBOX_AudioInfo;
+    };
 
-    typedef struct tag_PPBOX_StreamInfo
+    struct PPBOX_StreamInfo
     {
         PP_int32 type;          // TypeEnum
         PP_int32 sub_type;      // SubTypeEnum
@@ -44,46 +44,58 @@ extern "C" {
         PP_int32 format_type;   // 格式说明的类型
         PP_uint32 format_size;  // 格式说明的大小
         PP_uchar const * format_buffer;   // 不同的解码不同的结构体，格式说明的的内容
-    } PPBOX_StreamInfo;
-
-    enum PPBOX_SampleFlagEnum
-    {
-        f_sync = 1, 
-        f_discontinuity = 2,
-        f_config = 4, 
     };
 
-    typedef struct tag_PPBOX_Sample
+    struct PPBOX_SampleFlag
+    {
+        enum Enum
+        {
+            sync = 1, 
+            discontinuity = 2,
+        };
+    };
+
+    struct PPBOX_SampleBuffer
+    {
+        PP_uchar const * data;
+        PP_uint32 len;
+    };
+
+    struct PPBOX_Sample
     {
         PP_uint32 itrack;           // 流的编号
         PP_uint32 flags;            // Sample的标志
-        PP_uint64 time;             // Sample对应的时间戳, 单位是微妙
+        PP_uint64 time;             // Sample对应的时间戳, 单位是毫秒
         PP_uint64 decode_time;
         PP_uint32 composite_time_delta;
         PP_uint32 duration;
-        PP_uint32 length;           // Sample的大小
-        PP_uchar const * buffer;    // Sample的内容
+        PP_uint32 size;             // Sample的大小
+        PP_uchar const * buffer;    // Sample的内容，如果buffer为NULL，说明有多段buffer，size代表buffer的个数
         //当调用本函数的后，我们申请内存然后给他Sample
         //当调用下一个ReadSample函数的时候，或者Stop的时候，内存释放掉
-    } PPBOX_Sample;
-
-    enum PPBOX_PlayStatusEnum
-    {
-        ppbox_closed = 0, 
-        ppbox_playing, 
-        ppbox_buffering, 
-        ppbox_paused, 
+        void const * context;
     };
 
-    typedef struct tag_PPBOX_PlayStatistic
+    struct PPBOX_PlayStatus
+    {
+        enum Enum
+        {
+            closed = 0, 
+            playing, 
+            buffering, 
+            paused, 
+        };
+    };
+
+    struct PPBOX_PlayStatistic
     {
         PP_uint32 length;           //本结构体的长度
         PP_int32 play_status;       //播放状态 0-未启动 1-playing态 2-buffering态 3-Pausing态
         PP_uint32 buffering_present;//播放缓冲百分比 10 表示 10%
         PP_uint32 buffer_time;      //下载缓冲区数据的总时间
-    } PPBOX_PlayStatistic;
+    };
 
-    typedef struct tag_PPBOX_DownloadMsg
+    struct PPBOX_DownloadMsg
     {
         PP_uint32 length;                   // 本结构体的长度
         PP_uint32 start_time;               // 开始时刻
@@ -99,9 +111,9 @@ extern "C" {
         PP_uint32 total_upload_cache_hit_count;     // 总共的上传Cache命中数
         PP_uint32 download_duration_in_sec; // 下载总共持续时长(秒)
         PP_uint32 local_peer_version;       // 自己内核版本号
-    } PPBOX_DownloadMsg;
+    };
 
-    typedef struct tag_PPBOX_DownloadSpeedMsg
+    struct PPBOX_DownloadSpeedMsg
     {
         PP_uint32 length;                   // 本结构体的长度
         PP_uint32 now_download_speed;       // 当前下载速度 <5s统计>
@@ -115,7 +127,7 @@ extern "C" {
         PP_uint32 recent_upload_speed;      // 当前上传速度 <20s统计>
         PP_uint32 second_download_speed;    // 当前1s的下载速度
         PP_uint32 second_upload_speed;      // 当前1s的上传速度
-    } PPBOX_DownloadSpeedMsg;
+    };
 
 #if __cplusplus
 }
