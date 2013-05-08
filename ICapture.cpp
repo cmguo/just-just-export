@@ -63,6 +63,7 @@ namespace ppbox
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
+            capture->term();
             module_.destroy(capture, ec);
             return last_error(__FUNCTION__, ec);
         }
