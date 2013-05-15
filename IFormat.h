@@ -5,16 +5,16 @@
 
 #include "IPpbox.h"
 
-#include <ppbox/avformat/Format.h>
+#include <ppbox/avcodec/Format.h>
 
 #if __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-    typedef ppbox::avformat::StreamType PPBOX_StreamType;
-    typedef ppbox::avformat::VideoSubType PPBOX_VideoSubType;
-    typedef ppbox::avformat::AudioSubType PPBOX_AudioSubType;
-    typedef ppbox::avformat::FormatType PPBOX_FormatType;
+    typedef ppbox::avcodec::StreamType PPBOX_StreamType;
+    typedef ppbox::avcodec::VideoSubType PPBOX_VideoSubType;
+    typedef ppbox::avcodec::AudioSubType PPBOX_AudioSubType;
+    typedef ppbox::avcodec::FormatType PPBOX_FormatType;
 
     struct PPBOX_VideoInfo
     {
