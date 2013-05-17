@@ -11,11 +11,10 @@
 #include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/SourceError.h>
 #include <ppbox/data/base/DataStatistic.h>
-#include <ppbox/avcodec/Format.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::mux;
-using namespace ppbox::avcodec;
+using namespace ppbox::avbase;
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
