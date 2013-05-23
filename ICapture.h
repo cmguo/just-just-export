@@ -10,33 +10,36 @@
 extern "C" {
 #endif // __cplusplus
 
+    typedef PP_bool (*PPBOX_GetSampleBuffersCallBack)(PP_context, PPBOX_SampleBuffer *);
+    typedef PP_bool (*PPBOX_FreeSampleCallBack)(PP_context);
+
     struct PPBOX_CaptureConfigData
     {
-        PP_uint32 stream_count;
-        bool (*get_sample_buffers)(void const *, PPBOX_SampleBuffer *);
-        bool (*free_sample)(void const *);
+        PP_uint stream_count;
+        PPBOX_GetSampleBuffersCallBack get_sample_buffers;
+        PPBOX_FreeSampleCallBack free_sample;
     };
 
     //打开一个视频
-    PPBOX_DECL PPBOX_HANDLE PPBOX_CaptureCreate(
-        PP_char const * name, 
-        PP_char const * dest);
+    PPBOX_DECL PP_handle PPBOX_CaptureCreate(
+        PP_str name, 
+        PP_str dest);
 
     PPBOX_DECL PP_err PPBOX_CaptureInit(
-        PPBOX_HANDLE handle, 
+        PP_handle handle, 
         PPBOX_CaptureConfigData const * config);
 
     PPBOX_DECL PP_err PPBOX_CaptureSetStream(
-        PPBOX_HANDLE handle, 
-        PP_uint32 index, 
+        PP_handle handle, 
+        PP_uint index, 
 		PPBOX_StreamInfo const * stream);
 
     PPBOX_DECL PP_err PPBOX_CapturePutSample(
-        PPBOX_HANDLE handle, 
+        PP_handle handle, 
         PPBOX_Sample const * sample);
 
     PPBOX_DECL PP_err PPBOX_CaptureDestroy(
-        PPBOX_HANDLE handle);
+        PP_handle handle);
 
 #if __cplusplus
 }

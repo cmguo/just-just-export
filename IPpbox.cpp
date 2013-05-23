@@ -22,7 +22,7 @@ using namespace ppbox::common;
 #include "ppbox/ppbox/Output.h"
 #include "ppbox/ppbox/Server.h"
 #include "ppbox/ppbox/P2p.h"
-
+#include "ppbox/ppbox/Callback.h"
 
 #include <framework/logger/StreamRecord.h>
 #include <framework/logger/Section.h>
@@ -86,35 +86,10 @@ namespace ppbox
             LOG_INFO("Ppbox ready.");
         }
 
-        boost::uint16_t get_port(char const* module)
-        {
-            boost::uint16_t port = 0;
-            std::string strModule(module);
-            if(strModule == "rtsp")
-            {
-                std::string netName("0.0.0.0:0");
-                config().get("RtspManager","addr",netName);
-                framework::network::NetName tmpNet(netName);
-                port = tmpNet.port();
-            }
-            else if(strModule == "http")
-            {
-                std::string netName("0.0.0.0:0");
-                config().get("HttpManager","addr",netName);
-                framework::network::NetName tmpNet(netName);
-                port = tmpNet.port();
-            }
-            else
-            {
-            }
-            LOG_WARN("[get_port] Module:" << strModule<<" port:"<<port);
-            return port;
-        }
-
-        error::errors start_p2p_engine(
-            char const * gid, 
-            char const * pid, 
-            char const * auth)
+        PP_err start_p2p_engine(
+            PP_str gid, 
+            PP_str pid, 
+            PP_str auth)
         {
             LOG_SECTION();
 
@@ -139,7 +114,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors stop_p2p_engine()
+        PP_err stop_p2p_engine()
         {
             LOG_SECTION();
 
@@ -153,6 +128,32 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
+        PP_ushort get_port(
+            PP_str module)
+        {
+            boost::uint16_t port = 0;
+            std::string strModule(module);
+            if(strModule == "rtsp")
+            {
+                std::string netName("0.0.0.0:0");
+                config().get("RtspManager","addr",netName);
+                framework::network::NetName tmpNet(netName);
+                port = tmpNet.port();
+            }
+            else if(strModule == "http")
+            {
+                std::string netName("0.0.0.0:0");
+                config().get("HttpManager","addr",netName);
+                framework::network::NetName tmpNet(netName);
+                port = tmpNet.port();
+            }
+            else
+            {
+            }
+            LOG_WARN("[get_port] Module:" << strModule<<" port:"<<port);
+            return port;
+        }
+
         error::errors last_error(
             char const * log_title, 
             error_code const & ec) const
@@ -164,52 +165,53 @@ namespace ppbox
             return ppbox::error::last_error_enum(ec);
         }
 
-        error::errors last_error() const
+        PP_err last_error() const
         {
             return ppbox::error::last_error_enum();
         }
 
-        char const * last_error_msg() const
+        PP_str last_error_msg() const
         {
             static std::string err_msg;
             err_msg = ppbox::error::last_error().message();
             return err_msg.c_str();
         }
 
-        char const * version() const
+        PP_str version() const
         {
             return ppbox::version_string();
         }
 
-
-        void set_config(
-            char const * module, 
-            char const * section, 
-            char const * key, 
-            char const * value)
+        PP_err set_config(
+            PP_str module, 
+            PP_str section, 
+            PP_str key, 
+            PP_str value)
         {
             if(NULL == section ||
                 NULL == key ||
                 NULL == value)
             {
-                return;
+                return ppbox_logic_error;
             }
             config().set(section,key,value);
+            return ppbox_success;
         }
 
-        void debug_mode(
-            bool mode)
+        PP_err debug_mode(
+            PP_bool mode)
         {
             ppbox::common::Debuger & debuger = 
                 util::daemon::use_module<ppbox::common::Debuger>(*this);
             debuger.change_debug_mode(mode);
+            return ppbox_success;
         }
 
-        boost::uint32_t get_debug_msg(
+        PP_uint get_debug_msg(
             DialogMessage * vector, 
-            boost::int32_t size, 
-            char const * module, 
-            boost::int32_t level)
+            PP_uint size, 
+            PP_str module, 
+            PP_uint level)
         {
             ppbox::common::Debuger & debuger = 
                 util::daemon::use_module<ppbox::common::Debuger>(*this);
@@ -229,8 +231,8 @@ namespace ppbox
             return msgs.size();
         }
 
-        void submit_msg(
-            char const * msg, 
+        PP_err submit_msg(
+            PP_str msg, 
             boost::int32_t size)
         {
 #ifndef PPBOX_DISABLE_DAC
@@ -238,9 +240,10 @@ namespace ppbox
                 util::daemon::use_module<ppbox::dac::DacModule>(*this);
             dac.submit_log(msg, size);
 #endif
+            return ppbox_success;
         }
 
-        void log_dump(
+        PP_err log_dump(
             PPBOX_OnLogDump callback,
             boost::uint32_t level)
         {
@@ -248,21 +251,36 @@ namespace ppbox
                 util::daemon::use_module<ppbox::common::Debuger>(*this);
             debuger.set_log_hook(
                 ( ppbox::common::Debuger::on_logdump_type )(callback), level);
+            return ppbox_success;
         }
 
-        PPBOX_HANDLE schedule_callback(
-            PP_uint32 delay, 
-            void * user_data, 
+#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+        static void redirect_schedule_callback(
+            PPBOX_Callback callback, 
+            PP_context user_data, 
+            PP_err ec)
+        {
+            varg_call().call(callback, user_data, ec);
+        }
+#endif
+
+        PP_handle schedule_callback(
+            PP_uint delay, 
+            PP_context user_data, 
             PPBOX_Callback callback)
         {
             ppbox::common::ScheduleManager & scheduler = 
                 util::daemon::use_module<ppbox::common::ScheduleManager>(*this);
             return scheduler.schedule_callback(delay, user_data, 
+#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
                 boost::bind(callback, _1, boost::bind(last_error_enum, _2)));
+#else
+                boost::bind(redirect_schedule_callback, callback, _1, boost::bind(last_error_enum, _2)));
+#endif
         }
 
-        error::errors schedule_callback(
-            PPBOX_HANDLE handle)
+        PP_err cancel_callback(
+            PP_handle handle)
         {
             ppbox::common::ScheduleManager & scheduler = 
                 util::daemon::use_module<ppbox::common::ScheduleManager>(*this);
@@ -291,90 +309,90 @@ using namespace ppbox;
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL boost::int32_t PPBOX_StartP2PEngine(
-        char const * gid, 
-        char const * pid, 
-        char const * auth)
+    PPBOX_DECL PP_err PPBOX_StartP2PEngine(
+        PP_str gid, 
+        PP_str pid, 
+        PP_str auth)
     {
         return the_ppbox().start_p2p_engine(gid, pid, auth);
     }
 
-    PPBOX_DECL PP_uint16 PPBOX_GetPort(
-        PP_char const * moduleName)
+    PPBOX_DECL PP_ushort PPBOX_GetPort(
+        PP_str moduleName)
     {
         return the_ppbox().get_port(moduleName);
     }
 
-    PPBOX_DECL void PPBOX_StopP2PEngine()
+    PPBOX_DECL PP_err PPBOX_StopP2PEngine()
     {
-        the_ppbox().stop_p2p_engine();
+        return the_ppbox().stop_p2p_engine();
     }
 
-    PPBOX_DECL boost::int32_t PPBOX_GetLastError()
+    PPBOX_DECL PP_err PPBOX_GetLastError()
     {
         return the_ppbox().last_error();
     }
 
-    PPBOX_DECL char const * PPBOX_GetLastErrorMsg()
+    PPBOX_DECL PP_str PPBOX_GetLastErrorMsg()
     {
         return the_ppbox().last_error_msg();
     }
 
-    PPBOX_DECL char const * PPBOX_GetVersion()
+    PPBOX_DECL PP_str PPBOX_GetVersion()
     {
         return the_ppbox().version();
     }
 
-    PPBOX_DECL void PPBOX_SetConfig(
-        char const * module, 
-        char const * section, 
-        char const * key, 
-        char const * value)
+    PPBOX_DECL PP_err PPBOX_SetConfig(
+        PP_str module, 
+        PP_str section, 
+        PP_str key, 
+        PP_str value)
     {
         return the_ppbox().set_config(module, section, key, value);
     }
 
-    PPBOX_DECL void PPBOX_DebugMode(
+    PPBOX_DECL PP_err PPBOX_DebugMode(
         bool mode)
     {
-        the_ppbox().debug_mode(mode);
+        return the_ppbox().debug_mode(mode);
     }
 
-    PPBOX_DECL PP_uint32 PPBOX_DialogMessage(
+    PPBOX_DECL PP_uint PPBOX_DialogMessage(
         DialogMessage * vector, 
-        boost::int32_t size, 
-        char const * module, 
-        boost::int32_t level)
+        PP_uint size, 
+        PP_str module, 
+        PP_uint level)
     {
         return the_ppbox().get_debug_msg(vector, size, module, level);
     }
 
-    PPBOX_DECL void PPBOX_SubmitMessage(
-        PP_char const * msg, 
-        PP_int32 size)
+    PPBOX_DECL PP_err PPBOX_SubmitMessage(
+        PP_str msg, 
+        PP_uint size)
     {
-        the_ppbox().submit_msg(msg, size);
+        return the_ppbox().submit_msg(msg, size);
     }
 
-    PPBOX_DECL void PPBOX_LogDump(
+    PPBOX_DECL PP_err PPBOX_LogDump(
         PPBOX_OnLogDump callback,
-        PP_int32 level)
+        PP_uint level)
     {
-        the_ppbox().log_dump(callback, level);
+        return the_ppbox().log_dump(callback, level);
     }
 
-    PPBOX_DECL PPBOX_HANDLE PPBOX_ScheduleCallback(
-        PP_uint32 delay, 
-        void * user_data, 
+    PPBOX_DECL PP_handle PPBOX_ScheduleCallback(
+        PP_uint delay, 
+        PP_context user_data, 
         PPBOX_Callback callback)
     {
         return the_ppbox().schedule_callback(delay, user_data, callback);
     }
 
     PPBOX_DECL PP_err PPBOX_CancelCallback(
-        PPBOX_HANDLE timer)
+        PP_handle handle)
     {
-        return the_ppbox().schedule_callback(timer);
+        return the_ppbox().cancel_callback(handle);
     }
 
 

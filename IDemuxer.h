@@ -12,44 +12,44 @@ extern "C" {
 
     //打开一个视频
     PPBOX_DECL PP_err PPBOX_Open(
-        PP_char const * playlink);
+        PP_str playlink);
 
-    typedef void (*PPBOX_Open_Callback)(PP_int32);
+    typedef void (*PPBOX_Open_Callback)(PP_err);
 
-    PPBOX_DECL void PPBOX_AsyncOpen(
-        PP_char const * playlink, 
+    PPBOX_DECL PP_err PPBOX_AsyncOpen(
+        PP_str playlink, 
         PPBOX_Open_Callback callback);
 
     PPBOX_DECL PP_err PPBOX_OpenEx(
-        PP_char const * playlink, 
-        PP_char const * format);
+        PP_str playlink, 
+        PP_str format);
 
-    PPBOX_DECL void PPBOX_AsyncOpenEx(
-        PP_char const * playlink, 
-        PP_char const * format, 
-		void * user_data, 
+    PPBOX_DECL PP_err PPBOX_AsyncOpenEx(
+        PP_str playlink, 
+        PP_str format, 
+		PP_context user_data, 
         PPBOX_Callback callback);
 
     //暂停
     PPBOX_DECL PP_err PPBOX_Pause();
 
     //强制结束
-    PPBOX_DECL void PPBOX_Close();
+    PPBOX_DECL PP_err PPBOX_Close();
 
     //获得有多少流
-    PPBOX_DECL PP_uint32 PPBOX_GetStreamCount();
+    PPBOX_DECL PP_uint PPBOX_GetStreamCount();
 
     //获得流的详细信息
     PPBOX_DECL PP_err PPBOX_GetStreamInfo(
-        PP_uint32 index, 
+        PP_uint index, 
         PPBOX_StreamInfo * info);
 
     //获得总时长
-    PPBOX_DECL PP_uint32 PPBOX_GetDuration();
+    PPBOX_DECL PP_uint PPBOX_GetDuration();
 
     //跳到某个时刻开始播放
     PPBOX_DECL PP_err PPBOX_Seek(
-        PP_uint32 start_time);
+        PP_uint start_time);
 
     //同步读取Sample接口，不阻塞
     PPBOX_DECL PP_err PPBOX_ReadSample(
@@ -60,8 +60,8 @@ extern "C" {
     // 于内存之中，当内存中的下载缓冲大于这个预设值，那么将停止下载。直到被调用了
     // ReadSample，少了一些内存占用后，再继续下载，
     // length: 预设的下载内存缓冲的大小
-    PPBOX_DECL void PPBOX_SetDownloadBufferSize(
-        PP_uint32 length);
+    PPBOX_DECL PP_err PPBOX_SetDownloadBufferSize(
+        PP_uint length);
 
     //设置播放缓冲区的缓冲时间 (随时可以调用)
     // 主要用于计算播放状态，如果不调用这个函数，默认3s
@@ -69,8 +69,8 @@ extern "C" {
     // 如果 下载缓冲区数据的总时间 >=播放缓冲时间 则 处于 playing 状态
     // 如果 人为调用了 Pause 使之暂停的，则处于 Pausing 状态
     // 如果处于buffering状态，下载缓冲区数据的总时间/播放缓冲时间*100%就是缓冲百分比
-    PPBOX_DECL void PPBOX_SetPlayBufferTime(
-        PP_uint32 time);
+    PPBOX_DECL PP_err PPBOX_SetPlayBufferTime(
+        PP_uint time);
 
     //获得播放信息
     //返回值: 错误码

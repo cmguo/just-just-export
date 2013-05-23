@@ -3,6 +3,7 @@
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IDownloader.h"
+#include "ppbox/ppbox/Callback.h"
 using namespace ppbox::error;
 
 #include <ppbox/download/DownloadModule.h>
@@ -30,41 +31,46 @@ namespace ppbox
         }
         
         static void download_open_callback(
-            PPBOX_Download_Callback resp,
-            error_code const & ec)
+            PPBOX_Callback callback,
+            error_code const & ec, 
+            Downloader * downloader)
         {
+#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
             if (NULL != resp) {
-                resp(async_last_error(__FUNCTION__, ec));
+                callback(downloader, async_last_error(__FUNCTION__, ec));
             } else {
                 async_last_error(__FUNCTION__, ec);
             }
+#else
+            varg_call().call(callback, (PP_context)downloader, (PP_err)async_last_error(__FUNCTION__, ec));
+#endif
         }
 
-        PPBOX_Download_Handle download_open(
-            char const * playlink,
-            char const * format,
-            char const * filename,
-            PPBOX_Download_Callback resp)
+        PP_handle download_open(
+            PP_str playlink,
+            PP_str format,
+            PP_str filename,
+            PPBOX_Callback resp)
         {
             error_code ec;
             framework::string::Url url(filename);
             url.param("playlink", playlink);
             url.param("format", format);
             Downloader* hander = download_manager_.open(url, 
-                    boost::bind(&IDownloader::download_open_callback, resp, _1 ));
-            return  (PPBOX_Download_Handle)hander;
+                    boost::bind(&IDownloader::download_open_callback, resp, _1, _2));
+            return (PP_handle)hander;
         }
 
-        error::errors download_close(
-            PPBOX_Download_Handle const hander)
+        PP_err download_close(
+            PP_handle const hander)
         {
             error_code ec;
             download_manager_.close((Downloader*)hander, ec);
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors download_get_statistic(
-            PPBOX_Download_Handle const hander,
+        PP_err download_get_statistic(
+            PP_handle const hander,
             PPBOX_DownloadStatistic & statistic)
         {
             error_code ec;
@@ -80,7 +86,7 @@ namespace ppbox
         }
 
         static error::errors last_error(
-            char const * title, 
+            PP_str title, 
             error_code const & ec)
         {
             ppbox::error::last_error(ec);
@@ -88,7 +94,7 @@ namespace ppbox
         }
 
         static error::errors async_last_error(
-            char const * title, 
+            PP_str title, 
             error_code const & ec) 
         {
             if (ec && ec != boost::asio::error::would_block) {
@@ -115,25 +121,25 @@ extern "C" {
 
 
     //打开一个下载用例
-    PPBOX_DECL PPBOX_Download_Handle PPBOX_DownloadOpen(
-        char const * playlink,
-        char const * format,
-        char const * save_filename,
-        PPBOX_Download_Callback resp)
+    PPBOX_DECL PP_handle PPBOX_DownloadOpen(
+        PP_str playlink,
+        PP_str format,
+        PP_str save_filename,
+        PPBOX_Callback resp)
     {
         return downloader().download_open(playlink, format, save_filename, resp);
     }
 
     //关闭指定的下载用例
-    PPBOX_DECL void PPBOX_DownloadClose(
-        PPBOX_Download_Handle hander)
+    PPBOX_DECL PP_err PPBOX_DownloadClose(
+        PP_handle hander)
     {
-        downloader().download_close(hander);
+        return downloader().download_close(hander);
     }
 
     // 获取指定下载用例的实时统计信息
-    PPBOX_DECL PP_int32 PPBOX_GetDownloadInfo(
-        PPBOX_Download_Handle hander,
+    PPBOX_DECL PP_err PPBOX_GetDownloadInfo(
+        PP_handle hander,
         PPBOX_DownloadStatistic * stat)
     {
         return downloader().download_get_statistic(hander, *stat);

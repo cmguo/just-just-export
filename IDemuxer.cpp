@@ -3,6 +3,7 @@
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IDemuxer.h"
+#include "ppbox/ppbox/Callback.h"
 
 #include <ppbox/demux/DemuxModule.h>
 #include <ppbox/demux/base/DemuxerBase.h>
@@ -82,15 +83,15 @@ namespace ppbox
         {
         }
 
-        error::errors open(
-            char const * playlink)
+        PP_err open(
+            PP_str playlink)
         {
-            return open(playlink, "format=raw");
+            return open_ex(playlink, "format=raw");
         }
 
-        error::errors open(
-            char const * playlink, 
-            char const * format)
+        PP_err open_ex(
+            PP_str playlink, 
+            PP_str format)
         {
             LOG_SECTION();
             LOG_INFO("open playlink: " << playlink << ", format: " << format);
@@ -112,25 +113,54 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        void async_open(
-            char const * playlink, 
+#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+        static void redirect_open_callback(
+            PPBOX_Open_Callback callback, 
+            PP_err ec)
+        {
+            varg_call().call(callback, ec);
+        }
+#endif
+
+        PP_err async_open(
+            PP_str playlink, 
             PPBOX_Open_Callback callback)
         {
-            async_open(playlink, "format=raw", boost::bind(callback, _1));
+            return async_open(playlink, "format=raw", 
+#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+                boost::bind(callback, _1));
+#else
+                boost::bind(redirect_open_callback, callback, _1));
+#endif
         }
 
-        void async_open(
-            char const * playlink, 
-            char const * format, 
-			void * user_data, 
+#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+        static void redirect_open_ex_callback(
+            PPBOX_Callback callback, 
+            PP_context user_data, 
+            PP_err ec)
+        {
+            varg_call().call(callback, user_data, ec);
+        }
+#endif
+
+        PP_err async_open_ex(
+            PP_str playlink, 
+            PP_str format, 
+			PP_context user_data, 
             PPBOX_Callback callback)
         {
-            async_open(playlink, format, boost::bind(callback, user_data, _1));
+            return async_open(playlink, format, 
+#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+                boost::bind(callback, user_data, _1));
+#else
+                boost::bind(redirect_open_ex_callback, callback, user_data, _1));
+#endif
         }
 
-        void async_open(
-            char const * playlink, 
-            char const * format, 
+        PP_err async_open(
+            PP_str playlink, 
+            PP_str format, 
             boost::function<void (error::errors)> const & callback)
         {
             LOG_SECTION();
@@ -150,6 +180,7 @@ namespace ppbox
 				global_daemon().io_svc().post(
 					boost::bind(callback, async_last_error(__FUNCTION__, ec)));
             }
+            return ppbox_success;
         }
 
         void open_call_back(
@@ -178,7 +209,7 @@ namespace ppbox
             }
         }
 
-        error::errors seek(
+        PP_err seek(
             boost::uint64_t time)
         {
             LOG_SECTION();
@@ -192,7 +223,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors pause()
+        PP_err pause()
         {
             LOG_SECTION();
             LOG_INFO("pause");
@@ -206,7 +237,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors resume()
+        PP_err resume()
         {
             LOG_SECTION();
             LOG_INFO("resume");
@@ -220,7 +251,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors close()
+        PP_err close()
         {
             LOG_SECTION();
             LOG_INFO("close");
@@ -249,8 +280,8 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_stream_count(
-            boost::uint32_t & count)
+        PP_err get_stream_count(
+            PP_uint & count)
         {
             error_code ec;
             if (is_open(ec)) {
@@ -259,8 +290,8 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_stream_info(
-            boost::int32_t index,
+        PP_err get_stream_info(
+            PP_uint index,
             PPBOX_StreamInfo & info)
         {
             error_code ec;
@@ -287,8 +318,8 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_duration(
-            boost::uint32_t & duration)
+        PP_err get_duration(
+            PP_uint & duration)
         {
             error_code ec;
             if (is_open(ec)) {
@@ -299,7 +330,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors read_sample(
+        PP_err read_sample(
             PPBOX_Sample & sample)
         {
             error_code ec;
@@ -322,7 +353,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_play_stat(
+        PP_err get_play_stat(
             PPBOX_PlayStatistic & stat)
         {
             error_code ec;
@@ -363,7 +394,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_download_stat(
+        PP_err get_download_stat(
             PPBOX_DownloadMsg & stat)
         {
             error_code ec;
@@ -381,7 +412,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors get_download_speed(
+        PP_err get_download_speed(
             PPBOX_DownloadSpeedMsg & stat)
         {
             error_code ec;
@@ -402,16 +433,16 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors set_download_buffer_size(
-            boost::uint32_t buffer_size)
+        PP_err set_download_buffer_size(
+            PP_uint buffer_size)
         {
             error_code ec;
             demux_mod_.set_download_buffer_size(buffer_size);
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors set_play_buffer_time(
-            boost::uint32_t buffer_time)
+        PP_err set_play_buffer_time(
+            PP_uint buffer_time)
         {
             error_code ec;
             buffer_time_ = buffer_time;
@@ -419,7 +450,7 @@ namespace ppbox
         }
 
         static error::errors async_last_error(
-            char const * log_title, 
+            PP_str log_title, 
             error_code const & ec)
         {
             if (ec && ec != boost::asio::error::would_block) {
@@ -429,7 +460,7 @@ namespace ppbox
         }
 
         static error::errors last_error(
-            char const * title, 
+            PP_str title, 
             error_code const & ec)
         {
             ppbox::error::last_error(ec);
@@ -455,57 +486,57 @@ extern "C" {
 #endif // __cplusplus
 
     PPBOX_DECL PP_err PPBOX_Open(
-        char const * playlink)
+        PP_str playlink)
     {
         return demuxer().open(playlink);
     }
 
-    PPBOX_DECL void PPBOX_AsyncOpen(
-        char const * playlink, 
+    PPBOX_DECL PP_err PPBOX_AsyncOpen(
+        PP_str playlink, 
         PPBOX_Open_Callback callback)
     {
-        demuxer().async_open(playlink, callback);
+        return demuxer().async_open(playlink, callback);
     }
 
     PPBOX_DECL PP_err PPBOX_OpenEx(
-        PP_char const * playlink, 
-        PP_char const * format)
+        PP_str playlink, 
+        PP_str format)
     {
-        return demuxer().open(playlink, format);
+        return demuxer().open_ex(playlink, format);
     }
 
-    PPBOX_DECL void PPBOX_AsyncOpenEx(
-        PP_char const * playlink, 
-        PP_char const * format, 
-		void * user_data, 
+    PPBOX_DECL PP_err PPBOX_AsyncOpenEx(
+        PP_str playlink, 
+        PP_str format, 
+		PP_context user_data, 
         PPBOX_Callback callback)
     {
-        demuxer().async_open(playlink, format, user_data, callback);
+        return demuxer().async_open_ex(playlink, format, user_data, callback);
     }
 
-    PPBOX_DECL boost::uint32_t PPBOX_GetStreamCount()
+    PPBOX_DECL PP_uint PPBOX_GetStreamCount()
     {
-        boost::uint32_t n = 0;
+        PP_uint n = 0;
         demuxer().get_stream_count(n);
         return n;
     }
 
     PPBOX_DECL PP_err PPBOX_GetStreamInfo(
-        boost::uint32_t index, 
+        PP_uint index, 
         PPBOX_StreamInfo * stream_info)
     {
         return demuxer().get_stream_info(index, *stream_info);
     }
 
-    PPBOX_DECL boost::uint32_t PPBOX_GetDuration()
+    PPBOX_DECL PP_uint PPBOX_GetDuration()
     {
-        boost::uint32_t n = 0;
+        PP_uint n = 0;
         demuxer().get_duration(n);
         return n;
     }
 
     PPBOX_DECL PP_err PPBOX_Seek(
-        boost::uint32_t start_time)
+        PP_uint start_time)
     {
         return demuxer().seek(start_time);
     }
@@ -516,9 +547,9 @@ extern "C" {
         return demuxer().read_sample(*sample);
     }
 
-    PPBOX_DECL void PPBOX_Close()
+    PPBOX_DECL PP_err PPBOX_Close()
     {
-        demuxer().close();
+        return demuxer().close();
     }
 
     PPBOX_DECL PP_err PPBOX_Pause()
@@ -526,16 +557,16 @@ extern "C" {
         return demuxer().pause();
     }
 
-    PPBOX_DECL void PPBOX_SetDownloadBufferSize(
-        boost::uint32_t length)
+    PPBOX_DECL PP_err PPBOX_SetDownloadBufferSize(
+        PP_uint length)
     {
-        demuxer().set_download_buffer_size(length);
+        return demuxer().set_download_buffer_size(length);
     }
 
-    PPBOX_DECL void PPBOX_SetPlayBufferTime(
-        boost::uint32_t time)
+    PPBOX_DECL PP_err PPBOX_SetPlayBufferTime(
+        PP_uint time)
     {
-        demuxer().set_play_buffer_time(time);
+        return demuxer().set_play_buffer_time(time);
     }
 
     PPBOX_DECL PP_err PPBOX_GetPlayMsg(
@@ -555,20 +586,6 @@ extern "C" {
     {
         return demuxer().get_download_speed(*download_spped_Msg);
     }
-
-    //boost::int32_t PPBOX_InsertMedia(
-    //    boost::uint32_t count, 
-    //    InsertMedia const * medias)
-    //{
-    //    return demuxer().insert_media( 
-    //         count, medias);
-    //}
-
-    //boost::int32_t PPBOX_GetInsertMediaEvent(
-    //    InsertMediaEvent * event)
-    //{
-    //    return demuxer().get_insert_media_event( *event );
-    //}
 
 #if __cplusplus
 }

@@ -3,6 +3,7 @@
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/ICapture.h"
+#include "ppbox/ppbox/Callback.h"
 using namespace ppbox::error;
 
 #include <ppbox/capture/CaptureModule.h>
@@ -19,6 +20,8 @@ using namespace boost::system;
 
 namespace ppbox
 {
+
+    static PPBOX_CaptureConfigData s_config;
 
     class ICapture
     {
@@ -40,9 +43,9 @@ namespace ppbox
             download_module_.close(downloader, ec);
         }
 
-        PPBOX_HANDLE create(
-            PP_char const * name, 
-            PP_char const * dest)
+        PP_handle create(
+            PP_str name, 
+            PP_str dest)
         {
             error_code ec;
             framework::string::Url playlink(std::string("capture:///") + name);
@@ -55,11 +58,11 @@ namespace ppbox
                     boost::bind(&ICapture::download_finish, this, _1, _2));
             }
             last_error(__FUNCTION__, ec);
-            return (PPBOX_HANDLE)handle;
+            return (PP_handle)handle;
         }
 
-        error::errors destroy(
-            PPBOX_HANDLE handle)
+        PP_err destroy(
+            PP_handle handle)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
@@ -68,23 +71,44 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors init(
-            PPBOX_HANDLE handle, 
+#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+        static bool redirect_get_sample_buffers(
+            PP_context context, 
+            PPBOX_SampleBuffer * buffers)
+        {
+            return varg_call().call(s_config.get_sample_buffers, context, buffers);
+        }
+
+        static bool redirect_free_sample(
+            PP_context context)
+        {
+            return varg_call().call(s_config.free_sample, context);
+        }
+#endif
+
+        PP_err init(
+            PP_handle handle, 
             PPBOX_CaptureConfigData const & config)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
             CaptureConfigData data;
             data.stream_count = config.stream_count;
+#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
             data.get_sample_buffers = (bool (*)(void const *, CaptureBuffer *))config.get_sample_buffers;
             data.free_sample = config.free_sample;
+#else
+            s_config = config;
+            data.get_sample_buffers = (bool (*)(void const *, CaptureBuffer *))redirect_get_sample_buffers;
+            data.free_sample = redirect_free_sample;
+#endif
             capture->init(data, ec);
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors set_stream(
-            PPBOX_HANDLE handle, 
-            boost::uint32_t index, 
+        PP_err set_stream(
+            PP_handle handle, 
+            PP_uint index, 
 		    PPBOX_StreamInfo const & stream)
         {
             error_code ec;
@@ -116,8 +140,8 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        error::errors put_sample(
-            PPBOX_HANDLE handle, 
+        PP_err put_sample(
+            PP_handle handle, 
 		    PPBOX_Sample const & sample)
         {
             error_code ec;
@@ -172,23 +196,23 @@ extern "C" {
 
 
     //打开一个下载用例
-    PPBOX_DECL PPBOX_HANDLE PPBOX_CaptureCreate(
-        PP_char const * name, 
-        PP_char const * dest)
+    PPBOX_DECL PP_handle PPBOX_CaptureCreate(
+        PP_str name, 
+        PP_str dest)
     {
         return capture().create(name, dest);
     }
 
     // 获取指定下载用例的实时统计信息
-    PPBOX_DECL PP_int32 PPBOX_CaptureInit(
-        PPBOX_HANDLE handle,
+    PPBOX_DECL PP_err PPBOX_CaptureInit(
+        PP_handle handle,
         PPBOX_CaptureConfigData const * config)
     {
         return capture().init(handle, *config);
     }
 
     PPBOX_DECL PP_err PPBOX_CaptureSetStream(
-        PPBOX_HANDLE handle, 
+        PP_handle handle, 
         boost::uint32_t index, 
 		PPBOX_StreamInfo const * stream)
     {
@@ -196,7 +220,7 @@ extern "C" {
     }
 
     PPBOX_DECL PP_err PPBOX_CapturePutSample(
-        PPBOX_HANDLE handle, 
+        PP_handle handle, 
 		PPBOX_Sample const * sample)
     {
         return capture().put_sample(handle, *sample);
@@ -204,7 +228,7 @@ extern "C" {
 
     //关闭指定的下载用例
     PPBOX_DECL PP_err PPBOX_CaptureDestroy(
-        PPBOX_HANDLE handle)
+        PP_handle handle)
     {
         return capture().destroy(handle);
     }
