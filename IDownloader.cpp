@@ -36,7 +36,7 @@ namespace ppbox
             Downloader * downloader)
         {
 #ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
-            if (NULL != resp) {
+            if (NULL != callback) {
                 callback(downloader, async_last_error(__FUNCTION__, ec));
             } else {
                 async_last_error(__FUNCTION__, ec);
