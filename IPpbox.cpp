@@ -86,7 +86,7 @@ namespace ppbox
             LOG_INFO("Ppbox ready.");
         }
 
-        PP_err start_p2p_engine(
+        PP_err start_engine(
             PP_str gid, 
             PP_str pid, 
             PP_str auth)
@@ -114,7 +114,7 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        PP_err stop_p2p_engine()
+        PP_err stop_engine()
         {
             LOG_SECTION();
 
@@ -309,12 +309,12 @@ using namespace ppbox;
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_err PPBOX_StartP2PEngine(
+    PPBOX_DECL PP_err PPBOX_StartEngine(
         PP_str gid, 
         PP_str pid, 
         PP_str auth)
     {
-        return the_ppbox().start_p2p_engine(gid, pid, auth);
+        return the_ppbox().start_engine(gid, pid, auth);
     }
 
     PPBOX_DECL PP_ushort PPBOX_GetPort(
@@ -323,9 +323,9 @@ extern "C" {
         return the_ppbox().get_port(moduleName);
     }
 
-    PPBOX_DECL PP_err PPBOX_StopP2PEngine()
+    PPBOX_DECL PP_err PPBOX_StopEngine()
     {
-        return the_ppbox().stop_p2p_engine();
+        return the_ppbox().stop_engine();
     }
 
     PPBOX_DECL PP_err PPBOX_GetLastError()

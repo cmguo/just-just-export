@@ -1,7 +1,7 @@
 {
 	global: 
-		PPBOX_StartP2PEngine;
-		PPBOX_StopP2PEngine;
+		PPBOX_StartEngine;
+		PPBOX_StopEngine;
 		PPBOX_GetPort;
 		PPBOX_GetVersion;
 		PPBOX_GetLastError;
