@@ -4,6 +4,7 @@
 
 #include <ppbox/certify/CertifyError.h>
 #include <ppbox/demux/base/DemuxError.h>
+#include <ppbox/mux/MuxError.h>
 
 #include <util/protocol/http/HttpError.h>
 
@@ -23,6 +24,8 @@ namespace ppbox
             } else if (ec == boost::asio::error::would_block) {
                 return would_block;
             } else if (ec == ppbox::demux::error::no_more_sample) {
+                return stream_end;
+            } else if (ec == ppbox::mux::error::end_of_stream) {
                 return stream_end;
             } else if (ec == boost::asio::error::operation_aborted) {
                 return operation_canceled;

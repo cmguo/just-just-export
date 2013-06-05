@@ -63,10 +63,8 @@ namespace ppbox
             size_t close_token;
             DemuxerBase * demuxer;
             MuxerBase * muxer;
-            ppbox::demux::StreamInfo media_info;
-            boost::uint32_t video_media_index;
-            std::vector<boost::uint8_t> media_type_buffer;
-            ppbox::demux::Sample sample;
+            std::vector<StreamInfo> stream_infos;
+            Sample sample;
             bool paused;
             std::vector<boost::uint8_t> sample_buffer;
         };
@@ -108,6 +106,7 @@ namespace ppbox
                 if (!ec) {
                     framework::string::Url play_link(playlink);
                     cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
+                    cache->muxer->stream_info(cache->stream_infos);
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -193,6 +192,7 @@ namespace ppbox
             cache->demuxer = demuxer;
             if (!ec) {
                 cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
+                cache->muxer->stream_info(cache->stream_infos);
             }
             callback(async_last_error(__FUNCTION__, ec));
         }
@@ -285,7 +285,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                count = cache_->demuxer->get_stream_count(ec);
+                count = cache_->stream_infos.size();
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -296,24 +296,26 @@ namespace ppbox
         {
             error_code ec;
             if (!is_open(ec)) {
-            } else if(cache_->demuxer->get_stream_info(index, cache_->media_info, ec)) {
+            } else if(index >= cache_->stream_infos.size()) {
+                ec = framework::system::logic_error::out_of_range;
             } else {
-                info.type = cache_->media_info.type;
-                info.sub_type = cache_->media_info.sub_type;
-                info.time_scale = cache_->media_info.time_scale;
-                info.bitrate = cache_->media_info.bitrate;
-                info.format_type = cache_->media_info.format_type;
-                if (cache_->media_info.type == StreamType::VIDE) {
-                    info.video_format.frame_rate = cache_->media_info.video_format.frame_rate;
-                    info.video_format.height = cache_->media_info.video_format.height;
-                    info.video_format.width = cache_->media_info.video_format.width;
-                } else if (cache_->media_info.type == StreamType::AUDI) {
-                    info.audio_format.sample_rate = cache_->media_info.audio_format.sample_rate;
-                    info.audio_format.sample_size = cache_->media_info.audio_format.sample_size;
-                    info.audio_format.channel_count = cache_->media_info.audio_format.channel_count;
+                StreamInfo const & info2 = cache_->stream_infos[index];
+                info.type = info2.type;
+                info.sub_type = info2.sub_type;
+                info.time_scale = info2.time_scale;
+                info.bitrate = info2.bitrate;
+                info.format_type = info2.format_type;
+                if (info2.type == StreamType::VIDE) {
+                    info.video_format.frame_rate = info2.video_format.frame_rate;
+                    info.video_format.height = info2.video_format.height;
+                    info.video_format.width = info2.video_format.width;
+                } else if (info2.type == StreamType::AUDI) {
+                    info.audio_format.sample_rate = info2.audio_format.sample_rate;
+                    info.audio_format.sample_size = info2.audio_format.sample_size;
+                    info.audio_format.channel_count = info2.audio_format.channel_count;
                 }
-                info.format_size = cache_->media_info.format_data.size();
-                info.format_buffer = info.format_size ? &cache_->media_info.format_data.at(0) : NULL;
+                info.format_size = info2.format_data.size();
+                info.format_buffer = info.format_size ? &info2.format_data.at(0) : NULL;
             }
             return last_error(__FUNCTION__, ec);
         }
