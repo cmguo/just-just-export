@@ -21,7 +21,9 @@ using namespace boost::system;
 namespace ppbox
 {
 
+#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
     static PPBOX_CaptureConfigData s_config;
+#endif
 
     class ICapture
     {
