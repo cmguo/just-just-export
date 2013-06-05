@@ -11,6 +11,7 @@
 		PPBOX_DialogMessage;
 		PPBOX_SubmitMessage;
 		PPBOX_LogDump;
+		PPBOX_RedirectCallback;
 		PPBOX_ScheduleCallback;
 		PPBOX_CancelCallback;
 
@@ -48,6 +49,12 @@
 		PPBOX_GetDownSedMsg;
 		PPBOX_InsertMedia;
 		PPBOX_GetInsertMediaEvent;
+		
+		PPBOX_CaptureCreate;
+		PPBOX_CaptureInit;
+		PPBOX_CaptureSetStream;
+		PPBOX_CapturePutSample;
+		PPBOX_CaptureDestroy;
 		
 	local: *;
 };
