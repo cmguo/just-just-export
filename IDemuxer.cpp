@@ -306,13 +306,15 @@ namespace ppbox
                 info.bitrate = info2.bitrate;
                 info.format_type = info2.format_type;
                 if (info2.type == StreamType::VIDE) {
-                    info.video_format.frame_rate = info2.video_format.frame_rate;
-                    info.video_format.height = info2.video_format.height;
                     info.video_format.width = info2.video_format.width;
+                    info.video_format.height = info2.video_format.height;
+                    info.video_format.frame_rate_num = info2.video_format.frame_rate_num;
+                    info.video_format.frame_rate_den = info2.video_format.frame_rate_den;
                 } else if (info2.type == StreamType::AUDI) {
-                    info.audio_format.sample_rate = info2.audio_format.sample_rate;
-                    info.audio_format.sample_size = info2.audio_format.sample_size;
                     info.audio_format.channel_count = info2.audio_format.channel_count;
+                    info.audio_format.sample_size = info2.audio_format.sample_size;
+                    info.audio_format.sample_rate = info2.audio_format.sample_rate;
+                    info.audio_format.sample_per_frame = info2.audio_format.sample_per_frame;
                 }
                 info.format_size = info2.format_data.size();
                 info.format_buffer = info.format_size ? &info2.format_data.at(0) : NULL;

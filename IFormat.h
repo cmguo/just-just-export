@@ -25,7 +25,8 @@ extern "C" {
     {
         PP_uint width;
         PP_uint height;
-        PP_uint frame_rate;
+        PP_uint frame_rate_num;
+        PP_uint frame_rate_den;
     };
 
     struct PPBOX_AudioInfo
@@ -33,6 +34,7 @@ extern "C" {
         PP_uint channel_count;
         PP_uint sample_size;
         PP_uint sample_rate;
+        PP_uint sample_per_frame;
     };
 
     struct PPBOX_StreamInfo
