@@ -16,6 +16,7 @@ extern "C" {
     struct PPBOX_CaptureConfigData
     {
         PP_uint stream_count;
+        bool ordered;
         PPBOX_GetSampleBuffersCallBack get_sample_buffers;
         PPBOX_FreeSampleCallBack free_sample;
     };
