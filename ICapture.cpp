@@ -96,7 +96,7 @@ namespace ppbox
             CaptureSource * capture = (CaptureSource *)handle;
             CaptureConfigData data;
             data.stream_count = config.stream_count;
-            data.ordered = config.ordered;
+            data.flags = config.flags;
 #ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
             data.get_sample_buffers = (bool (*)(void const *, CaptureBuffer *))config.get_sample_buffers;
             data.free_sample = config.free_sample;

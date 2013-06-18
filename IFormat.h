@@ -5,6 +5,7 @@
 
 #include "IPpbox.h"
 
+#include <ppbox/avbase/Sample.h>
 #include <ppbox/avcodec/CodecType.h>
 #include <ppbox/avcodec/aac/AacFormatType.h>
 #include <ppbox/avcodec/avc/AvcFormatType.h>
@@ -57,8 +58,8 @@ extern "C" {
     {
         enum Enum
         {
-            sync = 1, 
-            discontinuity = 2,
+            sync = ppbox::avbase::Sample::f_sync, 
+            discontinuity = ppbox::avbase::Sample::f_discontinuity,
         };
     };
 

@@ -6,6 +6,8 @@
 #include "IPpbox.h"
 #include "IFormat.h"
 
+#include <ppbox/capture/CaptureFormat.h>
+
 #if __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -13,10 +15,19 @@ extern "C" {
     typedef PP_bool (*PPBOX_GetSampleBuffersCallBack)(PP_context, PPBOX_SampleBuffer *);
     typedef PP_bool (*PPBOX_FreeSampleCallBack)(PP_context);
 
+    struct PPBOX_CaptureConfigFlag
+    {
+        enum Enum
+        {
+            stream_ordered = ppbox::capture::CaptureConfigData::f_stream_ordered, 
+            multi_thread = ppbox::capture::CaptureConfigData::f_multi_thread, 
+        };
+    };
+
     struct PPBOX_CaptureConfigData
     {
         PP_uint stream_count;
-        bool ordered;
+        PP_uint flags;
         PPBOX_GetSampleBuffersCallBack get_sample_buffers;
         PPBOX_FreeSampleCallBack free_sample;
     };
