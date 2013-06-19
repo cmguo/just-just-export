@@ -5,15 +5,15 @@
 
 #include "IPpbox.h"
 
-#include <ppbox/common/VargCall.h>
+#include <ppbox/common/RedirectCall.h>
 
 namespace ppbox
 {
 
-    inline ppbox::common::VargCall & varg_call()
+    inline ppbox::common::RedirectCall & redirect_call()
     {
-        static ppbox::common::VargCall g_varg_call;
-        return g_varg_call;
+        static ppbox::common::RedirectCall g_redirect_call;
+        return g_redirect_call;
     }
 
 } // namespace ppbox

@@ -78,13 +78,13 @@ namespace ppbox
             PP_context context, 
             PPBOX_SampleBuffer * buffers)
         {
-            return varg_call().call(s_config.get_sample_buffers, context, buffers);
+            return redirect_call().call(s_config.get_sample_buffers, context, buffers);
         }
 
         static bool redirect_free_sample(
             PP_context context)
         {
-            return varg_call().call(s_config.free_sample, context);
+            return redirect_call().call(s_config.free_sample, context);
         }
 #endif
 
@@ -102,8 +102,8 @@ namespace ppbox
             data.free_sample = config.free_sample;
 #else
             s_config = config;
-            data.get_sample_buffers = (bool (*)(void const *, CaptureBuffer *))redirect_get_sample_buffers;
-            data.free_sample = redirect_free_sample;
+            data.get_sample_buffers = config.get_sample_buffers ? (bool (*)(void const *, CaptureBuffer *))redirect_get_sample_buffers : NULL;
+            data.free_sample = config.free_sample ? redirect_free_sample : NULL;
 #endif
             capture->init(data, ec);
             return last_error(__FUNCTION__, ec);

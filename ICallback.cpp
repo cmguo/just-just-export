@@ -15,7 +15,7 @@ extern "C" {
         PPBOX_CallbackFree free, 
         PP_context user_data)
     {
-        ppbox::varg_call().set(redirect, free, user_data);
+        ppbox::redirect_call().set(redirect, free, user_data);
         return ppbox_success;
     }
 

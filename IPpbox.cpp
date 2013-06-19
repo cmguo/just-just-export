@@ -260,7 +260,7 @@ namespace ppbox
             PP_context user_data, 
             PP_err ec)
         {
-            varg_call().call(callback, user_data, ec);
+            redirect_call().call(callback, user_data, ec);
         }
 #endif
 

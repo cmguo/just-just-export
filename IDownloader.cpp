@@ -42,7 +42,7 @@ namespace ppbox
                 async_last_error(__FUNCTION__, ec);
             }
 #else
-            varg_call().call(callback, (PP_context)downloader, (PP_err)async_last_error(__FUNCTION__, ec));
+            redirect_call().call(callback, (PP_context)downloader, (PP_err)async_last_error(__FUNCTION__, ec));
 #endif
         }
 
