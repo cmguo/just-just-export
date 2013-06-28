@@ -29,26 +29,14 @@
 		PPBOX_GetStreamInfo;
 		PPBOX_GetStreamInfoEx;
 		PPBOX_GetDuration;
-		PPBOX_GetWidthHeight;
 		PPBOX_Seek;
-		PPBOX_GetAvcConfig;
-		PPBOX_GetFirstSegHeader;
-		PPBOX_GetSegHeader;
-		PPBOX_GetSegDataSize;
-		PPBOX_GetSegmentCount;
-		PPBOX_GetSegmentInfo;
 		PPBOX_ReadSample;
 		PPBOX_ReadSampleEx;
 		PPBOX_ReadSampleEx2;
 		PPBOX_SetDownloadBufferSize;
-		PPBOX_SetHttpProxy;
-		PPBOX_SetDownloadMaxSpeed;
 		PPBOX_SetPlayBufferTime;
-		PPBOX_GetPlayMsg;
-		PPBOX_GetDownMsg;
-		PPBOX_GetDownSedMsg;
-		PPBOX_InsertMedia;
-		PPBOX_GetInsertMediaEvent;
+		PPBOX_GetPlayStat;
+		PPBOX_GetNetStat;
 		
 		PPBOX_CaptureCreate;
 		PPBOX_CaptureInit;

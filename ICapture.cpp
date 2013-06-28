@@ -126,15 +126,15 @@ namespace ppbox
             switch (stream.type)
             {
             case PPBOX_StreamType::VIDE:
-                data.video_format.width = stream.video_format.width;
-                data.video_format.height = stream.video_format.height;
-                data.video_format.frame_rate(stream.video_format.frame_rate_num, stream.video_format.frame_rate_den);
+                data.video_format.width = stream.format.video.width;
+                data.video_format.height = stream.format.video.height;
+                data.video_format.frame_rate(stream.format.video.frame_rate_num, stream.format.video.frame_rate_den);
                 break;
             case PPBOX_StreamType::AUDI:
-                data.audio_format.channel_count = stream.audio_format.channel_count;
-                data.audio_format.sample_size = stream.audio_format.sample_size;
-                data.audio_format.sample_rate = stream.audio_format.sample_rate;
-                data.audio_format.sample_per_frame = stream.audio_format.sample_per_frame;
+                data.audio_format.channel_count = stream.format.audio.channel_count;
+                data.audio_format.sample_size = stream.format.audio.sample_size;
+                data.audio_format.sample_rate = stream.format.audio.sample_rate;
+                data.audio_format.sample_per_frame = stream.format.audio.sample_per_frame;
                 break;
             default:
                 break;

@@ -5,21 +5,13 @@
 
 #include "IPpbox.h"
 
-#if __cplusplus
-extern "C" {
-#endif // __cplusplus
+PPBOX_CALLBACK_4(void, PPBOX_CallbackRedirect, (PP_context, PP_handle, void *, va_list));
 
+PPBOX_CALLBACK_1(void, PPBOX_CallbackFree, (PP_context));
 
-    typedef void (*PPBOX_CallbackRedirect)(PP_context, PP_handle, void *, va_list);
-    typedef void (*PPBOX_CallbackFree)(PP_context);
-
-    PPBOX_DECL PP_err PPBOX_RedirectCallback(
-        PPBOX_CallbackRedirect redirect, 
-        PPBOX_CallbackFree free, 
-        PP_context user_data);
-
-#if __cplusplus
-}
-#endif // __cplusplus
+PPBOX_FUNC_3(PP_err, PPBOX_RedirectCallback, (
+    (PPBOX_CallbackRedirect, redirect), 
+    (PPBOX_CallbackFree, free), 
+    (PP_context, user_data)));
 
 #endif // _PPBOX_PPBOX_I_CALLBACK_H_

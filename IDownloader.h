@@ -5,34 +5,26 @@
 
 #include "IPpbox.h"
 
-#if __cplusplus
-extern "C" {
-#endif // __cplusplus
+//打开一个下载用例
+PPBOX_FUNC_4(PP_handle, PPBOX_DownloadOpen, (
+    (PP_str, playlink),
+    (PP_str, format),
+    (PP_str, save_filename),
+    (PPBOX_Callback, resp)));
 
-    //打开一个下载用例
-    PPBOX_DECL PP_handle PPBOX_DownloadOpen(
-        PP_str playlink,
-        PP_str format,
-        PP_str save_filename,
-        PPBOX_Callback resp);
+//关闭指定的下载用例
+PPBOX_FUNC_1(PP_err, PPBOX_DownloadClose, (
+    (PP_handle, handle)));
 
-    //关闭指定的下载用例
-    PPBOX_DECL PP_err PPBOX_DownloadClose(PP_handle hander);
+PPBOX_STRUCT_3(PPBOX_DownloadStatistic, (
+    (PP_ulong, total_size),
+    (PP_ulong, finish_size),
+    (PP_uint, speed) 
+    ));
 
-    typedef struct tag_PPBOX_DownloadStatistic
-    {
-        PP_ulong total_size;
-        PP_ulong finish_size;
-        PP_uint speed; 
-    } PPBOX_DownloadStatistic;
-
-    // 获取指定下载用例的实时统计信息
-    PPBOX_DECL PP_err PPBOX_GetDownloadInfo(
-        PP_handle hander,
-        PPBOX_DownloadStatistic * stat);
-
-#if __cplusplus
-}
-#endif // __cplusplus
+// 获取指定下载用例的实时统计信息
+PPBOX_FUNC_2(PP_err, PPBOX_GetDownloadInfo, (
+    (PP_handle, handle),
+    (PPBOX_DownloadStatistic *, stat)));
 
 #endif // _PPBOX_PPBOX_I_DOWNLOADER_H_

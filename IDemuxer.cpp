@@ -2,7 +2,6 @@
 
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
-#include "ppbox/ppbox/IDemuxer.h"
 #include "ppbox/ppbox/Callback.h"
 
 #include <ppbox/demux/DemuxModule.h>
@@ -306,15 +305,15 @@ namespace ppbox
                 info.bitrate = info2.bitrate;
                 info.format_type = info2.format_type;
                 if (info2.type == StreamType::VIDE) {
-                    info.video_format.width = info2.video_format.width;
-                    info.video_format.height = info2.video_format.height;
-                    info.video_format.frame_rate_num = info2.video_format.frame_rate_num;
-                    info.video_format.frame_rate_den = info2.video_format.frame_rate_den;
+                    info.format.video.width = info2.video_format.width;
+                    info.format.video.height = info2.video_format.height;
+                    info.format.video.frame_rate_num = info2.video_format.frame_rate_num;
+                    info.format.video.frame_rate_den = info2.video_format.frame_rate_den;
                 } else if (info2.type == StreamType::AUDI) {
-                    info.audio_format.channel_count = info2.audio_format.channel_count;
-                    info.audio_format.sample_size = info2.audio_format.sample_size;
-                    info.audio_format.sample_rate = info2.audio_format.sample_rate;
-                    info.audio_format.sample_per_frame = info2.audio_format.sample_per_frame;
+                    info.format.audio.channel_count = info2.audio_format.channel_count;
+                    info.format.audio.sample_size = info2.audio_format.sample_size;
+                    info.format.audio.sample_rate = info2.audio_format.sample_rate;
+                    info.format.audio.sample_per_frame = info2.audio_format.sample_per_frame;
                 }
                 info.format_size = info2.format_data.size();
                 info.format_buffer = info.format_size ? &info2.format_data.at(0) : NULL;
@@ -362,7 +361,7 @@ namespace ppbox
         {
             error_code ec;
             memset(&stat, 0, sizeof(stat));
-            stat.length = sizeof(stat);
+            assert(stat.length = sizeof(stat));
             if (!is_open(ec)) {
                 stat.buffer_time = 0;
                 stat.buffering_present = 0;
@@ -398,41 +397,22 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        PP_err get_download_stat(
-            PPBOX_DownloadMsg & stat)
+        PP_err get_net_stat(
+            PPBOX_NetStatistic & stat)
         {
             error_code ec;
-            stat.length = sizeof(stat);
+            assert(stat.length == sizeof(stat));
             if (is_open(ec)) {
                 DataStatistic data_stat;
                 cache_->demuxer->get_data_stat(data_stat, ec);
                 memset(&stat, 0, sizeof(stat));
-                stat.length = sizeof(stat);
-                stat.start_time = (boost::uint32_t)data_stat.start_time;
+                stat.total_elapse = (boost::uint32_t)(time(NULL) - data_stat.start_time);
                 stat.total_download_bytes = (boost::uint32_t)data_stat.total_bytes;
-                stat.http_download_bytes = (boost::uint32_t)data_stat.total_bytes;
-                stat.download_duration_in_sec = (boost::uint32_t)(time(NULL) - data_stat.start_time);
-            }
-            return last_error(__FUNCTION__, ec);
-        }
-
-        PP_err get_download_speed(
-            PPBOX_DownloadSpeedMsg & stat)
-        {
-            error_code ec;
-            if (is_open(ec)) {
-                DataStatistic data_stat;
-                cache_->demuxer->get_data_stat(data_stat, ec);
-                memset(&stat, 0, sizeof(stat));
-                stat.length = sizeof(stat);
-                time_t now = time(NULL);
-                if (now > data_stat.start_time) {
-                    stat.avg_download_speed = (boost::uint32_t)(data_stat.total_bytes / (now - data_stat.start_time));
-                }
-                stat.second_download_speed = data_stat.speeds[0].cur_speed;
-                stat.recent_download_speed = data_stat.speeds[1].cur_speed;
-                stat.now_download_speed = data_stat.speeds[2].cur_speed;
-                stat.minute_download_speed = data_stat.speeds[3].cur_speed;
+                stat.connection_status = data_stat.connection_status;
+                stat.average_speed_one_second = data_stat.speeds[0].cur_speed;
+                stat.average_speed_five_seconds = data_stat.speeds[1].cur_speed;
+                stat.average_speed_twenty_seconds = data_stat.speeds[2].cur_speed;
+                stat.average_speed_sixty_seconds = data_stat.speeds[3].cur_speed;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -573,23 +553,18 @@ extern "C" {
         return demuxer().set_play_buffer_time(time);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetPlayMsg(
-        PPBOX_PlayStatistic * statistic_Msg)
+    PPBOX_DECL PP_err PPBOX_GetPlayStat(
+        PPBOX_PlayStatistic * stat)
     {
-        return demuxer().get_play_stat(*statistic_Msg);
+        return demuxer().get_play_stat(*stat);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetDownMsg(
-        PPBOX_DownloadMsg* download_Msg)
+    PPBOX_DECL PP_err PPBOX_GetNetStat(
+        PPBOX_NetStatistic * stat)
     {
-        return demuxer().get_download_stat(*download_Msg);
+        return demuxer().get_net_stat(*stat);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetDownSedMsg(
-        PPBOX_DownloadSpeedMsg* download_spped_Msg)
-    {
-        return demuxer().get_download_speed(*download_spped_Msg);
-    }
 
 #if __cplusplus
 }

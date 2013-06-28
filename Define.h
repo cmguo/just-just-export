@@ -3,11 +3,11 @@
 #ifndef _PPBOX_PPBOX_DEFINE_H_
 #define _PPBOX_PPBOX_DEFINE_H_
 
-#include "ppbox/common/VersionDefine.h" // for VERSION
-
 #define LIB
 
 #define NAME ppbox
+
+#define VERSION 1.2.0
 
 #define BEGIN_NAME_SPACE namespace ppbox {
 
