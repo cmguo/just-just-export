@@ -39,8 +39,16 @@ namespace ppbox
     private:
         struct Cache
         {
+            enum StatusEnum
+            {
+                closed, 
+                opening, 
+                canceled, 
+                opened, 
+            };
+
             Cache()
-                : close_token(0)
+                : status(closed)
                 , demuxer(NULL)
                 , muxer(NULL)
                 , paused(false)
@@ -59,7 +67,7 @@ namespace ppbox
                 }
             }
 
-            size_t close_token;
+            StatusEnum status;
             DemuxerBase * demuxer;
             MuxerBase * muxer;
             std::vector<StreamInfo> stream_infos;
@@ -94,6 +102,7 @@ namespace ppbox
             LOG_INFO("open playlink: " << playlink << ", format: " << format);
 
             error_code ec;
+            boost::mutex::scoped_lock lock(mutex_);
             if (cache_) {
                 ec = ppbox::error::already_open;
             } else {
@@ -101,11 +110,23 @@ namespace ppbox
                 cache_ = cache;
                 framework::string::Url play_link(playlink);
                 framework::string::Url config(std::string("config:///interface?") + format);
-                cache->demuxer = demux_mod_.open(play_link, config, cache->close_token, ec);
-                if (!ec) {
-                    framework::string::Url play_link(playlink);
-                    cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
-                    cache->muxer->stream_info(cache->stream_infos);
+                cache->demuxer = demux_mod_.create(play_link, config, ec);
+                if (cache->demuxer) {
+                    cache->status = Cache::opening;
+                    lock.unlock();
+                    cache->demuxer->open(ec);
+                    lock.lock();
+                    if (cache->status == Cache::canceled) {
+                        cache->demuxer->close(ec);
+                        demux_mod_.destroy(cache->demuxer, ec);
+                        ec = boost::asio::error::operation_aborted;
+                    } else {
+                        cache->status = Cache::opened;
+                        if (!ec) {
+                            cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
+                            cache->muxer->stream_info(cache->stream_infos);
+                        }
+                    }
                 }
             }
             return last_error(__FUNCTION__, ec);
@@ -165,14 +186,19 @@ namespace ppbox
             LOG_INFO("async_open playlink: " << playlink << ", format: " << format);
 
             error_code ec;
+            boost::mutex::scoped_lock lock(mutex_);
             if (cache_) {
                 ec = ppbox::error::already_open;
             } else {
                 cache_.reset(new Cache);
                 framework::string::Url play_link(playlink);
                 framework::string::Url config(std::string("config:///interface?") + format);
-                demux_mod_.async_open(play_link, config, cache_->close_token, 
-                    boost::bind(&IDemuxer::open_call_back, this, cache_, config, callback, _1, _2));
+                cache_->demuxer = demux_mod_.create(play_link, config, ec);
+                if (cache_->demuxer) {
+                    cache_->status = Cache::opening;
+                    cache_->demuxer->async_open(
+                        boost::bind(&IDemuxer::open_call_back, this, cache_, config, callback, _1));
+                }
             }
             if (ec) {
 				global_daemon().io_svc().post(
@@ -185,13 +211,19 @@ namespace ppbox
             boost::shared_ptr<Cache> & cache, 
             framework::string::Url const & config, 
             boost::function<void (error::errors)> const & callback, 
-            error_code ec, 
-            DemuxerBase * demuxer)
+            error_code ec)
         {
-            cache->demuxer = demuxer;
-            if (!ec) {
-                cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
-                cache->muxer->stream_info(cache->stream_infos);
+            boost::mutex::scoped_lock lock(mutex_);
+            if (cache->status == Cache::canceled) {
+                cache->demuxer->close(ec);
+                demux_mod_.destroy(cache->demuxer, ec);
+                ec = boost::asio::error::operation_aborted;
+            } else {
+                cache->status = Cache::opened;
+                if (!ec) {
+                    cache->muxer = mux_mod_.open(cache->demuxer, config, ec);
+                    cache->muxer->stream_info(cache->stream_infos);
+                }
             }
             callback(async_last_error(__FUNCTION__, ec));
         }
@@ -199,7 +231,7 @@ namespace ppbox
         bool is_open(
             error_code & ec) const
         {
-            if (cache_ && cache_->demuxer) {
+            if (cache_ && cache_->status == Cache::opened) {
                 ec.clear();
                 return true;
             } else {
@@ -256,22 +288,20 @@ namespace ppbox
             LOG_INFO("close");
 
             error_code ec;
+            boost::mutex::scoped_lock lock(mutex_);
             if (cache_) {
-                while (true) {
-                    if (cache_->muxer) {
-                        mux_mod_.close(cache_->muxer, ec);
-                    }
-                    if (cache_->demuxer) {
-                        cache_->demuxer->free_sample(cache_->sample, ec);
-                    }
-                    demux_mod_.close(cache_->close_token, ec);
-                    if (ec == framework::system::logic_error::item_not_exist) {
-                        boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-                    } else {
-                        break;
-                    }
+                if (cache_->status == Cache::closed) {
+                    ec = error::not_open;
+                } else if (cache_->status == Cache::opening) {
+                    cache_->status = Cache::canceled;
+                    cache_->demuxer->cancel(ec);
+                } else if (cache_->status == Cache::opened) {
+                    cache_->demuxer->free_sample(cache_->sample, ec);
+                    cache_->demuxer->close(ec);
+                    demux_mod_.destroy(cache_->demuxer, ec);
+                } else if (cache_->status == Cache::canceled) {
+                    ec = error::not_open;
                 }
-                cache_->demuxer = NULL;
                 cache_.reset();
             } else {
                 ec = ppbox::error::not_open;
@@ -402,7 +432,7 @@ namespace ppbox
         {
             error_code ec;
             assert(stat.length == sizeof(stat));
-            if (is_open(ec)) {
+            if (cache_ && cache_->demuxer) {
                 DataStatistic data_stat;
                 cache_->demuxer->get_data_stat(data_stat, ec);
                 memset(&stat, 0, sizeof(stat));
@@ -413,6 +443,8 @@ namespace ppbox
                 stat.average_speed_five_seconds = data_stat.speeds[1].cur_speed;
                 stat.average_speed_twenty_seconds = data_stat.speeds[2].cur_speed;
                 stat.average_speed_sixty_seconds = data_stat.speeds[3].cur_speed;
+            } else {
+                ec = error::not_open;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -456,6 +488,7 @@ namespace ppbox
         MuxModule & mux_mod_;
         boost::uint32_t buffer_time_;
         boost::shared_ptr<Cache> cache_;
+        boost::mutex mutex_;
     };
 }
 
