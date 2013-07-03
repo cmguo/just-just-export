@@ -10,7 +10,7 @@
 #include <ppbox/mux/MuxModule.h>
 #include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/SourceError.h>
-#include <ppbox/data/base/DataStatistic.h>
+#include <ppbox/data/base/SourceStatistic.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::mux;
@@ -433,7 +433,7 @@ namespace ppbox
             error_code ec;
             assert(stat.length == sizeof(stat));
             if (cache_ && cache_->demuxer) {
-                DataStatistic data_stat;
+                SourceStatisticData data_stat;
                 cache_->demuxer->get_data_stat(data_stat, ec);
                 memset(&stat, 0, sizeof(stat));
                 stat.total_elapse = (boost::uint32_t)(time(NULL) - data_stat.start_time);
