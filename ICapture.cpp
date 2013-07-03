@@ -217,7 +217,7 @@ extern "C" {
 
     PPBOX_DECL PP_err PPBOX_CaptureSetStream(
         PP_handle handle, 
-        boost::uint32_t index, 
+        PP_uint index, 
 		PPBOX_StreamInfo const * stream)
     {
         return capture().set_stream(handle, index, *stream);

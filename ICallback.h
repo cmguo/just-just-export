@@ -5,6 +5,8 @@
 
 #include "IPpbox.h"
 
+#include <stdarg.h>
+
 PPBOX_CALLBACK_4(void, PPBOX_CallbackRedirect, (PP_context, PP_handle, void *, va_list));
 
 PPBOX_CALLBACK_1(void, PPBOX_CallbackFree, (PP_context));
