@@ -17,7 +17,7 @@
 #define ENUM_NAME_VALUE(i, n, v) n = v,
 #define ENUMS_NAME_VALUE(ne, enums) LIST_PAIR_FORMAT(ENUM_NAME_VALUE, ne, enums)
 
-#define ENUM_PREFIX_NAME_VALUE(i, p, n, v) BOOST_PP_CAT(p ## _, n) = v,
+#define ENUM_PREFIX_NAME_VALUE(i, p, n, v) BOOST_PP_CAT(BOOST_PP_CAT(p, _), n) = v,
 #define ENUMS_PREFIX_NAME_VALUE(p, ne, enums) LIST_DATA_PAIR_FORMAT(ENUM_PREFIX_NAME_VALUE, p, ne, enums)
 
 #define FIELD_TYPE_NAME(i, t, n) t n;
