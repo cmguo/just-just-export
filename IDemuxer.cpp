@@ -296,6 +296,9 @@ namespace ppbox
                     cache_->status = Cache::canceled;
                     cache_->demuxer->cancel(ec);
                 } else if (cache_->status == Cache::opened) {
+                    if (cache_->muxer) {
+                        mux_mod_.close(cache_->muxer, ec);
+                    }
                     cache_->demuxer->free_sample(cache_->sample, ec);
                     cache_->demuxer->close(ec);
                     demux_mod_.destroy(cache_->demuxer, ec);
