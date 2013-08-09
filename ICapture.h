@@ -6,8 +6,8 @@
 #include "IPpbox.h"
 #include "IFormat.h"
 
-PPBOX_CALLBACK_2(bool, PPBOX_GetSampleBuffersCallBack, (PP_context, PPBOX_SampleBuffer *));
-PPBOX_CALLBACK_1(bool, PPBOX_FreeSampleCallBack, (PP_context));
+PPBOX_CALLBACK_2(PP_bool, PPBOX_GetSampleBuffersCallBack, (PP_context, PPBOX_SampleBuffer *));
+PPBOX_CALLBACK_1(PP_bool, PPBOX_FreeSampleCallBack, (PP_context));
 
 enum PPBOX_CaptureConfigFlagEnum
 {

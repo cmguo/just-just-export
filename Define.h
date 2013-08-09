@@ -9,8 +9,18 @@
 
 #define VERSION 1.2.0
 
+#ifdef __cplusplus
+
 #define BEGIN_NAME_SPACE namespace ppbox {
 
 #define END_NAME_SPACE }
+
+#else
+
+#define BEGIN_NAME_SPACE
+
+#define END_NAME_SPACE
+
+#endif
 
 #endif // _PPBOX_PPBOX_DEFINE_H_

@@ -106,13 +106,13 @@
 
 #include "ppbox/ppbox/IPpboxTypes.h"
 
-inline void void_defalut() { }
-inline PP_err PP_err_defalut() { return ppbox_other_error; }
-inline PP_str PP_str_defalut() { return ""; }
-inline PP_handle PP_handle_defalut() { return NULL; }
-inline PP_ushort PP_ushort_defalut() { return 0; }
-inline PP_uint PP_uint_defalut() { return 0; }
-inline PP_ulong PP_ulong_defalut() { return 0; }
+static inline void void_defalut(void) { }
+static inline PP_err PP_err_defalut(void) { return ppbox_other_error; }
+static inline PP_str PP_str_defalut(void) { return ""; }
+static inline PP_handle PP_handle_defalut(void) { return NULL; }
+static inline PP_ushort PP_ushort_defalut(void) { return 0; }
+static inline PP_uint PP_uint_defalut(void) { return 0; }
+static inline PP_ulong PP_ulong_defalut(void) { return 0; }
 
 #include "ppbox/ppbox/IGeneric.h"
 #include "ppbox/ppbox/ICallback.h"
