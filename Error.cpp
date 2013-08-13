@@ -23,9 +23,7 @@ namespace ppbox
                 return success;
             } else if (ec == boost::asio::error::would_block) {
                 return would_block;
-            } else if (ec == ppbox::demux::error::no_more_sample) {
-                return stream_end;
-            } else if (ec == ppbox::mux::error::end_of_stream) {
+            } else if (ec == ppbox::avformat::error::end_of_stream) {
                 return stream_end;
             } else if (ec == boost::asio::error::operation_aborted) {
                 return operation_canceled;

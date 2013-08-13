@@ -11,6 +11,8 @@
 #include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/SourceError.h>
 #include <ppbox/data/base/SourceStatistic.h>
+#include <ppbox/data/base/MediaInfo.h>
+#include <ppbox/data/base/StreamStatus.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::mux;
