@@ -227,6 +227,7 @@ namespace ppbox
                     cache->muxer->stream_info(cache->stream_infos);
                 }
             }
+            lock.unlock();
             callback(async_last_error(__FUNCTION__, ec));
         }
 
