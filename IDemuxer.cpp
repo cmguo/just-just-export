@@ -9,7 +9,7 @@
 #include <ppbox/demux/base/DemuxError.h>
 #include <ppbox/mux/MuxModule.h>
 #include <ppbox/mux/MuxerBase.h>
-#include <ppbox/data/base/SourceError.h>
+#include <ppbox/data/base/Error.h>
 #include <ppbox/data/base/SourceStatistic.h>
 #include <ppbox/data/base/MediaInfo.h>
 #include <ppbox/data/base/StreamStatus.h>
@@ -414,9 +414,11 @@ namespace ppbox
                     stat.play_status = PPBOX_PlayStatus::closed;
                 } else {
                     stat.buffer_time = (boost::uint32_t)(status.time_range.buf - status.time_range.pos);
-                    if (stat.buffer_time >= buffer_time_ || status.buf_ec == ppbox::data::source_error::no_more_segment) {
-                        stat.buffering_present = 100;
-                        stat.play_status = PPBOX_PlayStatus::playing;
+                    if (stat.buffer_time >= buffer_time_ 
+                        || status.buf_ec == boost::asio::error::eof
+                        || status.buf_ec == ppbox::data::error::no_more_segment) {
+                            stat.buffering_present = 100;
+                            stat.play_status = PPBOX_PlayStatus::playing;
                     } else if (buffer_time_ != 0) {
                         stat.buffering_present = stat.buffer_time * 100 / buffer_time_;
                         stat.play_status = PPBOX_PlayStatus::buffering;
