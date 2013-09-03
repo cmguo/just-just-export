@@ -9,6 +9,6 @@
 # define PPBOX_DECL
 #endif
 
-#include "ppbox/ppbox/IPpbox.h"
+#include "IPpbox.h"
 
 #endif // _PLUGINS_PPBOX_PPBOX_DYNAMIC_H_

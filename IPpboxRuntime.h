@@ -81,7 +81,7 @@ extern void PPBOX_Unload(void);
 #endif // PPBOX_DECLARE_ONLY
 #endif // PPBOX_FUNC
 
-#include "ppbox/ppbox/IPpboxTypes.h"
+#include "IPpboxTypes.h"
 
 static inline void void_defalut(void) { }
 static inline PP_err PP_err_defalut(void) { return ppbox_other_error; }
@@ -91,9 +91,9 @@ static inline PP_ushort PP_ushort_defalut(void) { return 0; }
 static inline PP_uint PP_uint_defalut(void) { return 0; }
 static inline PP_ulong PP_ulong_defalut(void) { return 0; }
 
-#include "ppbox/ppbox/IPpbox.h"
+#include "IPpbox.h"
 
-#include "ppbox/ppbox/Name.h"
+#include "Name.h"
 
 #ifndef PPBOX_DECLARE_ONLY
 

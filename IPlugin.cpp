@@ -3,7 +3,7 @@
 #include "ppbox/ppbox/Common.h"
 #define PPBOX_SOURCE
 #include "ppbox/ppbox/IPlugin.h"
-#include "ppbox/ppbox/PluginSink.h"
+#include "ppbox/ppbox/plugin/PluginSink.h"
 using namespace ppbox::error;
 
 #include <boost/bind.hpp>
