@@ -76,7 +76,7 @@ namespace ppbox
 #ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
         static bool redirect_get_sample_buffers(
             PP_context context, 
-            PPBOX_SampleBuffer * buffers)
+            PPBOX_ConstBuffer * buffers)
         {
             return redirect_call().call(s_config.get_sample_buffers, context, buffers);
         }

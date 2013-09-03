@@ -35,15 +35,15 @@ namespace ppbox
             error_code const & ec, 
             Downloader * downloader)
         {
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
             if (NULL != callback) {
+#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
                 callback(downloader, async_last_error(__FUNCTION__, ec));
+#else
+                redirect_call().call(callback, (PP_context)downloader, (PP_err)async_last_error(__FUNCTION__, ec));
+#endif
             } else {
                 async_last_error(__FUNCTION__, ec);
             }
-#else
-            redirect_call().call(callback, (PP_context)downloader, (PP_err)async_last_error(__FUNCTION__, ec));
-#endif
         }
 
         PP_handle download_open(
@@ -54,8 +54,12 @@ namespace ppbox
         {
             error_code ec;
             framework::string::Url url(filename);
+            framework::string::Url url_format(std::string("format:///?format=") + format);
             url.param("playlink", playlink);
-            url.param("format", format);
+            for (framework::string::Url::param_iterator iter = url_format.param_begin(); 
+                iter != url_format.param_end(); ++iter) {
+                    url.param(iter->key(), iter->value());
+            }
             Downloader* hander = download_manager_.open(url, 
                     boost::bind(&IDownloader::download_open_callback, resp, _1, _2));
             return (PP_handle)hander;
