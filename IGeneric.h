@@ -3,7 +3,9 @@
 #ifndef _PPBOX_PPBOX_I_GENERIC_H_
 #define _PPBOX_PPBOX_I_GENERIC_H_
 
-#include "IPpbox.h"
+#include "IPpboxTypes.h"
+
+PPBOX_CALLBACK_2(void, PPBOX_Callback, (PP_context, PP_err));
 
 PPBOX_FUNC_3(PP_err, PPBOX_StartEngine, (
     (PP_str, gid), 

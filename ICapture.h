@@ -3,10 +3,10 @@
 #ifndef _PPBOX_PPBOX_I_CAPTURE_H_
 #define _PPBOX_PPBOX_I_CAPTURE_H_
 
-#include "IPpbox.h"
+#include "IGeneric.h"
 #include "IFormat.h"
 
-PPBOX_CALLBACK_2(PP_bool, PPBOX_GetSampleBuffersCallBack, (PP_context, PPBOX_SampleBuffer *));
+PPBOX_CALLBACK_2(PP_bool, PPBOX_GetSampleBuffersCallBack, (PP_context, PPBOX_ConstBuffer *));
 PPBOX_CALLBACK_1(PP_bool, PPBOX_FreeSampleCallBack, (PP_context));
 
 enum PPBOX_CaptureConfigFlagEnum

@@ -3,7 +3,7 @@
 #ifndef _PPBOX_PPBOX_I_CALLBACK_H_
 #define _PPBOX_PPBOX_I_CALLBACK_H_
 
-#include "IPpbox.h"
+#include "IPpboxTypes.h"
 
 #include <stdarg.h>
 

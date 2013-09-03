@@ -3,7 +3,7 @@
 #ifndef _PPBOX_PPBOX_I_DEMUXER_H_
 #define _PPBOX_PPBOX_I_DEMUXER_H_
 
-#include "IPpbox.h"
+#include "IGeneric.h"
 #include "IFormat.h"
 
 //打开一个视频

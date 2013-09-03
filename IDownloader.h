@@ -3,7 +3,7 @@
 #ifndef _PPBOX_PPBOX_I_DOWNLOADER_H_
 #define _PPBOX_PPBOX_I_DOWNLOADER_H_
 
-#include "IPpbox.h"
+#include "IGeneric.h"
 
 //打开一个下载用例
 PPBOX_FUNC_4(PP_handle, PPBOX_DownloadOpen, (

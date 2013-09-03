@@ -3,7 +3,7 @@
 #ifndef _PPBOX_PPBOX_I_FORMAT_H_
 #define _PPBOX_PPBOX_I_FORMAT_H_
 
-#include "IPpbox.h"
+#include "IPpboxTypes.h"
 
 #ifdef BOOST_BIG_ENDIAN
 #define PPBOX_MAKE_FOURC_TYPE(c1, c2, c3, c4) \
@@ -96,9 +96,22 @@ PPBOX_ENUM_2(PPBOX_SampleFlag, (
     (discontinuity, 2)
 ));
 
-PPBOX_STRUCT_2(PPBOX_SampleBuffer, (
+PPBOX_STRUCT_1(PPBOX_Error, (
+    (PP_err, ec)
+    ));
+
+PPBOX_STRUCT_1(PPBOX_Url, (
+    (PP_str, str)
+    ));
+
+PPBOX_STRUCT_2(PPBOX_ConstBuffer, (
     (PP_ubyte const *, data),
     (PP_uint, len)
+    ));
+
+PPBOX_STRUCT_2(PPBOX_ConstBuffers, (
+    (PP_uint, count), 
+    (PPBOX_ConstBuffer *, buffers)
     ));
 
 PPBOX_STRUCT_9(PPBOX_Sample, (

@@ -61,13 +61,13 @@ extern void PPBOX_Unload(void);
 #ifndef PPBOX_FUNC
 #ifdef PPBOX_DECLARE_ONLY
 #define PPBOX_FUNC(type, name, np, params) \
-    type name(PARAMS_TYPE_NAME(np, params));
+    type name(FUNCTION_PARAMS_TYPE_NAME(np, params));
 #else  // PPBOX_DECLARE_ONLY
 #define PPBOX_FUNC(type, name, np, params) \
-    type name(PARAMS_TYPE_NAME(np, params)); \
-    inline type name(PARAMS_TYPE_NAME(np, params)) \
+    type name(FUNCTION_PARAMS_TYPE_NAME(np, params)); \
+    inline type name(FUNCTION_PARAMS_TYPE_NAME(np, params)) \
     { \
-        typedef type (* FT_ ## name)(PARAMS_TYPE(np, params)); \
+        typedef type (* FT_ ## name)(FUNCTION_PARAMS_TYPE(np, params)); \
         static FT_ ## name fp = NULL; \
         if (fp == NULL) { \
             fp = (FT_ ## name)dlsym(PPBOX_Load(NULL), #name); \
@@ -76,12 +76,22 @@ extern void PPBOX_Unload(void);
                 return type##_defalut(); \
             } \
         } \
-        return fp(PARAMS_NAME(np, params)); \
+        return fp(FUNCTION_PARAMS_NAME(np, params)); \
     }
 #endif // PPBOX_DECLARE_ONLY
 #endif // PPBOX_FUNC
 
-#include "ppbox/ppbox/import_func.h"
+#include "ppbox/ppbox/IPpboxTypes.h"
+
+static inline void void_defalut(void) { }
+static inline PP_err PP_err_defalut(void) { return ppbox_other_error; }
+static inline PP_str PP_str_defalut(void) { return ""; }
+static inline PP_handle PP_handle_defalut(void) { return NULL; }
+static inline PP_ushort PP_ushort_defalut(void) { return 0; }
+static inline PP_uint PP_uint_defalut(void) { return 0; }
+static inline PP_ulong PP_ulong_defalut(void) { return 0; }
+
+#include "ppbox/ppbox/IPpbox.h"
 
 #include "ppbox/ppbox/Name.h"
 
