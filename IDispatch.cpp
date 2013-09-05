@@ -101,7 +101,7 @@ namespace ppbox
 
 #ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
         static void redirect_open_callback(
-            PPBOX_Open_Callback callback, 
+            PPBOX_Callback callback, 
             PP_context ctx, 
             PP_err ec)
         {
