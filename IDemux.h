@@ -1,7 +1,7 @@
-// IDemuxer.h
+// IDemux.h
 
-#ifndef _PPBOX_PPBOX_I_DEMUXER_H_
-#define _PPBOX_PPBOX_I_DEMUXER_H_
+#ifndef _PPBOX_PPBOX_I_DEMUX_H_
+#define _PPBOX_PPBOX_I_DEMUX_H_
 
 #include "IGeneric.h"
 #include "IFormat.h"
@@ -80,7 +80,7 @@ PPBOX_FUNC_1(PP_err, PPBOX_GetPlayStat, (
 //返回值: 错误码
 //    ppbox_success      表示成功
 //    其他数值表示失败
-PPBOX_FUNC_1(PP_err, PPBOX_GetNetStat, (
-    (PPBOX_NetStatistic *, stat)));
+PPBOX_FUNC_1(PP_err, PPBOX_GetDataStat, (
+    (PPBOX_DataStat *, stat)));
 
-#endif // _PPBOX_PPBOX_I_DEMUXER_H_
+#endif // _PPBOX_PPBOX_I_DEMUX_H_

@@ -1,7 +1,7 @@
-// IDownloader.h
+// IDownload.h
 
-#ifndef _PPBOX_PPBOX_I_DOWNLOADER_H_
-#define _PPBOX_PPBOX_I_DOWNLOADER_H_
+#ifndef _PPBOX_PPBOX_I_DOWNLOAD_H_
+#define _PPBOX_PPBOX_I_DOWNLOAD_H_
 
 #include "IGeneric.h"
 
@@ -27,4 +27,4 @@ PPBOX_FUNC_2(PP_err, PPBOX_GetDownloadInfo, (
     (PP_handle, handle),
     (PPBOX_DownloadStatistic *, stat)));
 
-#endif // _PPBOX_PPBOX_I_DOWNLOADER_H_
+#endif // _PPBOX_PPBOX_I_DOWNLOAD_H_

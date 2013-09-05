@@ -1,7 +1,6 @@
-// IDemuxer.cpp
+// IDemux.cpp
 
 #include "ppbox/ppbox/Common.h"
-#define PPBOX_SOURCE
 #include "ppbox/ppbox/Callback.h"
 
 #include <ppbox/demux/DemuxModule.h>
@@ -10,7 +9,7 @@
 #include <ppbox/mux/MuxModule.h>
 #include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/Error.h>
-#include <ppbox/data/base/SourceStatistic.h>
+#include <ppbox/data/base/DataStat.h>
 #include <ppbox/data/base/MediaInfo.h>
 #include <ppbox/data/base/StreamStatus.h>
 using namespace ppbox::data;
@@ -31,12 +30,12 @@ using namespace boost::system;
 
 extern void pool_dump();
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDemuxer", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDemux", framework::logger::Debug);
 
 namespace ppbox
 {
 
-    class IDemuxer
+    class IDemux
     {
     private:
         struct Cache
@@ -79,14 +78,14 @@ namespace ppbox
         };
 
     public:
-        IDemuxer()
+        IDemux()
             : demux_mod_(util::daemon::use_module<DemuxModule>(global_daemon()))
             , mux_mod_(util::daemon::use_module<MuxModule>(global_daemon()))
             , buffer_time_(3000)
         {
         }
 
-        ~IDemuxer()
+        ~IDemux()
         {
         }
 
@@ -199,7 +198,7 @@ namespace ppbox
                 if (cache_->demuxer) {
                     cache_->status = Cache::opening;
                     cache_->demuxer->async_open(
-                        boost::bind(&IDemuxer::open_call_back, this, cache_, config, callback, _1));
+                        boost::bind(&IDemux::open_call_back, this, cache_, config, callback, _1));
                 }
             }
             if (ec) {
@@ -396,8 +395,6 @@ namespace ppbox
             PPBOX_PlayStatistic & stat)
         {
             error_code ec;
-            memset(&stat, 0, sizeof(stat));
-            assert(stat.length = sizeof(stat));
             if (!is_open(ec)) {
                 stat.buffer_time = 0;
                 stat.buffering_present = 0;
@@ -435,15 +432,13 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-        PP_err get_net_stat(
-            PPBOX_NetStatistic & stat)
+        PP_err get_data_stat(
+            PPBOX_DataStat & stat)
         {
             error_code ec;
-            assert(stat.length == sizeof(stat));
             if (cache_ && cache_->demuxer) {
-                SourceStatisticData data_stat;
+                DataStat data_stat;
                 cache_->demuxer->get_data_stat(data_stat, ec);
-                memset(&stat, 0, sizeof(stat));
                 stat.total_elapse = (boost::uint32_t)(time(NULL) - data_stat.start_time);
                 stat.total_download_bytes = (boost::uint32_t)data_stat.total_bytes;
                 stat.connection_status = data_stat.connection_status;
@@ -500,9 +495,9 @@ namespace ppbox
     };
 }
 
-static ppbox::IDemuxer & demuxer()
+static ppbox::IDemux & demuxer()
 {
-    static ppbox::IDemuxer the_demuxer;
+    static ppbox::IDemux the_demuxer;
     return the_demuxer;
 }
 
@@ -600,10 +595,10 @@ extern "C" {
         return demuxer().get_play_stat(*stat);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetNetStat(
-        PPBOX_NetStatistic * stat)
+    PPBOX_DECL PP_err PPBOX_GetDataStat(
+        PPBOX_DataStat * stat)
     {
-        return demuxer().get_net_stat(*stat);
+        return demuxer().get_data_stat(*stat);
     }
 
 

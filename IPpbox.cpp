@@ -2,7 +2,6 @@
 
 #include "ppbox/ppbox/Common.h"
 #include "ppbox/ppbox/Version.h"
-#define PPBOX_SOURCE
 #include "ppbox/ppbox/IPpbox.h"
 using namespace ppbox::error;
 

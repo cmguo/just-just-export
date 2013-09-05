@@ -1,7 +1,6 @@
 // IPpbox.cpp
 
 #include "ppbox/ppbox/Common.h"
-#define PPBOX_SOURCE
 #include "ppbox/ppbox/ICallback.h"
 #include "ppbox/ppbox/Callback.h"
 using namespace ppbox::error;

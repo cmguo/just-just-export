@@ -47,6 +47,14 @@ PPBOX_ENUM_5(PPBOX_FormatType, (
     (audio_adts, 1)
     ));
 
+PPBOX_STRUCT_5(PPBOX_MediaInfo, (
+    (PP_ulong, file_size), 
+    (PP_ulong, duration), 
+    (PP_uint, bitrate), 
+    (PP_str, format), 
+    (PP_str, format_data)
+    ));
+
 PPBOX_STRUCT_4(PPBOX_VideoInfo, (
     (PP_uint, width),
     (PP_uint, height),
@@ -59,6 +67,12 @@ PPBOX_STRUCT_4(PPBOX_AudioInfo, (
     (PP_uint, sample_size),
     (PP_uint, sample_rate),
     (PP_uint, sample_per_frame)
+    ));
+
+PPBOX_ENUM_3(PPBOX_SeekType, (
+    (byte, 0),
+    (time, 1),
+    (reset, 2)
     ));
 
 #ifdef PPBOX_NO_UNION
@@ -114,6 +128,16 @@ PPBOX_STRUCT_2(PPBOX_ConstBuffers, (
     (PPBOX_ConstBuffer *, buffers)
     ));
 
+PPBOX_STRUCT_7(PPBOX_StreamStatus, (
+    (PP_uint, video_index), 
+    (PP_uint, audio_index), 
+    (PP_ulong, byte_pos), 
+    (PP_ulong, byte_buf), 
+    (PP_ulong, time_pos), 
+    (PP_ulong, time_buf), 
+    (PP_err, data_err)
+));
+
 PPBOX_STRUCT_9(PPBOX_Sample, (
     (PP_uint, itrack),           // 流的编号
     (PP_uint, flags),            // Sample的标志
@@ -135,8 +159,7 @@ PPBOX_ENUM_4(PPBOX_PlayStatus, (
     (paused, 3)
     ));
 
-PPBOX_STRUCT_4(PPBOX_PlayStatistic, (
-    (PP_uint, length),              //本结构体的长度
+PPBOX_STRUCT_3(PPBOX_PlayStatistic, (
     (PP_uint, play_status),         //播放状态 0-未启动 1-playing态 2-buffering态 3-Pausing态
     (PP_uint, buffering_present),   //播放缓冲百分比 10 表示 10%
     (PP_uint, buffer_time)          //下载缓冲区数据的总时间
@@ -148,8 +171,7 @@ PPBOX_ENUM_3(PPBOX_ConnectionStatus, (
     (receiving, 2) 
     ));
 
-PPBOX_STRUCT_8(PPBOX_NetStatistic, (
-    (PP_uint, length),                       // 本结构体的长度
+PPBOX_STRUCT_7(PPBOX_DataStat, (
     (PP_uint, total_elapse),                 // 持续时间
     (PP_uint, total_download_bytes),         // 总共下载的字节数
     (PP_uint, connection_status),            // 当前连接状态

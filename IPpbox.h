@@ -10,8 +10,9 @@
 
 #include "IGeneric.h"
 #include "ICallback.h"
-#include "IDemuxer.h"
-#include "IDownloader.h"
+#include "IDispatch.h"
+#include "IDemux.h"
+#include "IDownload.h"
 #include "ICapture.h"
 #include "IPlugin.h"
 

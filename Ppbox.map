@@ -36,7 +36,7 @@
 		PPBOX_SetDownloadBufferSize;
 		PPBOX_SetPlayBufferTime;
 		PPBOX_GetPlayStat;
-		PPBOX_GetNetStat;
+		PPBOX_GetDataStat;
 		
 		PPBOX_CaptureCreate;
 		PPBOX_CaptureInit;

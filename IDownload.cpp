@@ -1,8 +1,7 @@
-// IDownloader.cpp
+// IDownload.cpp
 
 #include "ppbox/ppbox/Common.h"
-#define PPBOX_SOURCE
-#include "ppbox/ppbox/IDownloader.h"
+#include "ppbox/ppbox/IDownload.h"
 #include "ppbox/ppbox/Callback.h"
 using namespace ppbox::error;
 
@@ -18,15 +17,15 @@ using namespace boost::system;
 namespace ppbox
 {
 
-    class IDownloader
+    class IDownload
     {
     public:
-        IDownloader()
+        IDownload()
             : download_manager_(util::daemon::use_module<ppbox::download::DownloadModule>(global_daemon()))
         {
         }
 
-        ~IDownloader()
+        ~IDownload()
         {
         }
         
@@ -61,7 +60,7 @@ namespace ppbox
                     url.param(iter->key(), iter->value());
             }
             Downloader* hander = download_manager_.open(url, 
-                    boost::bind(&IDownloader::download_open_callback, resp, _1, _2));
+                    boost::bind(&IDownload::download_open_callback, resp, _1, _2));
             return (PP_handle)hander;
         }
 
@@ -113,9 +112,9 @@ namespace ppbox
 
 }
 
-static ppbox::IDownloader & downloader()
+static ppbox::IDownload & downloader()
 {
-    static ppbox::IDownloader the_downloader;
+    static ppbox::IDownload the_downloader;
     return the_downloader;
 }
 
