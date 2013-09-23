@@ -18,7 +18,7 @@ namespace ppbox
     BIND_TYPE(size_t, PP_uint)
 
     class PluginUrlSink
-        : public ppbox::data::UrlSink
+        : public util::stream::UrlSink
         , Plugin<PPBOX_PluginUrlSink>
     {
     public:
@@ -36,7 +36,7 @@ namespace ppbox
 #include "ppbox/ppbox/plugin/IPluginSink.h"
     };
 
-    ppbox::data::UrlSink * create_url_sink(
+    util::stream::UrlSink * create_url_sink(
         boost::asio::io_service & io_svc, 
         PPBOX_PluginCreate creator, 
         PPBOX_PluginDestroy destroyer)

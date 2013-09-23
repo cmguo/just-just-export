@@ -19,7 +19,7 @@ namespace ppbox
             PPBOX_PluginCreate creator, 
             PPBOX_PluginDestroy destroyer)
         {
-            ppbox::data::UrlSink::register_creator(
+            util::stream::UrlSink::register_creator(
                 name, 
                 boost::bind(create_url_sink, _1, creator, destroyer));
             return ppbox_success;

@@ -5,12 +5,12 @@
 
 #include "ppbox/ppbox/Plugin.h"
 
-#include <ppbox/data/base/UrlSink.h>
+#include <util/stream/UrlSink.h>
 
 namespace ppbox
 {
 
-    ppbox::data::UrlSink * create_url_sink(
+    util::stream::UrlSink * create_url_sink(
         boost::asio::io_service & io_svc, 
         PPBOX_PluginCreate creator, 
         PPBOX_PluginDestroy destroyer);
