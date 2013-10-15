@@ -43,8 +43,8 @@ PPBOX_ENUM_5(PPBOX_FormatType, (
     (none, 0),
     (video_avc_packet, 1),
     (video_avc_byte_stream, 2),
-    (audio_raw, 0),
-    (audio_adts, 1)
+    (audio_raw, 1),
+    (audio_adts, 2)
     ));
 
 PPBOX_STRUCT_5(PPBOX_MediaInfo, (
