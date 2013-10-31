@@ -16,4 +16,12 @@ PPBOX_FUNC_3(PP_err, PPBOX_RedirectCallback, (
     (PPBOX_CallbackFree, free), 
     (PP_context, user_data)));
 
+PPBOX_FUNC_3(PP_handle, PPBOX_ScheduleCallback, (
+    (PP_uint, delay), 
+    (PP_context, user_data), 
+    (PPBOX_Callback, callback)));
+
+PPBOX_FUNC_1(PP_err, PPBOX_CancelCallback, (
+    (PP_handle, handle)));
+
 #endif // _PPBOX_PPBOX_I_CALLBACK_H_
