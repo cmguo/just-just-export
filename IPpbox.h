@@ -10,6 +10,7 @@
 
 #include "IGeneric.h"
 #include "IDebug.h"
+#include "IBlob.h"
 #include "ICallback.h"
 #include "IDispatch.h"
 #include "IDemux.h"

@@ -82,7 +82,7 @@ static ppbox::IBlob & blob()
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_err PPBOX_InertBlob(
+    PPBOX_DECL PP_err PPBOX_InsertBlob(
         PP_str key, 
         PPBOX_ConstBuffer const * data, 
         PP_bool remove_on_get)
