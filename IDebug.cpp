@@ -85,7 +85,7 @@ extern "C" {
         return debug().change_debug_mode(mode);
     }
 
-    PPBOX_DECL PP_uint PPBOX_SetDebugMessage(
+    PPBOX_DECL PP_uint PPBOX_GetDebugMessage(
         PPBOX_DebugMessage * vector, 
         PP_uint size, 
         PP_str module, 

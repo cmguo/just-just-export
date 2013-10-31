@@ -20,6 +20,7 @@ namespace ppbox
     {
     public:
         IBlob()
+            : manager_(ppbox::common::blob_manager())
         {
         }
 
@@ -65,7 +66,7 @@ namespace ppbox
         }
 
     private:
-        ppbox::common::BlobManager manager_;
+        ppbox::common::BlobManager & manager_;
     };
 
 } // namespace ppbox
