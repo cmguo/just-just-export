@@ -8,7 +8,6 @@ using namespace ppbox::error;
 #include <ppbox/common/CommonModule.h>
 #include <ppbox/common/Version.h>
 //#include <ppbox/common/ConfigMgr.h>
-#include <ppbox/common/ScheduleManager.h>
 #include <ppbox/common/Debuger.h>
 #include <ppbox/common/PortManager.h>
 #ifndef PPBOX_DISABLE_DEBUGPROXY
@@ -25,11 +24,8 @@ using namespace ppbox::common;
 
 #include <framework/logger/StreamRecord.h>
 #include <framework/logger/Section.h>
-#include <framework/process/MessageQueue.h>
-#include <framework/process/Process.h>
 #include <framework/filesystem/Path.h>
 using namespace framework::logger;
-using namespace framework::process;
 
 #include <boost/asio/error.hpp>
 #include <boost/thread/thread.hpp>
@@ -197,39 +193,6 @@ namespace ppbox
             return ppbox_success;
         }
 
-        PP_err debug_mode(
-            PP_bool mode)
-        {
-            ppbox::common::Debuger & debuger = 
-                util::daemon::use_module<ppbox::common::Debuger>(*this);
-            debuger.change_debug_mode(mode);
-            return ppbox_success;
-        }
-
-        PP_uint get_debug_msg(
-            DialogMessage * vector, 
-            PP_uint size, 
-            PP_str module, 
-            PP_uint level)
-        {
-            ppbox::common::Debuger & debuger = 
-                util::daemon::use_module<ppbox::common::Debuger>(*this);
-            static std::vector<Message> msgs;
-            msgs.clear();
-            debuger.get_debug_msg(msgs, size, module, level);
-
-            for (size_t i = 0; i < msgs.size(); ++i)
-            {
-                vector[i].time = msgs[i].time;
-                vector[i].module = msgs[i].sender.c_str();
-                vector[i].level = msgs[i].level;
-                vector[i].size = msgs[i].data.length();
-                vector[i].msg = msgs[i].data.c_str();
-            }
-
-            return msgs.size();
-        }
-
         PP_err submit_msg(
             PP_str msg, 
             boost::int32_t size)
@@ -242,51 +205,6 @@ namespace ppbox
             return ppbox_success;
         }
 
-        PP_err log_dump(
-            PPBOX_OnLogDump callback,
-            boost::uint32_t level)
-        {
-            ppbox::common::Debuger & debuger = 
-                util::daemon::use_module<ppbox::common::Debuger>(*this);
-            debuger.set_log_hook(
-                ( ppbox::common::Debuger::on_logdump_type )(callback), level);
-            return ppbox_success;
-        }
-
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
-        static void redirect_schedule_callback(
-            PPBOX_Callback callback, 
-            PP_context user_data, 
-            PP_err ec)
-        {
-            redirect_call().call(callback, user_data, ec);
-        }
-#endif
-
-        PP_handle schedule_callback(
-            PP_uint delay, 
-            PP_context user_data, 
-            PPBOX_Callback callback)
-        {
-            ppbox::common::ScheduleManager & scheduler = 
-                util::daemon::use_module<ppbox::common::ScheduleManager>(*this);
-            return scheduler.schedule_callback(delay, user_data, 
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
-                boost::bind(callback, _1, boost::bind(last_error_enum, _2)));
-#else
-                boost::bind(redirect_schedule_callback, callback, _1, boost::bind(last_error_enum, _2)));
-#endif
-        }
-
-        PP_err cancel_callback(
-            PP_handle handle)
-        {
-            ppbox::common::ScheduleManager & scheduler = 
-                util::daemon::use_module<ppbox::common::ScheduleManager>(*this);
-            boost::system::error_code ec;
-            scheduler.cancel_callback(handle, ec);
-            return last_error(__FUNCTION__, ec);
-        }
     };
 
     util::daemon::Daemon & global_daemon()
@@ -351,49 +269,12 @@ extern "C" {
         return the_ppbox().set_config(module, section, key, value);
     }
 
-    PPBOX_DECL PP_err PPBOX_DebugMode(
-        bool mode)
-    {
-        return the_ppbox().debug_mode(mode);
-    }
-
-    PPBOX_DECL PP_uint PPBOX_DialogMessage(
-        DialogMessage * vector, 
-        PP_uint size, 
-        PP_str module, 
-        PP_uint level)
-    {
-        return the_ppbox().get_debug_msg(vector, size, module, level);
-    }
-
     PPBOX_DECL PP_err PPBOX_SubmitMessage(
         PP_str msg, 
         PP_uint size)
     {
         return the_ppbox().submit_msg(msg, size);
     }
-
-    PPBOX_DECL PP_err PPBOX_LogDump(
-        PPBOX_OnLogDump callback,
-        PP_uint level)
-    {
-        return the_ppbox().log_dump(callback, level);
-    }
-
-    PPBOX_DECL PP_handle PPBOX_ScheduleCallback(
-        PP_uint delay, 
-        PP_context user_data, 
-        PPBOX_Callback callback)
-    {
-        return the_ppbox().schedule_callback(delay, user_data, callback);
-    }
-
-    PPBOX_DECL PP_err PPBOX_CancelCallback(
-        PP_handle handle)
-    {
-        return the_ppbox().cancel_callback(handle);
-    }
-
 
 #if __cplusplus
 }

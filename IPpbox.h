@@ -9,6 +9,7 @@
 #include "detail/IFunction.h"
 
 #include "IGeneric.h"
+#include "IDebug.h"
 #include "ICallback.h"
 #include "IDispatch.h"
 #include "IDemux.h"
