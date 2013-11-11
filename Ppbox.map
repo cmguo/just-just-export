@@ -7,13 +7,18 @@
 		PPBOX_GetLastError;
 		PPBOX_GetLastErrorMsg;
 		PPBOX_SetConfig;
-		PPBOX_DebugMode;
-		PPBOX_DialogMessage;
+		PPBOX_ChangeDebugMode;
+		PPBOX_GetDebugMessage;
 		PPBOX_SubmitMessage;
-		PPBOX_LogDump;
+		PPBOX_SetLogHook;
+
 		PPBOX_RedirectCallback;
 		PPBOX_ScheduleCallback;
 		PPBOX_CancelCallback;
+
+		PPBOX_InsertBlob;
+		PPBOX_GetBlob;
+		PPBOX_RemoveBlob;
 
 		PPBOX_DownloadClose;
 		PPBOX_DownloadOpen;
@@ -37,12 +42,26 @@
 		PPBOX_SetPlayBufferTime;
 		PPBOX_GetPlayStat;
 		PPBOX_GetDataStat;
-		
+
+		PPBOX_DispatchCreate;
+		PPBOX_DispatchOpen;
+		PPBOX_DispatchAsyncOpen;
+		PPBOX_DispatchPause;
+		PPBOX_DispatchResume;
+		PPBOX_DispatchSeek;
+		PPBOX_DispatchRead;
+		PPBOX_DispatchGetMediaInfo;
+		PPBOX_DispatchGetStreamInfo;
+		PPBOX_DispatchGetStreamStatus;
+		PPBOX_DispatchGetDataStat;
+		PPBOX_DispatchClose;
+		PPBOX_DispatchDestroy;
+
 		PPBOX_CaptureCreate;
 		PPBOX_CaptureInit;
 		PPBOX_CaptureSetStream;
 		PPBOX_CapturePutSample;
 		PPBOX_CaptureDestroy;
-		
+
 	local: *;
 };
