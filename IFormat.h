@@ -25,18 +25,27 @@ PPBOX_ENUM_3(PPBOX_StreamType, (
     (AUDI, PPBOX_MAKE_FOURC_TYPE('A', 'U', 'D', 'I'))
     ));
 
-PPBOX_ENUM_3(PPBOX_VideoSubType, (
+PPBOX_ENUM_5(PPBOX_VideoSubType, (
     //(NONE, 0,
     (AVC1, PPBOX_MAKE_FOURC_TYPE('A', 'V', 'C', '1')),
     (WMV3, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'V', '3')),
-    (MP4V, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'V'))
+    (MP4V, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'V')), 
+    (I420, PPBOX_MAKE_FOURC_TYPE('I', '4', '2', '0')), 
+    (YV12, PPBOX_MAKE_FOURC_TYPE('Y', 'V', '1', '2'))
     ));
 
-PPBOX_ENUM_3(PPBOX_AudioSubType, (
+PPBOX_ENUM_10(PPBOX_AudioSubType, (
     //(NONE, 0),
-    (MP4A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
     (MP1A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '1', 'A')),
-    (WMA2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'A', '2'))
+    (MP2A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '2', 'A')),
+    (MP4A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
+    (WMA2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'A', '2')),
+    (AC3,  PPBOX_MAKE_FOURC_TYPE('A', 'C', '3', 0)), 
+    (DTS,  PPBOX_MAKE_FOURC_TYPE('D', 'T', 'S', 0)), 
+    (FLAC, PPBOX_MAKE_FOURC_TYPE('F', 'L', 'A', 'C')), 
+    (VORB, PPBOX_MAKE_FOURC_TYPE('V', 'O', 'R', 'B')), 
+    (PCM,  PPBOX_MAKE_FOURC_TYPE('P', 'C', 'M', 0)), 
+    (FLT,  PPBOX_MAKE_FOURC_TYPE('F', 'L', 'T', 0))
     ));
 
 PPBOX_ENUM_5(PPBOX_FormatType, (
