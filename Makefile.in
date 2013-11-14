@@ -40,7 +40,7 @@ PROJECT_COMMON_HEADERS  	:= ppbox/ppbox/Common.h
 
 ## 额外包含目录（多个，相对于包含根目录ROOT_INCLUDE_DIRECTORY）
 
-PROJECT_EXTERNAL_INCLUDES	:= server_mod
+PROJECT_EXTERNAL_INCLUDES	:=
 
 ## 该项目特点的编译选项
 
