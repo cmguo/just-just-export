@@ -25,27 +25,25 @@ PPBOX_ENUM_3(PPBOX_StreamType, (
     (AUDI, PPBOX_MAKE_FOURC_TYPE('A', 'U', 'D', 'I'))
     ));
 
-PPBOX_ENUM_5(PPBOX_VideoSubType, (
+PPBOX_ENUM_6(PPBOX_VideoSubType, (
     //(NONE, 0,
     (AVC1, PPBOX_MAKE_FOURC_TYPE('A', 'V', 'C', '1')),
-    (WMV3, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'V', '3')),
     (MP4V, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'V')), 
+    (WMV2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'V', '2')),
+    (WMV3, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'V', '3')),
     (I420, PPBOX_MAKE_FOURC_TYPE('I', '4', '2', '0')), 
-    (YV12, PPBOX_MAKE_FOURC_TYPE('Y', 'V', '1', '2'))
+    (RGBT, PPBOX_MAKE_FOURC_TYPE('R', 'G', 'B', 'T'))
     ));
 
-PPBOX_ENUM_10(PPBOX_AudioSubType, (
+PPBOX_ENUM_7(PPBOX_AudioSubType, (
     //(NONE, 0),
-    (MP1A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '1', 'A')),
-    (MP2A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '2', 'A')),
     (MP4A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
+    (MP1A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '1', 'A')),
     (WMA2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'A', '2')),
     (AC3,  PPBOX_MAKE_FOURC_TYPE('A', 'C', '3', 0)), 
-    (DTS,  PPBOX_MAKE_FOURC_TYPE('D', 'T', 'S', 0)), 
-    (FLAC, PPBOX_MAKE_FOURC_TYPE('F', 'L', 'A', 'C')), 
-    (VORB, PPBOX_MAKE_FOURC_TYPE('V', 'O', 'R', 'B')), 
-    (PCM,  PPBOX_MAKE_FOURC_TYPE('P', 'C', 'M', 0)), 
-    (FLT,  PPBOX_MAKE_FOURC_TYPE('F', 'L', 'T', 0))
+    (EAC3, PPBOX_MAKE_FOURC_TYPE('E', 'A', 'C', '3')), 
+    (FLT,  PPBOX_MAKE_FOURC_TYPE('F', 'L', 'T', 0)), 
+    (PCM,  PPBOX_MAKE_FOURC_TYPE('P', 'C', 'M', 0)) 
     ));
 
 PPBOX_ENUM_5(PPBOX_FormatType, (
@@ -71,10 +69,11 @@ PPBOX_STRUCT_4(PPBOX_VideoInfo, (
     (PP_uint, frame_rate_den)
     ));
 
-PPBOX_STRUCT_4(PPBOX_AudioInfo, (
+PPBOX_STRUCT_5(PPBOX_AudioInfo, (
     (PP_uint, channel_count),
     (PP_uint, sample_size),
     (PP_uint, sample_rate),
+    (PP_uint, block_align),
     (PP_uint, sample_per_frame)
     ));
 
@@ -85,7 +84,7 @@ PPBOX_ENUM_3(PPBOX_SeekType, (
     ));
 
 #ifdef PPBOX_NO_UNION
-PPBOX_STRUCT_11(PPBOX_StreamInfo, (
+PPBOX_STRUCT_12(PPBOX_StreamInfo, (
     (PP_uint, type),          // TypeEnum
     (PP_uint, sub_type),      // SubTypeEnum
     (PP_uint, time_scale),
@@ -94,6 +93,7 @@ PPBOX_STRUCT_11(PPBOX_StreamInfo, (
     (PP_uint, __union1),
     (PP_uint, __union2),
     (PP_uint, __union3),
+    (PP_uint, __union4),
     (PP_uint, format_type),   // 格式说明的类型
     (PP_uint, format_size),  // 格式说明的大小
     (PP_ubyte const *, format_buffer)   // 不同的解码不同的结构体，格式说明的的内容
