@@ -348,6 +348,7 @@ namespace ppbox
                     info.format.audio.channel_count = info2.audio_format.channel_count;
                     info.format.audio.sample_size = info2.audio_format.sample_size;
                     info.format.audio.sample_rate = info2.audio_format.sample_rate;
+                    info.format.audio.block_align = info2.audio_format.block_align;
                     info.format.audio.sample_per_frame = info2.audio_format.sample_per_frame;
                 }
                 info.format_size = info2.format_data.size();

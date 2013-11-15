@@ -133,6 +133,7 @@ namespace ppbox
                 data.audio_format.channel_count = stream.format.audio.channel_count;
                 data.audio_format.sample_size = stream.format.audio.sample_size;
                 data.audio_format.sample_rate = stream.format.audio.sample_rate;
+                data.audio_format.block_align = stream.format.audio.block_align;
                 data.audio_format.sample_per_frame = stream.format.audio.sample_per_frame;
                 break;
             default:
