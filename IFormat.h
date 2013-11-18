@@ -35,10 +35,11 @@ PPBOX_ENUM_6(PPBOX_VideoSubType, (
     (RGBT, PPBOX_MAKE_FOURC_TYPE('R', 'G', 'B', 'T'))
     ));
 
-PPBOX_ENUM_7(PPBOX_AudioSubType, (
+PPBOX_ENUM_8(PPBOX_AudioSubType, (
     //(NONE, 0),
     (MP4A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
-    (MP1A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '1', 'A')),
+    (MP3,  PPBOX_MAKE_FOURC_TYPE('M', 'P', '3', 0)),
+    (MP2,  PPBOX_MAKE_FOURC_TYPE('M', 'P', '2', 0)),
     (WMA2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'A', '2')),
     (AC3,  PPBOX_MAKE_FOURC_TYPE('A', 'C', '3', 0)), 
     (EAC3, PPBOX_MAKE_FOURC_TYPE('E', 'A', 'C', '3')), 
