@@ -79,9 +79,9 @@ PPBOX_STRUCT_5(PPBOX_AudioInfo, (
     ));
 
 PPBOX_ENUM_3(PPBOX_SeekType, (
-    (byte, 0),
-    (time, 1),
-    (reset, 2)
+    (reset, 0),
+    (byte, 1),
+    (time, 2)
     ));
 
 #ifdef PPBOX_NO_UNION
