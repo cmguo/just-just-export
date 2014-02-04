@@ -30,17 +30,8 @@ namespace ppbox
     private:
         struct Cache
         {
-            enum StatusEnum
-            {
-                closed, 
-                opening, 
-                canceled, 
-                opened, 
-            };
-
             Cache()
-                : status(closed)
-                , dispatcher(NULL)
+                : dispatcher(NULL)
             {
             }
 
@@ -56,7 +47,6 @@ namespace ppbox
                 }
             }
 
-            StatusEnum status;
             DispatcherBase * dispatcher;
             MediaInfo media_info;
             std::vector<StreamInfo> stream_infos;
@@ -210,6 +200,7 @@ namespace ppbox
             range.type = (SeekRange::TypeEnum)type;
             range.beg = pos;
             error_code ec;
+            cache->dispatcher->free(cache->sample, ec);
             cache->dispatcher->seek(range, ec);
             return last_error(__FUNCTION__, ec);
         }
@@ -304,6 +295,9 @@ namespace ppbox
 
             Cache * cache = (Cache *)handle;
             error_code ec;
+            if (!cache->sample.data.empty()) {
+                cache->dispatcher->free(cache->sample, ec);
+            }
             cache->dispatcher->close(ec);
             return last_error(__FUNCTION__, ec);
         }
