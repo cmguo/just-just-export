@@ -21,6 +21,7 @@
 #define PPBOX_STRUCT_9(name, fields) PPBOX_STRUCT(name, 9, fields)
 #define PPBOX_STRUCT_10(name, fields) PPBOX_STRUCT(name, 10, fields)
 #define PPBOX_STRUCT_11(name, fields) PPBOX_STRUCT(name, 11, fields)
+#define PPBOX_STRUCT_12(name, fields) PPBOX_STRUCT(name, 12, fields)
 
 #ifndef PPBOX_STRUCT
 #  define PPBOX_STRUCT(name, nf, fields) typedef struct name { STRUCT_FIELDS_TYPE_NAME(nf, fields) } name
