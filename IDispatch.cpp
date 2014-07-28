@@ -141,6 +141,7 @@ namespace ppbox
             if (cache->dispatcher->get_media_info(cache->media_info, ec)) {
                 info.file_size = cache->media_info.file_size;
                 info.duration = cache->media_info.duration;
+                info.head_size = cache->media_info.head_size;
                 info.bitrate = cache->media_info.bitrate;
                 info.format = cache->media_info.format.c_str();
                 info.format_data = cache->media_info.format_data.c_str();
@@ -257,8 +258,6 @@ namespace ppbox
             ppbox::data::StreamStatus status;
             error_code ec;
             if (cache->dispatcher->get_stream_status(status, ec)) {
-                stat.video_index = status.video_index;
-                stat.audio_index = status.audio_index;
                 stat.byte_pos = status.byte_range.pos;
                 stat.byte_buf = status.byte_range.buf;
                 stat.time_pos = status.time_range.pos;

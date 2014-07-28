@@ -55,9 +55,10 @@ PPBOX_ENUM_5(PPBOX_FormatType, (
     (audio_adts, 2)
     ));
 
-PPBOX_STRUCT_5(PPBOX_MediaInfo, (
+PPBOX_STRUCT_6(PPBOX_MediaInfo, (
     (PP_ulong, file_size), 
     (PP_ulong, duration), 
+    (PP_uint, head_size), 
     (PP_uint, bitrate), 
     (PP_str, format), 
     (PP_str, format_data)
@@ -138,9 +139,7 @@ PPBOX_STRUCT_2(PPBOX_ConstBuffers, (
     (PPBOX_ConstBuffer *, buffers)
     ));
 
-PPBOX_STRUCT_7(PPBOX_StreamStatus, (
-    (PP_uint, video_index), 
-    (PP_uint, audio_index), 
+PPBOX_STRUCT_5(PPBOX_StreamStatus, (
     (PP_ulong, byte_pos), 
     (PP_ulong, byte_buf), 
     (PP_ulong, time_pos), 
