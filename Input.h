@@ -15,6 +15,10 @@
 #include <ppbox/mmspc/MmspcModule.h>
 #endif
 
+#ifndef PPBOX_DISABLE_RTSPC
+#include <ppbox/rtspc/RtspcModule.h>
+#endif
+
 namespace ppbox
 {
 
@@ -29,6 +33,9 @@ namespace ppbox
 #endif
 #ifndef PPBOX_DISABLE_MMSPC
         util::daemon::use_module<ppbox::mmspc::MmspcModule>(daemon);
+#endif
+#ifndef PPBOX_DISABLE_RTSPC
+        util::daemon::use_module<ppbox::rtspc::RtspcModule>(daemon);
 #endif
     }
 

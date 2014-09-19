@@ -61,6 +61,7 @@ PROJECT_DEPENDS			:= \
 				/ppbox/dispatch \
 				/ppbox/rtmpc \
 				/ppbox/mmspc \
+				/ppbox/rtspc \
 				/ppbox/capture \
 				/ppbox/data \
 				/ppbox/merge \
