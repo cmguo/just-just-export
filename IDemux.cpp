@@ -10,8 +10,8 @@
 #include <ppbox/mux/MuxerBase.h>
 #include <ppbox/data/base/Error.h>
 #include <ppbox/data/base/DataStat.h>
-#include <ppbox/data/base/MediaInfo.h>
-#include <ppbox/data/base/StreamStatus.h>
+#include <ppbox/avbase/MediaInfo.h>
+#include <ppbox/avbase/StreamStatus.h>
 using namespace ppbox::data;
 using namespace ppbox::demux;
 using namespace ppbox::mux;
@@ -406,7 +406,7 @@ namespace ppbox
                 }
             } else {
                 cache_->demuxer->fill_data(ec);
-                ppbox::data::StreamStatus status;
+                StreamStatus status;
                 cache_->demuxer->get_stream_status(status, ec);
                 if (ec && ec != boost::asio::error::would_block) {
                     stat.play_status = PPBOX_PlayStatus::closed;

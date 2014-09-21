@@ -143,7 +143,7 @@ namespace ppbox
                 info.duration = cache->media_info.duration;
                 info.head_size = cache->media_info.head_size;
                 info.bitrate = cache->media_info.bitrate;
-                info.format = cache->media_info.format.c_str();
+                info.format = cache->media_info.format_type.c_str();
                 info.format_data = cache->media_info.format_data.c_str();
             }
             return last_error(__FUNCTION__, ec);
@@ -255,7 +255,7 @@ namespace ppbox
             PPBOX_StreamStatus & stat)
         {
             Cache * cache = (Cache *)handle;
-            ppbox::data::StreamStatus status;
+            StreamStatus status;
             error_code ec;
             if (cache->dispatcher->get_stream_status(status, ec)) {
                 stat.byte_pos = status.byte_range.pos;
