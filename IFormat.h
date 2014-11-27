@@ -1,53 +1,53 @@
 // IFormat.h
 
-#ifndef _PPBOX_PPBOX_I_FORMAT_H_
-#define _PPBOX_PPBOX_I_FORMAT_H_
+#ifndef _JUST_JUST_I_FORMAT_H_
+#define _JUST_JUST_I_FORMAT_H_
 
 #include "IPpboxTypes.h"
 
 #ifdef BOOST_BIG_ENDIAN
-#define PPBOX_MAKE_FOURC_TYPE(c1, c2, c3, c4) \
+#define JUST_MAKE_FOURC_TYPE(c1, c2, c3, c4) \
     ((((PP_uint)c1) << 24) | \
     (((PP_uint)c2) << 16) | \
     (((PP_uint)c3) << 8) | \
     (((PP_uint)c4)))
 #else
-#define PPBOX_MAKE_FOURC_TYPE(c1, c2, c3, c4) \
+#define JUST_MAKE_FOURC_TYPE(c1, c2, c3, c4) \
     ((((PP_uint)c1)) | \
     (((PP_uint)c2) << 8) | \
     (((PP_uint)c3)) << 16 | \
     (((PP_uint)c4) << 24))
 #endif
 
-PPBOX_ENUM_3(PPBOX_StreamType, (
+JUST_ENUM_3(JUST_StreamType, (
     (NONE, 0),
-    (VIDE, PPBOX_MAKE_FOURC_TYPE('V', 'I', 'D', 'E')),
-    (AUDI, PPBOX_MAKE_FOURC_TYPE('A', 'U', 'D', 'I'))
+    (VIDE, JUST_MAKE_FOURC_TYPE('V', 'I', 'D', 'E')),
+    (AUDI, JUST_MAKE_FOURC_TYPE('A', 'U', 'D', 'I'))
     ));
 
-PPBOX_ENUM_6(PPBOX_VideoSubType, (
+JUST_ENUM_6(JUST_VideoSubType, (
     //(NONE, 0,
-    (AVC1, PPBOX_MAKE_FOURC_TYPE('A', 'V', 'C', '1')),
-    (MP4V, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'V')), 
-    (WMV2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'V', '2')),
-    (WMV3, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'V', '3')),
-    (I420, PPBOX_MAKE_FOURC_TYPE('I', '4', '2', '0')), 
-    (RGBT, PPBOX_MAKE_FOURC_TYPE('R', 'G', 'B', 'T'))
+    (AVC1, JUST_MAKE_FOURC_TYPE('A', 'V', 'C', '1')),
+    (MP4V, JUST_MAKE_FOURC_TYPE('M', 'P', '4', 'V')), 
+    (WMV2, JUST_MAKE_FOURC_TYPE('W', 'M', 'V', '2')),
+    (WMV3, JUST_MAKE_FOURC_TYPE('W', 'M', 'V', '3')),
+    (I420, JUST_MAKE_FOURC_TYPE('I', '4', '2', '0')), 
+    (RGBT, JUST_MAKE_FOURC_TYPE('R', 'G', 'B', 'T'))
     ));
 
-PPBOX_ENUM_8(PPBOX_AudioSubType, (
+JUST_ENUM_8(JUST_AudioSubType, (
     //(NONE, 0),
-    (MP4A, PPBOX_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
-    (MP3,  PPBOX_MAKE_FOURC_TYPE('M', 'P', '3', 0)),
-    (MP2,  PPBOX_MAKE_FOURC_TYPE('M', 'P', '2', 0)),
-    (WMA2, PPBOX_MAKE_FOURC_TYPE('W', 'M', 'A', '2')),
-    (AC3,  PPBOX_MAKE_FOURC_TYPE('A', 'C', '3', 0)), 
-    (EAC3, PPBOX_MAKE_FOURC_TYPE('E', 'A', 'C', '3')), 
-    (FLT,  PPBOX_MAKE_FOURC_TYPE('F', 'L', 'T', 0)), 
-    (PCM,  PPBOX_MAKE_FOURC_TYPE('P', 'C', 'M', 0)) 
+    (MP4A, JUST_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
+    (MP3,  JUST_MAKE_FOURC_TYPE('M', 'P', '3', 0)),
+    (MP2,  JUST_MAKE_FOURC_TYPE('M', 'P', '2', 0)),
+    (WMA2, JUST_MAKE_FOURC_TYPE('W', 'M', 'A', '2')),
+    (AC3,  JUST_MAKE_FOURC_TYPE('A', 'C', '3', 0)), 
+    (EAC3, JUST_MAKE_FOURC_TYPE('E', 'A', 'C', '3')), 
+    (FLT,  JUST_MAKE_FOURC_TYPE('F', 'L', 'T', 0)), 
+    (PCM,  JUST_MAKE_FOURC_TYPE('P', 'C', 'M', 0)) 
     ));
 
-PPBOX_ENUM_5(PPBOX_FormatType, (
+JUST_ENUM_5(JUST_FormatType, (
     (none, 0),
     (video_avc_packet, 1),
     (video_avc_byte_stream, 2),
@@ -55,7 +55,7 @@ PPBOX_ENUM_5(PPBOX_FormatType, (
     (audio_adts, 2)
     ));
 
-PPBOX_STRUCT_6(PPBOX_MediaInfo, (
+JUST_STRUCT_6(JUST_MediaInfo, (
     (PP_ulong, file_size), 
     (PP_ulong, duration), 
     (PP_uint, head_size), 
@@ -64,14 +64,14 @@ PPBOX_STRUCT_6(PPBOX_MediaInfo, (
     (PP_str, format_data)
     ));
 
-PPBOX_STRUCT_4(PPBOX_VideoInfo, (
+JUST_STRUCT_4(JUST_VideoInfo, (
     (PP_uint, width),
     (PP_uint, height),
     (PP_uint, frame_rate_num),
     (PP_uint, frame_rate_den)
     ));
 
-PPBOX_STRUCT_5(PPBOX_AudioInfo, (
+JUST_STRUCT_5(JUST_AudioInfo, (
     (PP_uint, channel_count),
     (PP_uint, sample_size),
     (PP_uint, sample_rate),
@@ -79,14 +79,14 @@ PPBOX_STRUCT_5(PPBOX_AudioInfo, (
     (PP_uint, sample_per_frame)
     ));
 
-PPBOX_ENUM_3(PPBOX_SeekType, (
+JUST_ENUM_3(JUST_SeekType, (
     (reset, 0),
     (byte, 1),
     (time, 2)
     ));
 
-#ifdef PPBOX_NO_UNION
-PPBOX_STRUCT_12(PPBOX_StreamInfo, (
+#ifdef JUST_NO_UNION
+JUST_STRUCT_12(JUST_StreamInfo, (
     (PP_uint, type),          // TypeEnum
     (PP_uint, sub_type),      // SubTypeEnum
     (PP_uint, time_scale),
@@ -101,14 +101,14 @@ PPBOX_STRUCT_12(PPBOX_StreamInfo, (
     (PP_ubyte const *, format_buffer)   // 不同的解码不同的结构体，格式说明的的内容
     ));
 #else
-PPBOX_STRUCT_8(PPBOX_StreamInfo, (
+JUST_STRUCT_8(JUST_StreamInfo, (
     (PP_uint, type),          // TypeEnum
     (PP_uint, sub_type),      // SubTypeEnum
     (PP_uint, time_scale),
     (PP_uint, bitrate),      // bps
     (union {
-        PPBOX_VideoInfo video;
-        PPBOX_AudioInfo audio;
+        JUST_VideoInfo video;
+        JUST_AudioInfo audio;
 } , format),
     (PP_uint, format_type),   // 格式说明的类型
     (PP_uint, format_size),  // 格式说明的大小
@@ -116,30 +116,30 @@ PPBOX_STRUCT_8(PPBOX_StreamInfo, (
     ));
 #endif
 
-PPBOX_ENUM_2(PPBOX_SampleFlag, (
+JUST_ENUM_2(JUST_SampleFlag, (
     (sync, 1),
     (discontinuity, 2)
 ));
 
-PPBOX_STRUCT_1(PPBOX_Error, (
+JUST_STRUCT_1(JUST_Error, (
     (PP_err, ec)
     ));
 
-PPBOX_STRUCT_1(PPBOX_Url, (
+JUST_STRUCT_1(JUST_Url, (
     (PP_str, str)
     ));
 
-PPBOX_STRUCT_2(PPBOX_ConstBuffer, (
+JUST_STRUCT_2(JUST_ConstBuffer, (
     (PP_ubyte const *, data),
     (PP_uint, len)
     ));
 
-PPBOX_STRUCT_2(PPBOX_ConstBuffers, (
+JUST_STRUCT_2(JUST_ConstBuffers, (
     (PP_uint, count), 
-    (PPBOX_ConstBuffer *, buffers)
+    (JUST_ConstBuffer *, buffers)
     ));
 
-PPBOX_STRUCT_5(PPBOX_StreamStatus, (
+JUST_STRUCT_5(JUST_StreamStatus, (
     (PP_ulong, byte_pos), 
     (PP_ulong, byte_buf), 
     (PP_ulong, time_pos), 
@@ -147,7 +147,7 @@ PPBOX_STRUCT_5(PPBOX_StreamStatus, (
     (PP_err, data_err)
 ));
 
-PPBOX_STRUCT_9(PPBOX_Sample, (
+JUST_STRUCT_9(JUST_Sample, (
     (PP_uint, itrack),           // 流的编号
     (PP_uint, flags),            // Sample的标志
     (PP_ulong, time),             // Sample对应的时间戳, 单位是微妙
@@ -161,26 +161,26 @@ PPBOX_STRUCT_9(PPBOX_Sample, (
     (PP_context, context)
     ));
 
-PPBOX_ENUM_4(PPBOX_PlayStatus, (
+JUST_ENUM_4(JUST_PlayStatus, (
     (closed, 0),
     (playing, 1),
     (buffering, 2), 
     (paused, 3)
     ));
 
-PPBOX_STRUCT_3(PPBOX_PlayStatistic, (
+JUST_STRUCT_3(JUST_PlayStatistic, (
     (PP_uint, play_status),         //播放状态 0-未启动 1-playing态 2-buffering态 3-Pausing态
     (PP_uint, buffering_present),   //播放缓冲百分比 10 表示 10%
     (PP_uint, buffer_time)          //下载缓冲区数据的总时间
     ));
 
-PPBOX_ENUM_3(PPBOX_ConnectionStatus, (
+JUST_ENUM_3(JUST_ConnectionStatus, (
     (closed, 0), 
     (opening, 1), 
     (receiving, 2) 
     ));
 
-PPBOX_STRUCT_7(PPBOX_DataStat, (
+JUST_STRUCT_7(JUST_DataStat, (
     (PP_uint, total_elapse),                 // 持续时间
     (PP_uint, total_download_bytes),         // 总共下载的字节数
     (PP_uint, connection_status),            // 当前连接状态
@@ -190,4 +190,4 @@ PPBOX_STRUCT_7(PPBOX_DataStat, (
     (PP_uint, average_speed_sixty_seconds)   // 平均下载速度 <60s统计>
     ));
 
-#endif // _PPBOX_PPBOX_I_DEMUXER_H_
+#endif // _JUST_JUST_I_DEMUXER_H_

@@ -1,17 +1,17 @@
 // Define.h
 
-#ifndef _PPBOX_PPBOX_DEFINE_H_
-#define _PPBOX_PPBOX_DEFINE_H_
+#ifndef _JUST_JUST_DEFINE_H_
+#define _JUST_JUST_DEFINE_H_
 
 #define LIB
 
-#define NAME ppbox
+#define NAME just
 
 #define VERSION 1.2.0
 
 #ifdef __cplusplus
 
-#define BEGIN_NAME_SPACE namespace ppbox {
+#define BEGIN_NAME_SPACE namespace just {
 
 #define END_NAME_SPACE }
 
@@ -23,4 +23,4 @@
 
 #endif
 
-#endif // _PPBOX_PPBOX_DEFINE_H_
+#endif // _JUST_JUST_DEFINE_H_

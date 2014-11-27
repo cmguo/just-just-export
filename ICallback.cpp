@@ -1,11 +1,11 @@
 // ICallback.cpp
 
-#include "ppbox/ppbox/Common.h"
-#include "ppbox/ppbox/ICallback.h"
-#include "ppbox/ppbox/Callback.h"
-using namespace ppbox::error;
+#include "just/just/Common.h"
+#include "just/just/ICallback.h"
+#include "just/just/Callback.h"
+using namespace just::error;
 
-#include <ppbox/common/ScheduleManager.h>
+#include <just/common/ScheduleManager.h>
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
@@ -13,22 +13,22 @@ using namespace ppbox::error;
 #include <boost/bind.hpp>
 using namespace boost::system;
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.ISchedule", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.ISchedule", framework::logger::Debug);
 
-namespace ppbox
+namespace just
 {
 
     class ISchedule
     {
     public:
         ISchedule()
-        : scheduler_(util::daemon::use_module<ppbox::common::ScheduleManager>(global_daemon()))
+        : scheduler_(util::daemon::use_module<just::common::ScheduleManager>(global_daemon()))
         {
         }
 
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifdef JUST_ENABLE_REDIRECT_CALLBACK
         static void redirect_schedule_callback(
-            PPBOX_Callback callback, 
+            JUST_Callback callback, 
             PP_context user_data, 
             PP_err ec)
         {
@@ -39,10 +39,10 @@ namespace ppbox
         PP_handle schedule_callback(
             PP_uint delay, 
             PP_context user_data, 
-            PPBOX_Callback callback)
+            JUST_Callback callback)
         {
             return scheduler_.schedule_callback(delay, user_data, 
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifndef JUST_ENABLE_REDIRECT_CALLBACK
                 boost::bind(callback, _1, boost::bind(last_error_enum, _2)));
 #else
                 boost::bind(redirect_schedule_callback, callback, _1, boost::bind(last_error_enum, _2)));
@@ -64,19 +64,19 @@ namespace ppbox
             if (ec && ec != boost::asio::error::would_block) {
                 LOG_WARN(log_title << ": " << ec.message());
             }
-            ppbox::error::last_error(ec);
-            return ppbox::error::last_error_enum(ec);
+            just::error::last_error(ec);
+            return just::error::last_error_enum(ec);
         }
 
     private:
-        ppbox::common::ScheduleManager & scheduler_;
+        just::common::ScheduleManager & scheduler_;
     };
 
-} // namespace ppbox
+} // namespace just
 
-static ppbox::ISchedule & schedule()
+static just::ISchedule & schedule()
 {
-    static ppbox::ISchedule the_schedule;
+    static just::ISchedule the_schedule;
     return the_schedule;
 }
 
@@ -85,24 +85,24 @@ static ppbox::ISchedule & schedule()
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_err PPBOX_RedirectCallback(
-        PPBOX_CallbackRedirect redirect, 
-        PPBOX_CallbackFree free, 
+    JUST_DECL PP_err JUST_RedirectCallback(
+        JUST_CallbackRedirect redirect, 
+        JUST_CallbackFree free, 
         PP_context user_data)
     {
-        ppbox::redirect_call().set(redirect, free, user_data);
-        return ppbox_success;
+        just::redirect_call().set(redirect, free, user_data);
+        return just_success;
     }
 
-    PPBOX_DECL PP_handle PPBOX_ScheduleCallback(
+    JUST_DECL PP_handle JUST_ScheduleCallback(
         PP_uint delay, 
         PP_context user_data, 
-        PPBOX_Callback callback)
+        JUST_Callback callback)
     {
         return schedule().schedule_callback(delay, user_data, callback);
     }
 
-    PPBOX_DECL PP_err PPBOX_CancelCallback(
+    JUST_DECL PP_err JUST_CancelCallback(
         PP_handle handle)
     {
         return schedule().cancel_callback(handle);

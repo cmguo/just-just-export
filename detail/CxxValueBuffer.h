@@ -1,21 +1,21 @@
 // CxxValueBuffer.h
 
-#ifndef _PPBOX_PPBOX_DETAIL_CXX_VALUE_BUFFER_H_
-#define _PPBOX_PPBOX_DETAIL_CXX_VALUE_BUFFER_H_
+#ifndef _JUST_JUST_DETAIL_CXX_VALUE_BUFFER_H_
+#define _JUST_JUST_DETAIL_CXX_VALUE_BUFFER_H_
 
-#include "ppbox/ppbox/detail/CxxTypeBind.h"
+#include "just/just/detail/CxxTypeBind.h"
 
 #include <framework/container/Array.h>
 
 #include <util/stream/StreamBuffers.h>
 
-namespace ppbox
+namespace just
 {
 
     template <>
-    struct TypeBind<PPBOX_ConstBuffer>
+    struct TypeBind<JUST_ConstBuffer>
     {
-        typedef PPBOX_ConstBuffer ctype_t;
+        typedef JUST_ConstBuffer ctype_t;
         typedef boost::asio::const_buffer xtype_t;
 
         static xtype_t c2x(ctype_t c)
@@ -33,7 +33,7 @@ namespace ppbox
     };
     
     struct buffers_holder
-        : PPBOX_ConstBuffers
+        : JUST_ConstBuffers
     {
     public:
         buffers_holder(
@@ -41,27 +41,27 @@ namespace ppbox
         {
             util::stream::StreamConstBuffers::const_iterator iter = buffers.begin();
             for (; iter != buffers.end(); ++iter) {
-                buffers_.push_back(TypeBind<PPBOX_ConstBuffer>::x2c(*iter));
+                buffers_.push_back(TypeBind<JUST_ConstBuffer>::x2c(*iter));
             }
-            PPBOX_ConstBuffers::buffers = &buffers_.front();
-            PPBOX_ConstBuffers::count = buffers_.size();
+            JUST_ConstBuffers::buffers = &buffers_.front();
+            JUST_ConstBuffers::count = buffers_.size();
         }
 
     protected:
-        std::vector<PPBOX_ConstBuffer> buffers_;
+        std::vector<JUST_ConstBuffer> buffers_;
     };
 
     template <>
-    struct TypeBind<PPBOX_ConstBuffers>
+    struct TypeBind<JUST_ConstBuffers>
     {
-        typedef PPBOX_ConstBuffers ctype_t;
+        typedef JUST_ConstBuffers ctype_t;
         typedef util::stream::StreamConstBuffers xtype_t;
 
         static xtype_t c2x(ctype_t c)
         {
             xtype_t x;
             for (PP_uint i = 0; i < c.count; ++i) {
-                x.push_back(TypeBind<PPBOX_ConstBuffer>::c2x(c.buffers[i]));
+                x.push_back(TypeBind<JUST_ConstBuffer>::c2x(c.buffers[i]));
             }
             return x;
         }
@@ -72,6 +72,6 @@ namespace ppbox
         }
     };
     
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_DETAIL_CXX_VALUE_BUFFER_H_
+#endif // _JUST_JUST_DETAIL_CXX_VALUE_BUFFER_H_

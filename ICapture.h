@@ -1,46 +1,46 @@
 // IDemuxer.h
 
-#ifndef _PPBOX_PPBOX_I_CAPTURE_H_
-#define _PPBOX_PPBOX_I_CAPTURE_H_
+#ifndef _JUST_JUST_I_CAPTURE_H_
+#define _JUST_JUST_I_CAPTURE_H_
 
 #include "IGeneric.h"
 #include "IFormat.h"
 
-PPBOX_CALLBACK_2(PP_bool, PPBOX_GetSampleBuffersCallBack, (PP_context, PPBOX_ConstBuffer *));
-PPBOX_CALLBACK_1(PP_bool, PPBOX_FreeSampleCallBack, (PP_context));
+JUST_CALLBACK_2(PP_bool, JUST_GetSampleBuffersCallBack, (PP_context, JUST_ConstBuffer *));
+JUST_CALLBACK_1(PP_bool, JUST_FreeSampleCallBack, (PP_context));
 
-enum PPBOX_CaptureConfigFlagEnum
+enum JUST_CaptureConfigFlagEnum
 {
-    PPBOX_CaptureConfigFlag_stream_ordered = 1,  
-    PPBOX_CaptureConfigFlag_multi_thread = 2, 
+    JUST_CaptureConfigFlag_stream_ordered = 1,  
+    JUST_CaptureConfigFlag_multi_thread = 2, 
 };
 
-PPBOX_STRUCT_4(PPBOX_CaptureConfigData, (
+JUST_STRUCT_4(JUST_CaptureConfigData, (
     (PP_uint, stream_count),
     (PP_uint, flags),
-    (PPBOX_GetSampleBuffersCallBack, get_sample_buffers),
-    (PPBOX_FreeSampleCallBack, free_sample)
+    (JUST_GetSampleBuffersCallBack, get_sample_buffers),
+    (JUST_FreeSampleCallBack, free_sample)
     ));
 
 //打开一个视频
-PPBOX_FUNC_2(PP_handle, PPBOX_CaptureCreate, (
+JUST_FUNC_2(PP_handle, JUST_CaptureCreate, (
     (PP_str, name), 
     (PP_str, dest)));
 
-PPBOX_FUNC_2(PP_err, PPBOX_CaptureInit, (
+JUST_FUNC_2(PP_err, JUST_CaptureInit, (
     (PP_handle, handle), 
-    (PPBOX_CaptureConfigData const *, config)));
+    (JUST_CaptureConfigData const *, config)));
 
-PPBOX_FUNC_3(PP_err, PPBOX_CaptureSetStream, (
+JUST_FUNC_3(PP_err, JUST_CaptureSetStream, (
     (PP_handle, handle), 
     (PP_uint, index), 
-    (PPBOX_StreamInfo const *, stream)));
+    (JUST_StreamInfo const *, stream)));
 
-PPBOX_FUNC_2(PP_err, PPBOX_CapturePutSample, (
+JUST_FUNC_2(PP_err, JUST_CapturePutSample, (
     (PP_handle, handle), 
-    (PPBOX_Sample const *, sample)));
+    (JUST_Sample const *, sample)));
 
-PPBOX_FUNC_1(PP_err, PPBOX_CaptureDestroy, (
+JUST_FUNC_1(PP_err, JUST_CaptureDestroy, (
     (PP_handle, handle)));
 
-#endif // _PPBOX_PPBOX_I_CAPTURE_H_
+#endif // _JUST_JUST_I_CAPTURE_H_

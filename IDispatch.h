@@ -1,7 +1,7 @@
 // IDispatch.h
 
-#ifndef _PPBOX_PPBOX_I_DISPATCH_H_
-#define _PPBOX_PPBOX_I_DISPATCH_H_
+#ifndef _JUST_JUST_I_DISPATCH_H_
+#define _JUST_JUST_I_DISPATCH_H_
 
 #include "IPpbox.h"
 #include "IFormat.h"
@@ -10,60 +10,60 @@
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_FUNC_0(PP_handle, PPBOX_DispatchCreate, ());
+    JUST_FUNC_0(PP_handle, JUST_DispatchCreate, ());
 
-    PPBOX_FUNC_3(PP_err, PPBOX_DispatchOpen, (
+    JUST_FUNC_3(PP_err, JUST_DispatchOpen, (
         (PP_handle, handle), 
         (PP_str, playlink), 
         (PP_str, format)));
 
-    PPBOX_FUNC_5(PP_err, PPBOX_DispatchAsyncOpen, (
+    JUST_FUNC_5(PP_err, JUST_DispatchAsyncOpen, (
         (PP_handle, handle), 
         (PP_str, playlink), 
         (PP_str, format), 
         (PP_context, ctx), 
-        (PPBOX_Callback, callback)));
+        (JUST_Callback, callback)));
 
-    PPBOX_FUNC_2(PP_err, PPBOX_DispatchGetMediaInfo, (
+    JUST_FUNC_2(PP_err, JUST_DispatchGetMediaInfo, (
         (PP_handle, handle), 
-        (PPBOX_MediaInfo *, info)));
+        (JUST_MediaInfo *, info)));
 
-    PPBOX_FUNC_3(PP_err, PPBOX_DispatchGetStreamInfo, (
+    JUST_FUNC_3(PP_err, JUST_DispatchGetStreamInfo, (
         (PP_handle, handle), 
         (PP_uint *, num), 
-        (PPBOX_StreamInfo *, infos)));
+        (JUST_StreamInfo *, infos)));
 
-    PPBOX_FUNC_1(PP_err, PPBOX_DispatchPause, (
+    JUST_FUNC_1(PP_err, JUST_DispatchPause, (
         (PP_handle, handle)));
 
-    PPBOX_FUNC_1(PP_err, PPBOX_DispatchResume, (
+    JUST_FUNC_1(PP_err, JUST_DispatchResume, (
         (PP_handle, handle)));
 
-    PPBOX_FUNC_3(PP_err, PPBOX_DispatchSeek, (
+    JUST_FUNC_3(PP_err, JUST_DispatchSeek, (
         (PP_handle, handle), 
         (PP_uint, type), 
         (PP_ulong, pos)));
 
-    PPBOX_FUNC_2(PP_err, PPBOX_DispatchRead, (
+    JUST_FUNC_2(PP_err, JUST_DispatchRead, (
         (PP_handle, handle), 
-        (PPBOX_Sample *, sample)));
+        (JUST_Sample *, sample)));
 
-    PPBOX_FUNC_2(PP_err, PPBOX_DispatchGetStreamStatus, (
+    JUST_FUNC_2(PP_err, JUST_DispatchGetStreamStatus, (
         (PP_handle, handle), 
-        (PPBOX_StreamStatus *, status)));
+        (JUST_StreamStatus *, status)));
 
-    PPBOX_FUNC_2(PP_err, PPBOX_DispatchGetDataStat, (
+    JUST_FUNC_2(PP_err, JUST_DispatchGetDataStat, (
         (PP_handle, handle), 
-        (PPBOX_DataStat *, status)));
+        (JUST_DataStat *, status)));
 
-    PPBOX_FUNC_1(PP_err, PPBOX_DispatchClose, (
+    JUST_FUNC_1(PP_err, JUST_DispatchClose, (
         (PP_handle, handle)));
 
-    PPBOX_FUNC_1(PP_err, PPBOX_DispatchDestroy, (
+    JUST_FUNC_1(PP_err, JUST_DispatchDestroy, (
         (PP_handle, handle)));
 
 #if __cplusplus
 }
 #endif // __cplusplus
 
-#endif // _PPBOX_PPBOX_I_DISPATCH_H_
+#endif // _JUST_JUST_I_DISPATCH_H_

@@ -1,29 +1,29 @@
 // P2p.h
 
-#ifndef _PPBOX_PPBOX_P2P_H_
-#define _PPBOX_PPBOX_P2P_H_
+#ifndef _JUST_JUST_P2P_H_
+#define _JUST_JUST_P2P_H_
 
-#ifndef PPBOX_DISABLE_PEER 
-#  include <ppbox/peer/PeerModule.h>
+#ifndef JUST_DISABLE_PEER 
+#  include <just/peer/PeerModule.h>
 #endif
-#ifndef PPBOX_DISABLE_LIVE 
-#  include <ppbox/live/LiveModule.h>
+#ifndef JUST_DISABLE_LIVE 
+#  include <just/live/LiveModule.h>
 #endif
 
-namespace ppbox
+namespace just
 {
 
     void p2p_init(
         util::daemon::Daemon & daemon)
     {
-#ifndef PPBOX_DISABLE_PEER
-        util::daemon::use_module<ppbox::peer::PeerModule>(daemon);
+#ifndef JUST_DISABLE_PEER
+        util::daemon::use_module<just::peer::PeerModule>(daemon);
 #endif
-#ifndef PPBOX_DISABLE_LIVE
-        util::daemon::use_module<ppbox::live::LiveModule>(daemon);
+#ifndef JUST_DISABLE_LIVE
+        util::daemon::use_module<just::live::LiveModule>(daemon);
 #endif
     }
 
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_P2P_H_
+#endif // _JUST_JUST_P2P_H_

@@ -1,7 +1,7 @@
 // IPpboxTypes.h
 
-#ifndef _PPBOX_PPBOX_I_PPBOX_TYPES_H_
-#define _PPBOX_PPBOX_I_PPBOX_TYPES_H_
+#ifndef _JUST_JUST_I_JUST_TYPES_H_
+#define _JUST_JUST_I_JUST_TYPES_H_
 
 #ifndef DEFINED_PP_BOOL
 #define DEFINED_PP_BOOL
@@ -61,21 +61,21 @@ typedef PP_ubyte const * PP_data;
 typedef void const * PP_handle;
 typedef void const * PP_context;
 
-enum PPBOX_ErrorEnum
+enum JUST_ErrorEnum
 {
-    ppbox_success = 0, 
-    ppbox_not_start, 
-    ppbox_already_start, 
-    ppbox_not_open, 
-    ppbox_already_open, 
-    ppbox_operation_canceled, 
-    ppbox_would_block, 
-    ppbox_stream_end, 
-    ppbox_logic_error, 
-    ppbox_network_error, 
-    ppbox_demux_error, 
-    ppbox_certify_error, 
-    ppbox_other_error = 1024, 
+    just_success = 0, 
+    just_not_start, 
+    just_already_start, 
+    just_not_open, 
+    just_already_open, 
+    just_operation_canceled, 
+    just_would_block, 
+    just_stream_end, 
+    just_logic_error, 
+    just_network_error, 
+    just_demux_error, 
+    just_certify_error, 
+    just_other_error = 1024, 
 };
 
-#endif // _PPBOX_PPBOX_I_PPBOX_TYPES_H_
+#endif // _JUST_JUST_I_JUST_TYPES_H_

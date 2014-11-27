@@ -1,31 +1,31 @@
 // Server.h
 
-#ifndef _PPBOX_PPBOX_SERVER_H_
-#define _PPBOX_PPBOX_SERVER_H_
+#ifndef _JUST_JUST_SERVER_H_
+#define _JUST_JUST_SERVER_H_
 
-#ifndef PPBOX_DISABLE_CERTIFY 
-#  include <ppbox/certify/Certifier.h>
+#ifndef JUST_DISABLE_CERTIFY 
+#  include <just/certify/Certifier.h>
 #endif
-#ifndef PPBOX_DISABLE_DAC 
-#  include <ppbox/dac/DacModule.h>
+#ifndef JUST_DISABLE_DAC 
+#  include <just/dac/DacModule.h>
 #endif
-#include <ppbox/cdn/CdnModule.h>
+#include <just/cdn/CdnModule.h>
 
-namespace ppbox
+namespace just
 {
 
     void server_init(
         util::daemon::Daemon & daemon)
     {
-#ifndef PPBOX_DISABLE_CERTIFY
-        util::daemon::use_module<ppbox::certify::Certifier>(daemon);
+#ifndef JUST_DISABLE_CERTIFY
+        util::daemon::use_module<just::certify::Certifier>(daemon);
 #endif
-#ifndef PPBOX_DISABLE_DAC
-        util::daemon::use_module<ppbox::dac::DacModule>(daemon);
+#ifndef JUST_DISABLE_DAC
+        util::daemon::use_module<just::dac::DacModule>(daemon);
 #endif
-        util::daemon::use_module<ppbox::cdn::CdnModule>(daemon);
+        util::daemon::use_module<just::cdn::CdnModule>(daemon);
     }
 
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_SERVER_H_
+#endif // _JUST_JUST_SERVER_H_

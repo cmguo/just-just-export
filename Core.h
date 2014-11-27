@@ -1,25 +1,25 @@
 // Core.h
 
-#ifndef _PPBOX_PPBOX_CORE_H_
-#define _PPBOX_PPBOX_CORE_H_
+#ifndef _JUST_JUST_CORE_H_
+#define _JUST_JUST_CORE_H_
 
-#include <ppbox/data/DataModule.h>
-#include <ppbox/demux/DemuxModule.h>
-#include <ppbox/merge/MergeModule.h>
-#  include <ppbox/mux/MuxModule.h>
+#include <just/data/DataModule.h>
+#include <just/demux/DemuxModule.h>
+#include <just/merge/MergeModule.h>
+#  include <just/mux/MuxModule.h>
 
-namespace ppbox
+namespace just
 {
 
     void core_init(
         util::daemon::Daemon & daemon)
     {
-        util::daemon::use_module<ppbox::data::DataModule>(daemon);
-        util::daemon::use_module<ppbox::demux::DemuxModule>(daemon);
-        util::daemon::use_module<ppbox::merge::MergeModule>(daemon);
-        util::daemon::use_module<ppbox::mux::MuxModule>(daemon);
+        util::daemon::use_module<just::data::DataModule>(daemon);
+        util::daemon::use_module<just::demux::DemuxModule>(daemon);
+        util::daemon::use_module<just::merge::MergeModule>(daemon);
+        util::daemon::use_module<just::mux::MuxModule>(daemon);
     }
 
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_CORE_H_
+#endif // _JUST_JUST_CORE_H_

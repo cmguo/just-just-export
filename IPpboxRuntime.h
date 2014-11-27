@@ -1,7 +1,7 @@
-// ppbox_runtime.h
+// just_runtime.h
 
-#ifndef _PLUGINS_PPBOX_PPBOX_RUNTIME_H_
-#define _PLUGINS_PPBOX_PPBOX_RUNTIME_H_
+#ifndef _PLUGINS_JUST_JUST_RUNTIME_H_
+#define _PLUGINS_JUST_JUST_RUNTIME_H_
 
 #include <assert.h>
 #include <stdlib.h>
@@ -33,58 +33,58 @@ static inline HMODULE LoadLibraryA(
 #endif
 
 #ifdef __cplusplus
-#  define PPBOX_LIB_NAME ppbox::name_string()
+#  define JUST_LIB_NAME just::name_string()
 #else
-#  define PPBOX_LIB_NAME name_string()
+#  define JUST_LIB_NAME name_string()
 #endif
 
 #ifdef __cplusplus
-extern HMODULE PPBOX_Load(
+extern HMODULE JUST_Load(
     char const * name = NULL);
 #else
-extern HMODULE PPBOX_Load(
+extern HMODULE JUST_Load(
     char const * name);
 #endif
-extern void PPBOX_Unload(void); 
+extern void JUST_Unload(void); 
 
 
-#ifndef PPBOX_LIBRARY_NOT_EXIST
-#  define PPBOX_LIBRARY_NOT_EXIST(x) fprintf(stderr, "library %s not exists\r\n", x); abort();
+#ifndef JUST_LIBRARY_NOT_EXIST
+#  define JUST_LIBRARY_NOT_EXIST(x) fprintf(stderr, "library %s not exists\r\n", x); abort();
 #endif
 
-#ifndef PPBOX_FUNCTION_NOT_EXIST
-#  define PPBOX_FUNCTION_NOT_EXIST(x) fprintf(stderr, "function %s not exists", #x); abort();
+#ifndef JUST_FUNCTION_NOT_EXIST
+#  define JUST_FUNCTION_NOT_EXIST(x) fprintf(stderr, "function %s not exists", #x); abort();
 #endif
 
-#define PPBOX_DECL
+#define JUST_DECL
 
-#ifndef PPBOX_FUNC
-#ifdef PPBOX_DECLARE_ONLY
-#define PPBOX_FUNC(type, name, np, params) \
+#ifndef JUST_FUNC
+#ifdef JUST_DECLARE_ONLY
+#define JUST_FUNC(type, name, np, params) \
     type name(FUNCTION_PARAMS_TYPE_NAME(np, params));
-#else  // PPBOX_DECLARE_ONLY
-#define PPBOX_FUNC(type, name, np, params) \
+#else  // JUST_DECLARE_ONLY
+#define JUST_FUNC(type, name, np, params) \
     type name(FUNCTION_PARAMS_TYPE_NAME(np, params)); \
     inline type name(FUNCTION_PARAMS_TYPE_NAME(np, params)) \
     { \
         typedef type (* FT_ ## name)(FUNCTION_PARAMS_TYPE(np, params)); \
         static FT_ ## name fp = NULL; \
         if (fp == NULL) { \
-            fp = (FT_ ## name)dlsym(PPBOX_Load(NULL), #name); \
+            fp = (FT_ ## name)dlsym(JUST_Load(NULL), #name); \
             if (fp == NULL) { \
-                PPBOX_FUNCTION_NOT_EXIST(name); \
+                JUST_FUNCTION_NOT_EXIST(name); \
                 return type##_defalut(); \
             } \
         } \
         return fp(FUNCTION_PARAMS_NAME(np, params)); \
     }
-#endif // PPBOX_DECLARE_ONLY
-#endif // PPBOX_FUNC
+#endif // JUST_DECLARE_ONLY
+#endif // JUST_FUNC
 
 #include "IPpboxTypes.h"
 
 static inline void void_defalut(void) { }
-static inline PP_err PP_err_defalut(void) { return ppbox_other_error; }
+static inline PP_err PP_err_defalut(void) { return just_other_error; }
 static inline PP_str PP_str_defalut(void) { return ""; }
 static inline PP_handle PP_handle_defalut(void) { return NULL; }
 static inline PP_ushort PP_ushort_defalut(void) { return 0; }
@@ -95,33 +95,33 @@ static inline PP_ulong PP_ulong_defalut(void) { return 0; }
 
 #include "Name.h"
 
-#ifndef PPBOX_DECLARE_ONLY
+#ifndef JUST_DECLARE_ONLY
 
-inline void PPBOX_Unload(void)
+inline void JUST_Unload(void)
 {
-    if (PPBOX_Load(NULL)) {
-#ifndef PPBOX_DISABLE_AUTO_START
-        PPBOX_StopEngine();
+    if (JUST_Load(NULL)) {
+#ifndef JUST_DISABLE_AUTO_START
+        JUST_StopEngine();
 #endif
-        dlclose(PPBOX_Load(NULL));
+        dlclose(JUST_Load(NULL));
     }
 }
 
-inline HMODULE PPBOX_Load(
+inline HMODULE JUST_Load(
     char const * name)
 {
     static HMODULE hMod = NULL;
     if (hMod == NULL) {
         if (name == NULL)
-            name = PPBOX_LIB_NAME;
+            name = JUST_LIB_NAME;
         hMod = dlopen(name, RTLD_LAZY);
         if (hMod == NULL) {
-            PPBOX_LIBRARY_NOT_EXIST(name);
+            JUST_LIBRARY_NOT_EXIST(name);
         } else {
-#ifndef PPBOX_DISABLE_AUTO_START
-            PP_err ret = PPBOX_StartEngine("12", "161", "08ae1acd062ea3ab65924e07717d5994");
-            if (ret != ppbox_success && ret != ppbox_already_start) {
-                PPBOX_Unload();
+#ifndef JUST_DISABLE_AUTO_START
+            PP_err ret = JUST_StartEngine("12", "161", "08ae1acd062ea3ab65924e07717d5994");
+            if (ret != just_success && ret != just_already_start) {
+                JUST_Unload();
             }
 #endif
         }
@@ -129,6 +129,6 @@ inline HMODULE PPBOX_Load(
     return hMod;
 }
 
-#endif // PPBOX_DECLARE_ONLY
+#endif // JUST_DECLARE_ONLY
 
-#endif // _PLUGINS_PPBOX_PPBOX_RUNTIME_H_
+#endif // _PLUGINS_JUST_JUST_RUNTIME_H_

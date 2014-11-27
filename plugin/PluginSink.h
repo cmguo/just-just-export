@@ -1,20 +1,20 @@
 // PluginSink.h
 
-#ifndef _PPBOX_PPBOX_PLUGIN_PLUGIN_SINK_H_
-#define _PPBOX_PPBOX_PLUGIN_PLUGIN_SINK_H_
+#ifndef _JUST_JUST_PLUGIN_PLUGIN_SINK_H_
+#define _JUST_JUST_PLUGIN_PLUGIN_SINK_H_
 
-#include "ppbox/ppbox/Plugin.h"
+#include "just/just/Plugin.h"
 
 #include <util/stream/UrlSink.h>
 
-namespace ppbox
+namespace just
 {
 
     util::stream::UrlSink * create_url_sink(
         boost::asio::io_service & io_svc, 
-        PPBOX_PluginCreate creator, 
-        PPBOX_PluginDestroy destroyer);
+        JUST_PluginCreate creator, 
+        JUST_PluginDestroy destroyer);
 
 }
 
-#endif // _PPBOX_PPBOX_PLUGIN_PLUGIN_SINK_H_
+#endif // _JUST_JUST_PLUGIN_PLUGIN_SINK_H_

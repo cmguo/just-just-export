@@ -1,9 +1,9 @@
 // IInterface.h
 
-#ifndef _PPBOX_PPBOX_DETAIL_I_INTERFACE_H_
-#define _PPBOX_PPBOX_DETAIL_I_INTERFACE_H_
+#ifndef _JUST_JUST_DETAIL_I_INTERFACE_H_
+#define _JUST_JUST_DETAIL_I_INTERFACE_H_
 
-#include "ppbox/ppbox/detail/IPreprocessor.h"
+#include "just/just/detail/IPreprocessor.h"
 
 #define METHOD_PARAM_TYPE_NAME(i, t, n) BOOST_PP_COMMA_IF(i) t n
 #define METHOD_PARAM_TYPE(i, t, n) BOOST_PP_COMMA_IF(i) t
@@ -16,11 +16,11 @@
 #define INTERFACE_METHOD(i, m) m
 #define INTERFACE_METHODS(nm, methods) LIST_FORMAT(INTERFACE_METHOD, nm, methods)
 
-#ifndef PPBOX_INTERFACE
+#ifndef JUST_INTERFACE
 #  ifdef __cplusplus
-#    define PPBOX_METHOD(type, name, np, params) \
-        type (*name)(PPBOX_Plugin * BOOST_PP_COMMA_IF(np) METHOD_PARAMS_TYPE(np, params));
-#    define PPBOX_INTERFACE(name, base, nm, methods) \
+#    define JUST_METHOD(type, name, np, params) \
+        type (*name)(JUST_Plugin * BOOST_PP_COMMA_IF(np) METHOD_PARAMS_TYPE(np, params));
+#    define JUST_INTERFACE(name, base, nm, methods) \
         struct name : base { \
             INTERFACE_METHODS(nm, methods) \
         };
@@ -28,4 +28,4 @@
 #  endif
 #endif
 
-#endif // _PPBOX_PPBOX_DETAIL_I_INTERFACE_H_
+#endif // _JUST_JUST_DETAIL_I_INTERFACE_H_

@@ -1,7 +1,7 @@
 // IPpbox.h
 
-#ifndef _PPBOX_PPBOX_I_PPBOX_H_
-#define _PPBOX_PPBOX_I_PPBOX_H_
+#ifndef _JUST_JUST_I_JUST_H_
+#define _JUST_JUST_I_JUST_H_
 
 #include "detail/IEnum.h"
 #include "detail/IStruct.h"
@@ -18,4 +18,4 @@
 #include "ICapture.h"
 #include "IPlugin.h"
 
-#endif // _PPBOX_PPBOX_I_PPBOX_H_
+#endif // _JUST_JUST_I_JUST_H_

@@ -1,9 +1,9 @@
 // Plugin.h
 
-#ifndef _PPBOX_PPBOX_PLUGIN_H_
-#define _PPBOX_PPBOX_PLUGIN_H_
+#ifndef _JUST_JUST_PLUGIN_H_
+#define _JUST_JUST_PLUGIN_H_
 
-#include "ppbox/ppbox/IPlugin.h"
+#include "just/just/IPlugin.h"
 
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -11,7 +11,7 @@
 #include <boost/preprocessor/enum.hpp>
 #include <boost/preprocessor/comma_if.hpp>
 
-namespace ppbox
+namespace just
 {
 
     template <typename T>
@@ -19,8 +19,8 @@ namespace ppbox
     {
     protected:
         Plugin(
-            PPBOX_PluginCreate creator, 
-            PPBOX_PluginDestroy destroyer)
+            JUST_PluginCreate creator, 
+            JUST_PluginDestroy destroyer)
             : impl_(create_va(creator))
             , destroyer_(destroyer)
         {
@@ -39,28 +39,28 @@ namespace ppbox
             return *(T const *)impl_;
         }
 
-        PPBOX_Plugin * pimpl() const
+        JUST_Plugin * pimpl() const
         {
             return impl_;
         }
 
     private:
-        static PPBOX_Plugin * create_va(
-            PPBOX_PluginCreate creator, 
+        static JUST_Plugin * create_va(
+            JUST_PluginCreate creator, 
             ...)
         {
             va_list args;
             va_start(args, creator); \
-            PPBOX_Plugin * plugin = creator(args); \
+            JUST_Plugin * plugin = creator(args); \
             va_end(args);
             return plugin;
         }
 
     private:
-        PPBOX_Plugin * impl_;
-        PPBOX_PluginDestroy destroyer_;
+        JUST_Plugin * impl_;
+        JUST_PluginDestroy destroyer_;
     };
 
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_PLUGIN_H_
+#endif // _JUST_JUST_PLUGIN_H_

@@ -1,11 +1,11 @@
 // IDispatch.cpp
 
-#include "ppbox/ppbox/Common.h"
-#include "ppbox/ppbox/Callback.h"
+#include "just/just/Common.h"
+#include "just/just/Callback.h"
 
-#include <ppbox/dispatch/DispatchModule.h>
-#include <ppbox/dispatch/DispatcherBase.h>
-using namespace ppbox::dispatch;
+#include <just/dispatch/DispatchModule.h>
+#include <just/dispatch/DispatcherBase.h>
+using namespace just::dispatch;
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
@@ -20,9 +20,9 @@ using namespace boost::system;
 
 extern void pool_dump();
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDispatch", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IDispatch", framework::logger::Debug);
 
-namespace ppbox
+namespace just
 {
 
     class IDispatch
@@ -89,9 +89,9 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifdef JUST_ENABLE_REDIRECT_CALLBACK
         static void redirect_open_callback(
-            PPBOX_Callback callback, 
+            JUST_Callback callback, 
             PP_context ctx, 
             PP_err ec)
         {
@@ -104,7 +104,7 @@ namespace ppbox
             PP_str playlink, 
             PP_str format, 
 			PP_context ctx, 
-            PPBOX_Callback callback)
+            JUST_Callback callback)
         {
             LOG_SECTION();
             LOG_INFO("async_open playlink: " << playlink);
@@ -114,15 +114,15 @@ namespace ppbox
             Cache * cache = (Cache *)handle;
             cache->dispatcher->async_open((url), 
                 boost::bind(&IDispatch::handle_async_open, this, ctx, callback, _1));
-            return ppbox_success;
+            return just_success;
         }
 
         void handle_async_open(
             PP_context ctx, 
-            PPBOX_Callback callback, 
+            JUST_Callback callback, 
             boost::system::error_code const & ec)
         {
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifndef JUST_ENABLE_REDIRECT_CALLBACK
             callback(ctx, async_last_error(__FUNCTION__, ec));
 #else
             redirect_open_callback(callback, ctx, async_last_error(__FUNCTION__, ec));
@@ -131,7 +131,7 @@ namespace ppbox
 
         PP_err get_media_info(
             PP_handle handle, 
-            PPBOX_MediaInfo & info)
+            JUST_MediaInfo & info)
         {
             LOG_SECTION();
             LOG_INFO("get_media_info");
@@ -152,7 +152,7 @@ namespace ppbox
         PP_err get_stream_info(
             PP_handle handle, 
             PP_uint & num,
-            PPBOX_StreamInfo * info)
+            JUST_StreamInfo * info)
         {
             LOG_SECTION();
             LOG_INFO("get_stream_info");
@@ -161,19 +161,19 @@ namespace ppbox
             error_code ec;
             if (cache->dispatcher->get_stream_info(cache->stream_infos, ec)) {
                 for (size_t i = 0; i < cache->stream_infos.size() && i < num; ++i) {
-                    PPBOX_StreamInfo & info1 = info[i];
+                    JUST_StreamInfo & info1 = info[i];
                     StreamInfo const & info2 = cache->stream_infos[i];
                     info1.type = info2.type;
                     info1.sub_type = info2.sub_type;
                     info1.time_scale = info2.time_scale;
                     info1.bitrate = info2.bitrate;
                     info1.format_type = info2.format_type;
-                    if (info2.type == PPBOX_StreamType::VIDE) {
+                    if (info2.type == JUST_StreamType::VIDE) {
                         info1.format.video.width = info2.video_format.width;
                         info1.format.video.height = info2.video_format.height;
                         info1.format.video.frame_rate_num = info2.video_format.frame_rate_num;
                         info1.format.video.frame_rate_den = info2.video_format.frame_rate_den;
-                    } else if (info2.type == PPBOX_StreamType::AUDI) {
+                    } else if (info2.type == JUST_StreamType::AUDI) {
                         info1.format.audio.channel_count = info2.audio_format.channel_count;
                         info1.format.audio.sample_size = info2.audio_format.sample_size;
                         info1.format.audio.sample_rate = info2.audio_format.sample_rate;
@@ -232,7 +232,7 @@ namespace ppbox
 
         PP_err read(
             PP_handle handle, 
-            PPBOX_Sample & sample)
+            JUST_Sample & sample)
         {
             Cache * cache = (Cache *)handle;
             error_code ec;
@@ -252,7 +252,7 @@ namespace ppbox
 
         PP_err get_stream_status(
             PP_handle handle, 
-            PPBOX_StreamStatus & stat)
+            JUST_StreamStatus & stat)
         {
             Cache * cache = (Cache *)handle;
             StreamStatus status;
@@ -262,14 +262,14 @@ namespace ppbox
                 stat.byte_buf = status.byte_range.buf;
                 stat.time_pos = status.time_range.pos;
                 stat.time_buf = status.time_range.buf;
-                stat.data_err = ppbox::error::last_error_enum(status.buf_ec);
+                stat.data_err = just::error::last_error_enum(status.buf_ec);
             }
             return last_error(__FUNCTION__, ec);
         }
 
         PP_err get_data_stat(
             PP_handle handle, 
-            PPBOX_DataStat & stat)
+            JUST_DataStat & stat)
         {
             Cache * cache = (Cache *)handle;
             DataStat stat2;
@@ -307,7 +307,7 @@ namespace ppbox
             Cache * cache = (Cache *)handle;
             delete cache->dispatcher;
             delete cache;
-            return ppbox_success;
+            return just_success;
         }
 
         static error::errors async_last_error(
@@ -317,14 +317,14 @@ namespace ppbox
             if (ec && ec != boost::asio::error::would_block) {
                 LOG_WARN(log_title << ": " << ec.message());
             }
-            return ppbox::error::last_error_enum(ec);
+            return just::error::last_error_enum(ec);
         }
 
         static error::errors last_error(
             PP_str title, 
             error_code const & ec)
         {
-            ppbox::error::last_error(ec);
+            just::error::last_error(ec);
             return async_last_error(title, ec);
         }
 
@@ -335,9 +335,9 @@ namespace ppbox
     };
 }
 
-static ppbox::IDispatch & dispatch()
+static just::IDispatch & dispatch()
 {
-    static ppbox::IDispatch the_dispatch;
+    static just::IDispatch the_dispatch;
     return the_dispatch;
 }
 
@@ -345,12 +345,12 @@ static ppbox::IDispatch & dispatch()
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_handle PPBOX_DispatchCreate()
+    JUST_DECL PP_handle JUST_DispatchCreate()
     {
         return dispatch().create();
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchOpen(
+    JUST_DECL PP_err JUST_DispatchOpen(
         PP_handle handle, 
         PP_str playlink, 
         PP_str format)
@@ -358,32 +358,32 @@ extern "C" {
         return dispatch().open(handle, playlink, format);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchAsyncOpen(
+    JUST_DECL PP_err JUST_DispatchAsyncOpen(
         PP_handle handle, 
         PP_str playlink, 
         PP_str format, 
         PP_context ctx, 
-        PPBOX_Callback callback)
+        JUST_Callback callback)
     {
         return dispatch().async_open(handle, playlink, format, ctx, callback);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchGetMediaInfo(
+    JUST_DECL PP_err JUST_DispatchGetMediaInfo(
         PP_handle handle, 
-        PPBOX_MediaInfo * info)
+        JUST_MediaInfo * info)
     {
         return dispatch().get_media_info(handle, *info);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchGetStreamInfo(
+    JUST_DECL PP_err JUST_DispatchGetStreamInfo(
         PP_handle handle, 
         PP_uint * num, 
-        PPBOX_StreamInfo * info)
+        JUST_StreamInfo * info)
     {
         return dispatch().get_stream_info(handle, *num, info);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchSeek(
+    JUST_DECL PP_err JUST_DispatchSeek(
         PP_handle handle, 
         PP_uint type, 
         PP_ulong pos)
@@ -391,46 +391,46 @@ extern "C" {
         return dispatch().seek(handle, type, pos);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchRead(
+    JUST_DECL PP_err JUST_DispatchRead(
         PP_handle handle, 
-        PPBOX_Sample * sample)
+        JUST_Sample * sample)
     {
         return dispatch().read(handle, *sample);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchPause(
+    JUST_DECL PP_err JUST_DispatchPause(
         PP_handle handle)
     {
         return dispatch().pause(handle);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchResume(
+    JUST_DECL PP_err JUST_DispatchResume(
         PP_handle handle)
     {
         return dispatch().resume(handle);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchClose(
+    JUST_DECL PP_err JUST_DispatchClose(
         PP_handle handle)
     {
         return dispatch().close(handle);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchGetStreamStatus(
+    JUST_DECL PP_err JUST_DispatchGetStreamStatus(
         PP_handle handle, 
-        PPBOX_StreamStatus * status)
+        JUST_StreamStatus * status)
     {
         return dispatch().get_stream_status(handle, *status);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchGetDataStat(
+    JUST_DECL PP_err JUST_DispatchGetDataStat(
         PP_handle handle, 
-        PPBOX_DataStat * stat)
+        JUST_DataStat * stat)
     {
         return dispatch().get_data_stat(handle, *stat);
     }
 
-    PPBOX_DECL PP_err PPBOX_DispatchDestroy(
+    JUST_DECL PP_err JUST_DispatchDestroy(
         PP_handle handle)
     {
         return dispatch().destroy(handle);

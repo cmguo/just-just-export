@@ -1,46 +1,46 @@
 // Version.h
 
-#ifndef _PPBOX_PPBOX_VERSION_H_
-#define _PPBOX_PPBOX_VERSION_H_
+#ifndef _JUST_JUST_VERSION_H_
+#define _JUST_JUST_VERSION_H_
 
-#include "ppbox/ppbox/Define.h"
+#include "just/just/Define.h"
 
 #include <framework/system/AutoVersion.h>
 /*
-#include <ppbox/common/Version.h>
-#include <ppbox/data/Version.h>
-#include <ppbox/avformat/Version.h>
-#ifndef PPBOX_DISABLE_DEMUX
-#  include <ppbox/demux/Version.h>
+#include <just/common/Version.h>
+#include <just/data/Version.h>
+#include <just/avformat/Version.h>
+#ifndef JUST_DISABLE_DEMUX
+#  include <just/demux/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_MUX
-#  include <ppbox/mux/Version.h>
+#ifndef JUST_DISABLE_MUX
+#  include <just/mux/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_MERGE
-#  include <ppbox/merge/Version.h>
+#ifndef JUST_DISABLE_MERGE
+#  include <just/merge/Version.h>
 #endif
-#include <ppbox/cdn/Version.h>
-#ifndef PPBOX_DISABLE_LIVE
-#  include <ppbox/live/Version.h>
+#include <just/cdn/Version.h>
+#ifndef JUST_DISABLE_LIVE
+#  include <just/live/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_PEER
-#  include <ppbox/peer/Version.h>
+#ifndef JUST_DISABLE_PEER
+#  include <just/peer/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_CERTIFY
-#  include <ppbox/certify/Version.h>
+#ifndef JUST_DISABLE_CERTIFY
+#  include <just/certify/Version.h>
 #endif
-#include <ppbox/demux/Version.h>
-#ifndef PPBOX_DISABLE_DAC
-#  include <ppbox/dac/Version.h>
+#include <just/demux/Version.h>
+#ifndef JUST_DISABLE_DAC
+#  include <just/dac/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_DOWNLOAD
-#  include <ppbox/download/Version.h>
+#ifndef JUST_DISABLE_DOWNLOAD
+#  include <just/download/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_HTTPD
-#  include <ppbox/httpd/Version.h>
+#ifndef JUST_DISABLE_HTTPD
+#  include <just/httpd/Version.h>
 #endif
-#ifndef PPBOX_DISABLE_RTSPD
-#  include <ppbox/rtspd/Version.h>
+#ifndef JUST_DISABLE_RTSPD
+#  include <just/rtspd/Version.h>
 #endif
 */
-#endif // _PPBOX_PPBOX_VERSION_H_
+#endif // _JUST_JUST_VERSION_H_

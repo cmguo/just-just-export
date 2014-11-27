@@ -1,9 +1,9 @@
 // Error.h
 
-#ifndef _PPBOX_PPBOX_ERROR_H_
-#define _PPBOX_PPBOX_ERROR_H_
+#ifndef _JUST_JUST_ERROR_H_
+#define _JUST_JUST_ERROR_H_
 
-namespace ppbox
+namespace just
 {
 
     namespace error {
@@ -34,7 +34,7 @@ namespace ppbox
             public:
                 const char* name() const
                 {
-                    return "ppbox/ppbox";
+                    return "just/just";
                 }
 
                 std::string message(int value) const
@@ -42,30 +42,30 @@ namespace ppbox
                     if (value == success)
                         return "Everything is ok";
                     if (value == not_start)
-                        return "PPBOX has not started";
+                        return "JUST has not started";
                     if (value == already_start)
-                        return "PPBOX has already started";
+                        return "JUST has already started";
                     if (value == not_open)
-                        return "PPBOX has not opened";
+                        return "JUST has not opened";
                     if (value == already_open)
-                        return "PPBOX has already opened";
+                        return "JUST has already opened";
                     if (value == operation_canceled)
-                        return "PPBOX operation canceled";
+                        return "JUST operation canceled";
                     if (value == would_block)
-                        return "PPBOX stream would block";
+                        return "JUST stream would block";
                     if (value == stream_end)
-                        return "PPBOX stream end";
+                        return "JUST stream end";
                     if (value == logic_error)
-                        return "PPBOX logic error";
+                        return "JUST logic error";
                     if (value == network_error)
-                        return "PPBOX network error";
+                        return "JUST network error";
                     if (value == demux_error)
-                        return "PPBOX demux error";
+                        return "JUST demux error";
                     if (value == certify_error)
-                        return "PPBOX certify error";
+                        return "JUST certify error";
                     if (value == download_error)
-                        return "PPBOX download error";
-                    return "PPBOX error";
+                        return "JUST download error";
+                    return "JUST error";
                 }
             };
 
@@ -77,7 +77,7 @@ namespace ppbox
             return instance;
         }
 
-        static boost::system::error_category const & ppbox_category = get_category();
+        static boost::system::error_category const & just_category = get_category();
 
         inline boost::system::error_code make_error_code(
             errors e)
@@ -113,7 +113,7 @@ namespace ppbox
 
     } // namespace error
 
-} // namespace ppbox
+} // namespace just
 
 namespace boost
 {
@@ -121,16 +121,16 @@ namespace boost
     {
 
         template<>
-        struct is_error_code_enum<ppbox::error::errors>
+        struct is_error_code_enum<just::error::errors>
         {
             BOOST_STATIC_CONSTANT(bool, value = true);
         };
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-        using ppbox::error::make_error_code;
+        using just::error::make_error_code;
 #endif
 
     }
 }
 
-#endif // _PPBOX_PPBOX_ERROR_H_
+#endif // _JUST_JUST_ERROR_H_

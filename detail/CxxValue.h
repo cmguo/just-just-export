@@ -1,11 +1,11 @@
 // CxxValue.h
 
-#ifndef _PPBOX_PPBOX_DETAIL_CXX_VALUE_H_
-#define _PPBOX_PPBOX_DETAIL_CXX_VALUE_H_
+#ifndef _JUST_JUST_DETAIL_CXX_VALUE_H_
+#define _JUST_JUST_DETAIL_CXX_VALUE_H_
 
-#include "ppbox/ppbox/detail/CxxTypeBind.h"
+#include "just/just/detail/CxxTypeBind.h"
 
-namespace ppbox
+namespace just
 {
 
     template <
@@ -162,6 +162,6 @@ namespace ppbox
         cT const c_;
     };
 
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_DETAIL_CXX_VALUE_H_
+#endif // _JUST_JUST_DETAIL_CXX_VALUE_H_

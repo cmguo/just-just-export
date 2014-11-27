@@ -1,21 +1,21 @@
 // IBlob.h
 
-#ifndef _PPBOX_PPBOX_I_BLOB_H_
-#define _PPBOX_PPBOX_I_BLOB_H_
+#ifndef _JUST_JUST_I_BLOB_H_
+#define _JUST_JUST_I_BLOB_H_
 
 #include "IPpboxTypes.h"
 #include "IFormat.h"
 
-PPBOX_FUNC_3(PP_err, PPBOX_InsertBlob, (
+JUST_FUNC_3(PP_err, JUST_InsertBlob, (
     (PP_str, key), 
-    (PPBOX_ConstBuffer  const *, blob), 
+    (JUST_ConstBuffer  const *, blob), 
     (PP_bool, remove_on_get)));
 
-PPBOX_FUNC_2(PP_err, PPBOX_GetBlob, (
+JUST_FUNC_2(PP_err, JUST_GetBlob, (
     (PP_str, key), 
-    (PPBOX_ConstBuffer  *, blob)));
+    (JUST_ConstBuffer  *, blob)));
 
-PPBOX_FUNC_1(PP_err, PPBOX_RemoveBlob, (
+JUST_FUNC_1(PP_err, JUST_RemoveBlob, (
     (PP_str, key)));
 
-#endif // _PPBOX_PPBOX_I_BLOB_H_
+#endif // _JUST_JUST_I_BLOB_H_

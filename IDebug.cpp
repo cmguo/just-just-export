@@ -1,7 +1,7 @@
 // IDebug.cpp
 
-#include "ppbox/ppbox/Common.h"
-#include <ppbox/common/Debuger.h>
+#include "just/just/Common.h"
+#include <just/common/Debuger.h>
 
 #include <framework/process/MessageQueue.h>
 #include <framework/process/Process.h>
@@ -10,16 +10,16 @@ using namespace framework::process;
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDebug", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IDebug", framework::logger::Debug);
 
-namespace ppbox
+namespace just
 {
 
     class IDebug
     {
     public:
         IDebug()
-            : debuger_(util::daemon::use_module<ppbox::common::Debuger>(global_daemon()))
+            : debuger_(util::daemon::use_module<just::common::Debuger>(global_daemon()))
         {
 
         }
@@ -28,11 +28,11 @@ namespace ppbox
             PP_bool mode)
         {
             debuger_.change_debug_mode(mode);
-            return ppbox_success;
+            return just_success;
         }
 
         PP_uint get_debug_msg(
-            PPBOX_DebugMessage * vector, 
+            JUST_DebugMessage * vector, 
             PP_uint size, 
             PP_str module, 
             PP_uint level)
@@ -53,40 +53,40 @@ namespace ppbox
         }
 
         PP_err set_log_hook(
-            PPBOX_LogHook callback,
+            JUST_LogHook callback,
             boost::uint32_t level)
         {
             debuger_.set_log_hook(
-                ( ppbox::common::Debuger::on_logdump_type )(callback), level);
-            return ppbox_success;
+                ( just::common::Debuger::on_logdump_type )(callback), level);
+            return just_success;
         }
 
     private:
-        ppbox::common::Debuger & debuger_;
+        just::common::Debuger & debuger_;
     };
 
 }
 
-static ppbox::IDebug & debug()
+static just::IDebug & debug()
 {
-    static ppbox::IDebug the_debug;
+    static just::IDebug the_debug;
     return the_debug;
 }
 
-using namespace ppbox;
+using namespace just;
 
 #if __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_err PPBOX_ChangeDebugMode(
+    JUST_DECL PP_err JUST_ChangeDebugMode(
         bool mode)
     {
         return debug().change_debug_mode(mode);
     }
 
-    PPBOX_DECL PP_uint PPBOX_GetDebugMessage(
-        PPBOX_DebugMessage * vector, 
+    JUST_DECL PP_uint JUST_GetDebugMessage(
+        JUST_DebugMessage * vector, 
         PP_uint size, 
         PP_str module, 
         PP_uint level)
@@ -94,8 +94,8 @@ extern "C" {
         return debug().get_debug_msg(vector, size, module, level);
     }
 
-    PPBOX_DECL PP_err PPBOX_SetLogHook(
-        PPBOX_LogHook hook,
+    JUST_DECL PP_err JUST_SetLogHook(
+        JUST_LogHook hook,
         PP_uint level)
     {
         return debug().set_log_hook(hook, level);

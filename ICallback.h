@@ -1,27 +1,27 @@
 // ICallback.h
 
-#ifndef _PPBOX_PPBOX_I_CALLBACK_H_
-#define _PPBOX_PPBOX_I_CALLBACK_H_
+#ifndef _JUST_JUST_I_CALLBACK_H_
+#define _JUST_JUST_I_CALLBACK_H_
 
 #include "IPpboxTypes.h"
 
 #include <stdarg.h>
 
-PPBOX_CALLBACK_4(void, PPBOX_CallbackRedirect, (PP_context, PP_handle, void *, va_list));
+JUST_CALLBACK_4(void, JUST_CallbackRedirect, (PP_context, PP_handle, void *, va_list));
 
-PPBOX_CALLBACK_1(void, PPBOX_CallbackFree, (PP_context));
+JUST_CALLBACK_1(void, JUST_CallbackFree, (PP_context));
 
-PPBOX_FUNC_3(PP_err, PPBOX_RedirectCallback, (
-    (PPBOX_CallbackRedirect, redirect), 
-    (PPBOX_CallbackFree, free), 
+JUST_FUNC_3(PP_err, JUST_RedirectCallback, (
+    (JUST_CallbackRedirect, redirect), 
+    (JUST_CallbackFree, free), 
     (PP_context, user_data)));
 
-PPBOX_FUNC_3(PP_handle, PPBOX_ScheduleCallback, (
+JUST_FUNC_3(PP_handle, JUST_ScheduleCallback, (
     (PP_uint, delay), 
     (PP_context, user_data), 
-    (PPBOX_Callback, callback)));
+    (JUST_Callback, callback)));
 
-PPBOX_FUNC_1(PP_err, PPBOX_CancelCallback, (
+JUST_FUNC_1(PP_err, JUST_CancelCallback, (
     (PP_handle, handle)));
 
-#endif // _PPBOX_PPBOX_I_CALLBACK_H_
+#endif // _JUST_JUST_I_CALLBACK_H_

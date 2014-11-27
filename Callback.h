@@ -1,19 +1,19 @@
 // Callback.h
 
-#ifndef _PPBOX_PPBOX_CALLBACK_H_
-#define _PPBOX_PPBOX_CALLBACK_H_
+#ifndef _JUST_JUST_CALLBACK_H_
+#define _JUST_JUST_CALLBACK_H_
 
-#include <ppbox/common/RedirectCall.h>
+#include <just/common/RedirectCall.h>
 
-namespace ppbox
+namespace just
 {
 
-    inline ppbox::common::RedirectCall & redirect_call()
+    inline just::common::RedirectCall & redirect_call()
     {
-        static ppbox::common::RedirectCall g_redirect_call;
+        static just::common::RedirectCall g_redirect_call;
         return g_redirect_call;
     }
 
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_CALLBACK_H_
+#endif // _JUST_JUST_CALLBACK_H_

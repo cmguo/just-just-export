@@ -1,24 +1,24 @@
 // CxxValueUrl.h
 
-#ifndef _PPBOX_PPBOX_DETAIL_CXX_VALUE_URL_H_
-#define _PPBOX_PPBOX_DETAIL_CXX_VALUE_URL_H_
+#ifndef _JUST_JUST_DETAIL_CXX_VALUE_URL_H_
+#define _JUST_JUST_DETAIL_CXX_VALUE_URL_H_
 
-#include "ppbox/ppbox/detail/CxxTypeBind.h"
+#include "just/just/detail/CxxTypeBind.h"
 
 #include <framework/string/Url.h>
 
-namespace ppbox
+namespace just
 {
 
     struct url_holder
-        : PPBOX_Url
+        : JUST_Url
     {
     public:
         url_holder(
             framework::string::Url const & url)
             : str_(url.to_string())
         {
-            PPBOX_Url::str = str_.c_str();
+            JUST_Url::str = str_.c_str();
         }
 
     protected:
@@ -26,9 +26,9 @@ namespace ppbox
     };
 
     template <>
-    struct TypeBind<PPBOX_Url>
+    struct TypeBind<JUST_Url>
     {
-        typedef PPBOX_Url ctype_t;
+        typedef JUST_Url ctype_t;
         typedef framework::string::Url xtype_t;
 
         static xtype_t c2x(ctype_t c)
@@ -43,9 +43,9 @@ namespace ppbox
 
     protected:
         xtype_t x_;
-        PPBOX_Url c_;
+        JUST_Url c_;
     };
     
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_DETAIL_CXX_VALUE_URL_H_
+#endif // _JUST_JUST_DETAIL_CXX_VALUE_URL_H_

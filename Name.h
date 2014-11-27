@@ -1,10 +1,10 @@
 // Name.h
 
-#ifndef _PPBOX_PPBOX_NAME_H_
-#define _PPBOX_PPBOX_NAME_H_
+#ifndef _JUST_JUST_NAME_H_
+#define _JUST_JUST_NAME_H_
 
 #include "Define.h"
 
 #include <framework/system/AutoName.h>
 
-#endif // _PPBOX_PPBOX_NAME_H_
+#endif // _JUST_JUST_NAME_H_

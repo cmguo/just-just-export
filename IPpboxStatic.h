@@ -1,8 +1,8 @@
-// ppbox_static.h
+// just_static.h
 
-#ifndef _PLUGINS_PPBOX_PPBOX_STATIC_H_
-#define _PLUGINS_PPBOX_PPBOX_STATIC_H_
+#ifndef _PLUGINS_JUST_JUST_STATIC_H_
+#define _PLUGINS_JUST_JUST_STATIC_H_
 
 #include "IPpbox.h"
 
-#endif // _PLUGINS_PPBOX_PPBOX_STATIC_H_
+#endif // _PLUGINS_JUST_JUST_STATIC_H_

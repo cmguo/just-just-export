@@ -1,19 +1,19 @@
 // Common.h
 
-#include <ppbox/common/Common.h>
+#include <just/common/Common.h>
 
-#include "ppbox/ppbox/Error.h"
+#include "just/just/Error.h"
 
-namespace ppbox
+namespace just
 {
     util::daemon::Daemon & global_daemon();
 }
 
 #ifdef BOOST_HAS_DECLSPEC
-#  define PPBOX_DECL __declspec(dllexport)
+#  define JUST_DECL __declspec(dllexport)
 #else
-#  define PPBOX_DECL __attribute__ ((visibility("default")))
+#  define JUST_DECL __attribute__ ((visibility("default")))
 #endif
 
-#include "ppbox/ppbox/IPpboxBoostTypes.h"
-#include "ppbox/ppbox/IPpbox.h"
+#include "just/just/IPpboxBoostTypes.h"
+#include "just/just/IPpbox.h"

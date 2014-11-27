@@ -1,27 +1,27 @@
 // ICapture.cpp
 
-#include "ppbox/ppbox/Common.h"
-#include "ppbox/ppbox/ICapture.h"
-#include "ppbox/ppbox/Callback.h"
-using namespace ppbox::error;
+#include "just/just/Common.h"
+#include "just/just/ICapture.h"
+#include "just/just/Callback.h"
+using namespace just::error;
 
-#include <ppbox/capture/CaptureModule.h>
-#include <ppbox/capture/CaptureSource.h>
-using namespace ppbox::capture;
+#include <just/capture/CaptureModule.h>
+#include <just/capture/CaptureSource.h>
+using namespace just::capture;
 
-#include <ppbox/download/DownloadModule.h>
-using namespace ppbox::download;
+#include <just/download/DownloadModule.h>
+using namespace just::download;
 
 #include <boost/bind.hpp>
 using namespace boost::system;
 
-#ifndef PPBOX_DISABLE_CAPTURE
+#ifndef JUST_DISABLE_CAPTURE
 
-namespace ppbox
+namespace just
 {
 
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
-    static PPBOX_CaptureConfigData s_config;
+#ifdef JUST_ENABLE_REDIRECT_CALLBACK
+    static JUST_CaptureConfigData s_config;
 #endif
 
     class ICapture
@@ -72,10 +72,10 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifdef JUST_ENABLE_REDIRECT_CALLBACK
         static bool redirect_get_sample_buffers(
             PP_context context, 
-            PPBOX_ConstBuffer * buffers)
+            JUST_ConstBuffer * buffers)
         {
             return redirect_call().call(s_config.get_sample_buffers, context, buffers);
         }
@@ -89,14 +89,14 @@ namespace ppbox
 
         PP_err init(
             PP_handle handle, 
-            PPBOX_CaptureConfigData const & config)
+            JUST_CaptureConfigData const & config)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
             CaptureConfigData data;
             data.stream_count = config.stream_count;
             data.flags = config.flags;
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifndef JUST_ENABLE_REDIRECT_CALLBACK
             data.get_sample_buffers = (bool (*)(void const *, CaptureBuffer *))config.get_sample_buffers;
             data.free_sample = config.free_sample;
 #else
@@ -111,7 +111,7 @@ namespace ppbox
         PP_err set_stream(
             PP_handle handle, 
             PP_uint index, 
-		    PPBOX_StreamInfo const & stream)
+		    JUST_StreamInfo const & stream)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
@@ -124,12 +124,12 @@ namespace ppbox
             data.format_type = stream.format_type;
             switch (stream.type)
             {
-            case PPBOX_StreamType::VIDE:
+            case JUST_StreamType::VIDE:
                 data.video_format.width = stream.format.video.width;
                 data.video_format.height = stream.format.video.height;
                 data.video_format.frame_rate(stream.format.video.frame_rate_num, stream.format.video.frame_rate_den);
                 break;
-            case PPBOX_StreamType::AUDI:
+            case JUST_StreamType::AUDI:
                 data.audio_format.channel_count = stream.format.audio.channel_count;
                 data.audio_format.sample_size = stream.format.audio.sample_size;
                 data.audio_format.sample_rate = stream.format.audio.sample_rate;
@@ -146,7 +146,7 @@ namespace ppbox
 
         PP_err put_sample(
             PP_handle handle, 
-		    PPBOX_Sample const & sample)
+		    JUST_Sample const & sample)
         {
             error_code ec;
             CaptureSource * capture = (CaptureSource *)handle;
@@ -167,7 +167,7 @@ namespace ppbox
             char const * title, 
             error_code const & ec)
         {
-            ppbox::error::last_error(ec);
+            just::error::last_error(ec);
             return async_last_error(title, ec);
         }
 
@@ -178,7 +178,7 @@ namespace ppbox
             if (ec && ec != boost::asio::error::would_block) {
                 std::cout << title << ": " << ec.message() << std::endl;
             }
-            return ppbox::error::last_error_enum(ec);
+            return just::error::last_error_enum(ec);
         }
 
     private:
@@ -188,9 +188,9 @@ namespace ppbox
 
 }
 
-static ppbox::ICapture & capture()
+static just::ICapture & capture()
 {
-    static ppbox::ICapture the_capture;
+    static just::ICapture the_capture;
     return the_capture;
 }
 
@@ -200,7 +200,7 @@ extern "C" {
 
 
     //打开一个下载用例
-    PPBOX_DECL PP_handle PPBOX_CaptureCreate(
+    JUST_DECL PP_handle JUST_CaptureCreate(
         PP_str name, 
         PP_str dest)
     {
@@ -208,30 +208,30 @@ extern "C" {
     }
 
     // 获取指定下载用例的实时统计信息
-    PPBOX_DECL PP_err PPBOX_CaptureInit(
+    JUST_DECL PP_err JUST_CaptureInit(
         PP_handle handle,
-        PPBOX_CaptureConfigData const * config)
+        JUST_CaptureConfigData const * config)
     {
         return capture().init(handle, *config);
     }
 
-    PPBOX_DECL PP_err PPBOX_CaptureSetStream(
+    JUST_DECL PP_err JUST_CaptureSetStream(
         PP_handle handle, 
         PP_uint index, 
-		PPBOX_StreamInfo const * stream)
+		JUST_StreamInfo const * stream)
     {
         return capture().set_stream(handle, index, *stream);
     }
 
-    PPBOX_DECL PP_err PPBOX_CapturePutSample(
+    JUST_DECL PP_err JUST_CapturePutSample(
         PP_handle handle, 
-		PPBOX_Sample const * sample)
+		JUST_Sample const * sample)
     {
         return capture().put_sample(handle, *sample);
     }
 
     //关闭指定的下载用例
-    PPBOX_DECL PP_err PPBOX_CaptureDestroy(
+    JUST_DECL PP_err JUST_CaptureDestroy(
         PP_handle handle)
     {
         return capture().destroy(handle);

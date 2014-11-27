@@ -1,17 +1,17 @@
 // CxxValueError.h
 
-#ifndef _PPBOX_PPBOX_DETAIL_CXX_VALUE_ERROR_H_
-#define _PPBOX_PPBOX_DETAIL_CXX_VALUE_ERROR_H_
+#ifndef _JUST_JUST_DETAIL_CXX_VALUE_ERROR_H_
+#define _JUST_JUST_DETAIL_CXX_VALUE_ERROR_H_
 
-#include "ppbox/ppbox/detail/CxxTypeBind.h"
+#include "just/just/detail/CxxTypeBind.h"
 
-namespace ppbox
+namespace just
 {
 
     template <>
-    struct TypeBind<PPBOX_Error>
+    struct TypeBind<JUST_Error>
     {
-        typedef PPBOX_Error ctype_t;
+        typedef JUST_Error ctype_t;
         typedef boost::system::error_code xtype_t;
 
         static xtype_t c2x(ctype_t c)
@@ -27,6 +27,6 @@ namespace ppbox
         }
     };
     
-} // namespace ppbox
+} // namespace just
 
-#endif // _PPBOX_PPBOX_DETAIL_CXX_VALUE_ERROR_H_
+#endif // _JUST_JUST_DETAIL_CXX_VALUE_ERROR_H_

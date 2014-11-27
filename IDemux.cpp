@@ -1,21 +1,21 @@
 // IDemux.cpp
 
-#include "ppbox/ppbox/Common.h"
-#include "ppbox/ppbox/Callback.h"
+#include "just/just/Common.h"
+#include "just/just/Callback.h"
 
-#include <ppbox/demux/DemuxModule.h>
-#include <ppbox/demux/base/DemuxerBase.h>
-#include <ppbox/demux/base/DemuxError.h>
-#include <ppbox/mux/MuxModule.h>
-#include <ppbox/mux/MuxerBase.h>
-#include <ppbox/data/base/Error.h>
-#include <ppbox/data/base/DataStat.h>
-#include <ppbox/avbase/MediaInfo.h>
-#include <ppbox/avbase/StreamStatus.h>
-using namespace ppbox::data;
-using namespace ppbox::demux;
-using namespace ppbox::mux;
-using namespace ppbox::avbase;
+#include <just/demux/DemuxModule.h>
+#include <just/demux/base/DemuxerBase.h>
+#include <just/demux/base/DemuxError.h>
+#include <just/mux/MuxModule.h>
+#include <just/mux/MuxerBase.h>
+#include <just/data/base/Error.h>
+#include <just/data/base/DataStat.h>
+#include <just/avbase/MediaInfo.h>
+#include <just/avbase/StreamStatus.h>
+using namespace just::data;
+using namespace just::demux;
+using namespace just::mux;
+using namespace just::avbase;
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
@@ -30,9 +30,9 @@ using namespace boost::system;
 
 extern void pool_dump();
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IDemux", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IDemux", framework::logger::Debug);
 
-namespace ppbox
+namespace just
 {
 
     class IDemux
@@ -105,7 +105,7 @@ namespace ppbox
             error_code ec;
             boost::mutex::scoped_lock lock(mutex_);
             if (cache_) {
-                ec = ppbox::error::already_open;
+                ec = just::error::already_open;
             } else {
                 boost::shared_ptr<Cache> cache(new Cache);
                 cache_ = cache;
@@ -133,9 +133,9 @@ namespace ppbox
             return last_error(__FUNCTION__, ec);
         }
 
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifdef JUST_ENABLE_REDIRECT_CALLBACK
         static void redirect_open_callback(
-            PPBOX_Open_Callback callback, 
+            JUST_Open_Callback callback, 
             PP_err ec)
         {
             redirect_call().call(callback, ec);
@@ -144,19 +144,19 @@ namespace ppbox
 
         PP_err async_open(
             PP_str playlink, 
-            PPBOX_Open_Callback callback)
+            JUST_Open_Callback callback)
         {
             return async_open(playlink, "format=raw", 
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifndef JUST_ENABLE_REDIRECT_CALLBACK
                 boost::bind(callback, _1));
 #else
                 boost::bind(redirect_open_callback, callback, _1));
 #endif
         }
 
-#ifdef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifdef JUST_ENABLE_REDIRECT_CALLBACK
         static void redirect_open_ex_callback(
-            PPBOX_Callback callback, 
+            JUST_Callback callback, 
             PP_context user_data, 
             PP_err ec)
         {
@@ -168,10 +168,10 @@ namespace ppbox
             PP_str playlink, 
             PP_str format, 
 			PP_context user_data, 
-            PPBOX_Callback callback)
+            JUST_Callback callback)
         {
             return async_open(playlink, format, 
-#ifndef PPBOX_ENABLE_REDIRECT_CALLBACK
+#ifndef JUST_ENABLE_REDIRECT_CALLBACK
                 boost::bind(callback, user_data, _1));
 #else
                 boost::bind(redirect_open_ex_callback, callback, user_data, _1));
@@ -189,7 +189,7 @@ namespace ppbox
             error_code ec;
             boost::mutex::scoped_lock lock(mutex_);
             if (cache_) {
-                ec = ppbox::error::already_open;
+                ec = just::error::already_open;
             } else {
                 cache_.reset(new Cache);
                 framework::string::Url play_link(playlink);
@@ -205,7 +205,7 @@ namespace ppbox
 				global_daemon().io_svc().post(
 					boost::bind(callback, async_last_error(__FUNCTION__, ec)));
             }
-            return ppbox_success;
+            return just_success;
         }
 
         void open_call_back(
@@ -237,7 +237,7 @@ namespace ppbox
                 ec.clear();
                 return true;
             } else {
-                ec = ppbox::error::not_open;
+                ec = just::error::not_open;
                 return false;
             }
         }
@@ -309,7 +309,7 @@ namespace ppbox
                 }
                 cache_.reset();
             } else {
-                ec = ppbox::error::not_open;
+                ec = just::error::not_open;
             }
             return last_error(__FUNCTION__, ec);
         }
@@ -326,7 +326,7 @@ namespace ppbox
 
         PP_err get_stream_info(
             PP_uint index,
-            PPBOX_StreamInfo & info)
+            JUST_StreamInfo & info)
         {
             error_code ec;
             if (!is_open(ec)) {
@@ -362,7 +362,7 @@ namespace ppbox
         {
             error_code ec;
             if (is_open(ec)) {
-                ppbox::data::MediaInfo info;
+                just::data::MediaInfo info;
                 cache_->demuxer->get_media_info(info, ec);
                 duration = ec ? 0 : (boost::uint32_t)info.duration;
             }
@@ -370,7 +370,7 @@ namespace ppbox
         }
 
         PP_err read_sample(
-            PPBOX_Sample & sample)
+            JUST_Sample & sample)
         {
             error_code ec;
             if (is_open(ec)) {
@@ -393,39 +393,39 @@ namespace ppbox
         }
 
         PP_err get_play_stat(
-            PPBOX_PlayStatistic & stat)
+            JUST_PlayStatistic & stat)
         {
             error_code ec;
             if (!is_open(ec)) {
                 stat.buffer_time = 0;
                 stat.buffering_present = 0;
                 if (ec == boost::asio::error::would_block) {
-                    stat.play_status = cache_->paused ? PPBOX_PlayStatus::paused : PPBOX_PlayStatus::buffering;
+                    stat.play_status = cache_->paused ? JUST_PlayStatus::paused : JUST_PlayStatus::buffering;
                 } else {
-                    stat.play_status = PPBOX_PlayStatus::closed;
+                    stat.play_status = JUST_PlayStatus::closed;
                 }
             } else {
                 cache_->demuxer->fill_data(ec);
                 StreamStatus status;
                 cache_->demuxer->get_stream_status(status, ec);
                 if (ec && ec != boost::asio::error::would_block) {
-                    stat.play_status = PPBOX_PlayStatus::closed;
+                    stat.play_status = JUST_PlayStatus::closed;
                 } else {
                     stat.buffer_time = (boost::uint32_t)(status.time_range.buf - status.time_range.pos);
                     if (stat.buffer_time >= buffer_time_ 
                         || status.buf_ec == boost::asio::error::eof
-                        || status.buf_ec == ppbox::data::error::no_more_segment) {
+                        || status.buf_ec == just::data::error::no_more_segment) {
                             stat.buffering_present = 100;
-                            stat.play_status = PPBOX_PlayStatus::playing;
+                            stat.play_status = JUST_PlayStatus::playing;
                     } else if (buffer_time_ != 0) {
                         stat.buffering_present = stat.buffer_time * 100 / buffer_time_;
-                        stat.play_status = PPBOX_PlayStatus::buffering;
+                        stat.play_status = JUST_PlayStatus::buffering;
                     }
                     if (cache_->paused) {
-                        stat.play_status = PPBOX_PlayStatus::paused;
+                        stat.play_status = JUST_PlayStatus::paused;
                     }
                     // 在缓冲状态，缓冲的错误码更有参考意义
-                    if (stat.play_status == PPBOX_PlayStatus::buffering) {
+                    if (stat.play_status == JUST_PlayStatus::buffering) {
                         ec = status.buf_ec;
                     }
                 }
@@ -434,7 +434,7 @@ namespace ppbox
         }
 
         PP_err get_data_stat(
-            PPBOX_DataStat & stat)
+            JUST_DataStat & stat)
         {
             error_code ec;
             if (cache_ && cache_->demuxer) {
@@ -476,14 +476,14 @@ namespace ppbox
             if (ec && ec != boost::asio::error::would_block) {
                 LOG_WARN(log_title << ": " << ec.message());
             }
-            return ppbox::error::last_error_enum(ec);
+            return just::error::last_error_enum(ec);
         }
 
         static error::errors last_error(
             PP_str title, 
             error_code const & ec)
         {
-            ppbox::error::last_error(ec);
+            just::error::last_error(ec);
             return async_last_error(title, ec);
         }
 
@@ -496,9 +496,9 @@ namespace ppbox
     };
 }
 
-static ppbox::IDemux & demuxer()
+static just::IDemux & demuxer()
 {
-    static ppbox::IDemux the_demuxer;
+    static just::IDemux the_demuxer;
     return the_demuxer;
 }
 
@@ -506,98 +506,98 @@ static ppbox::IDemux & demuxer()
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_err PPBOX_Open(
+    JUST_DECL PP_err JUST_Open(
         PP_str playlink)
     {
         return demuxer().open(playlink);
     }
 
-    PPBOX_DECL PP_err PPBOX_AsyncOpen(
+    JUST_DECL PP_err JUST_AsyncOpen(
         PP_str playlink, 
-        PPBOX_Open_Callback callback)
+        JUST_Open_Callback callback)
     {
         return demuxer().async_open(playlink, callback);
     }
 
-    PPBOX_DECL PP_err PPBOX_OpenEx(
+    JUST_DECL PP_err JUST_OpenEx(
         PP_str playlink, 
         PP_str format)
     {
         return demuxer().open_ex(playlink, format);
     }
 
-    PPBOX_DECL PP_err PPBOX_AsyncOpenEx(
+    JUST_DECL PP_err JUST_AsyncOpenEx(
         PP_str playlink, 
         PP_str format, 
 		PP_context user_data, 
-        PPBOX_Callback callback)
+        JUST_Callback callback)
     {
         return demuxer().async_open_ex(playlink, format, user_data, callback);
     }
 
-    PPBOX_DECL PP_uint PPBOX_GetStreamCount()
+    JUST_DECL PP_uint JUST_GetStreamCount()
     {
         PP_uint n = 0;
         demuxer().get_stream_count(n);
         return n;
     }
 
-    PPBOX_DECL PP_err PPBOX_GetStreamInfo(
+    JUST_DECL PP_err JUST_GetStreamInfo(
         PP_uint index, 
-        PPBOX_StreamInfo * stream_info)
+        JUST_StreamInfo * stream_info)
     {
         return demuxer().get_stream_info(index, *stream_info);
     }
 
-    PPBOX_DECL PP_uint PPBOX_GetDuration()
+    JUST_DECL PP_uint JUST_GetDuration()
     {
         PP_uint n = 0;
         demuxer().get_duration(n);
         return n;
     }
 
-    PPBOX_DECL PP_err PPBOX_Seek(
+    JUST_DECL PP_err JUST_Seek(
         PP_uint start_time)
     {
         return demuxer().seek(start_time);
     }
 
-    PPBOX_DECL PP_err PPBOX_ReadSample(
-        PPBOX_Sample * sample)
+    JUST_DECL PP_err JUST_ReadSample(
+        JUST_Sample * sample)
     {
         return demuxer().read_sample(*sample);
     }
 
-    PPBOX_DECL PP_err PPBOX_Close()
+    JUST_DECL PP_err JUST_Close()
     {
         return demuxer().close();
     }
 
-    PPBOX_DECL PP_err PPBOX_Pause()
+    JUST_DECL PP_err JUST_Pause()
     {
         return demuxer().pause();
     }
 
-    PPBOX_DECL PP_err PPBOX_SetDownloadBufferSize(
+    JUST_DECL PP_err JUST_SetDownloadBufferSize(
         PP_uint length)
     {
         return demuxer().set_download_buffer_size(length);
     }
 
-    PPBOX_DECL PP_err PPBOX_SetPlayBufferTime(
+    JUST_DECL PP_err JUST_SetPlayBufferTime(
         PP_uint time)
     {
         return demuxer().set_play_buffer_time(time);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetPlayStat(
-        PPBOX_PlayStatistic * stat)
+    JUST_DECL PP_err JUST_GetPlayStat(
+        JUST_PlayStatistic * stat)
     {
         return demuxer().get_play_stat(*stat);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetDataStat(
-        PPBOX_DataStat * stat)
+    JUST_DECL PP_err JUST_GetDataStat(
+        JUST_DataStat * stat)
     {
         return demuxer().get_data_stat(*stat);
     }

@@ -1,32 +1,32 @@
 // IBlob.cpp
 
-#include "ppbox/ppbox/Common.h"
-#include "ppbox/ppbox/IBlob.h"
-using namespace ppbox::error;
+#include "just/just/Common.h"
+#include "just/just/IBlob.h"
+using namespace just::error;
 
-#include <ppbox/common/BlobManager.h>
+#include <just/common/BlobManager.h>
 
 #include <framework/logger/Logger.h>
 #include <framework/logger/StreamRecord.h>
 
 using namespace boost::system;
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("ppbox.IBlob", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IBlob", framework::logger::Debug);
 
-namespace ppbox
+namespace just
 {
 
     class IBlob
     {
     public:
         IBlob()
-            : manager_(ppbox::common::blob_manager())
+            : manager_(just::common::blob_manager())
         {
         }
 
         PP_err insert(
             PP_str key, 
-            PPBOX_ConstBuffer const & data, 
+            JUST_ConstBuffer const & data, 
             PP_bool remove_on_get)
         {
             boost::asio::const_buffer data2(data.data, data.len);
@@ -36,7 +36,7 @@ namespace ppbox
 
         PP_err get(
             PP_str key, 
-            PPBOX_ConstBuffer & data)
+            JUST_ConstBuffer & data)
         {
             boost::asio::const_buffer data2;
             error_code ec = manager_.get(key, data2);
@@ -61,19 +61,19 @@ namespace ppbox
             if (ec && ec != boost::asio::error::would_block) {
                 LOG_WARN(log_title << ": " << ec.message());
             }
-            ppbox::error::last_error(ec);
-            return ppbox::error::last_error_enum(ec);
+            just::error::last_error(ec);
+            return just::error::last_error_enum(ec);
         }
 
     private:
-        ppbox::common::BlobManager & manager_;
+        just::common::BlobManager & manager_;
     };
 
-} // namespace ppbox
+} // namespace just
 
-static ppbox::IBlob & blob()
+static just::IBlob & blob()
 {
-    static ppbox::IBlob the_blob;
+    static just::IBlob the_blob;
     return the_blob;
 }
 
@@ -82,22 +82,22 @@ static ppbox::IBlob & blob()
 extern "C" {
 #endif // __cplusplus
 
-    PPBOX_DECL PP_err PPBOX_InsertBlob(
+    JUST_DECL PP_err JUST_InsertBlob(
         PP_str key, 
-        PPBOX_ConstBuffer const * data, 
+        JUST_ConstBuffer const * data, 
         PP_bool remove_on_get)
     {
         return blob().insert(key, *data, remove_on_get);
     }
 
-    PPBOX_DECL PP_err PPBOX_GetBlob(
+    JUST_DECL PP_err JUST_GetBlob(
         PP_str key, 
-        PPBOX_ConstBuffer * data)
+        JUST_ConstBuffer * data)
     {
         return blob().get(key, *data);
     }
 
-    PPBOX_DECL PP_err PPBOX_RemoveBlob(
+    JUST_DECL PP_err JUST_RemoveBlob(
         PP_str key)
     {
         return blob().remove(key);
