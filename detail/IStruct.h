@@ -1,9 +1,9 @@
 // IStruct.h
 
-#ifndef _JUST_JUST_DETAIL_I_STRUCT_H_
-#define _JUST_JUST_DETAIL_I_STRUCT_H_
+#ifndef _JUST_EXPORT_DETAIL_I_STRUCT_H_
+#define _JUST_EXPORT_DETAIL_I_STRUCT_H_
 
-#include "just/just/detail/IPreprocessor.h"
+#include "just/export/detail/IPreprocessor.h"
 
 #define STRUCT_FIELD_TYPE_NAME(i, t, n) t n;
 
@@ -27,4 +27,4 @@
 #  define JUST_STRUCT(name, nf, fields) typedef struct name { STRUCT_FIELDS_TYPE_NAME(nf, fields) } name
 #endif
 
-#endif // _JUST_JUST_DETAIL_I_STRUCT_H_
+#endif // _JUST_EXPORT_DETAIL_I_STRUCT_H_

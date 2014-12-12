@@ -1,8 +1,8 @@
-// IPpbox.cpp
+// IJust.cpp
 
-#include "just/just/Common.h"
-#include "just/just/Version.h"
-#include "just/just/IPpbox.h"
+#include "just/export/Common.h"
+#include "just/export/Version.h"
+#include "just/export/IJust.h"
 using namespace just::error;
 
 #include <just/common/CommonModule.h>
@@ -15,12 +15,12 @@ using namespace just::error;
 #endif
 using namespace just::common;
 
-#include "just/just/Core.h"
-#include "just/just/Input.h"
-#include "just/just/Output.h"
-#include "just/just/Server.h"
-#include "just/just/P2p.h"
-#include "just/just/Callback.h"
+#include "just/export/Core.h"
+#include "just/export/Input.h"
+#include "just/export/Output.h"
+#include "just/export/Server.h"
+#include "just/export/P2p.h"
+#include "just/export/Callback.h"
 
 #include <framework/logger/StreamRecord.h>
 #include <framework/logger/Section.h>
@@ -31,16 +31,16 @@ using namespace framework::logger;
 #include <boost/thread/thread.hpp>
 using namespace boost::system;
 
-FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IPpbox", framework::logger::Debug);
+FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IJust", framework::logger::Debug);
 
 namespace just
 {
 
-    class IPpbox
+    class IJust
         : public util::daemon::Daemon
     {
     public:
-        IPpbox()
+        IJust()
             : util::daemon::Daemon("just.conf")
         {
 
@@ -57,7 +57,7 @@ namespace just
 
             just::common::log_versions();
 
-            std::string just_name = "Ppbox_" + framework::filesystem::bin_file().stem();
+            std::string just_name = "Just_" + framework::filesystem::bin_file().stem();
             just::common::CommonModule & common = 
                 util::daemon::use_module<just::common::CommonModule>(*this, just_name);
             common.set_version(just::version());
@@ -78,7 +78,7 @@ namespace just
 
             p2p_init(*this);
 
-            LOG_INFO("Ppbox ready.");
+            LOG_INFO("Just ready.");
         }
 
         PP_err start_engine(
@@ -209,15 +209,15 @@ namespace just
 
     util::daemon::Daemon & global_daemon()
     {
-        static IPpbox the_just;
+        static IJust the_just;
         return the_just;
     }
 
 }
 
-just::IPpbox & the_just()
+just::IJust & the_just()
 {
-    return static_cast<just::IPpbox &>(just::global_daemon());
+    return static_cast<just::IJust &>(just::global_daemon());
 }
 
 using namespace just;

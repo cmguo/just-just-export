@@ -1,7 +1,7 @@
 // Input.h
 
-#ifndef _JUST_JUST_INPUT_H_
-#define _JUST_JUST_INPUT_H_
+#ifndef _JUST_EXPORT_INPUT_H_
+#define _JUST_EXPORT_INPUT_H_
 
 #ifndef JUST_DISABLE_CAPTURE
 #include <just/capture/CaptureModule.h>
@@ -41,4 +41,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_INPUT_H_
+#endif // _JUST_EXPORT_INPUT_H_

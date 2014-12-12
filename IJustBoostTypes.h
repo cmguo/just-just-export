@@ -1,7 +1,7 @@
-// IPpboxBoostTypes.h
+// IJustBoostTypes.h
 
-#ifndef _JUST_JUST_I_JUST_BOOST_TYPES_H_
-#define _JUST_JUST_I_JUST_BOOST_TYPES_H_
+#ifndef _JUST_EXPORT_I_JUST_BOOST_TYPES_H_
+#define _JUST_EXPORT_I_JUST_BOOST_TYPES_H_
 
 #include <boost/cstdint.hpp>
 
@@ -29,4 +29,4 @@ typedef boost::uint32_t PP_uint;
 #define DEFINED_PP_ULONG
 typedef boost::uint64_t PP_ulong;
 
-#endif // _JUST_JUST_I_JUST_BOOST_TYPES_H_
+#endif // _JUST_EXPORT_I_JUST_BOOST_TYPES_H_

@@ -1,9 +1,9 @@
 // IDebug.h
 
-#ifndef _JUST_JUST_I_DEBUG_H_
-#define _JUST_JUST_I_DEBUG_H_
+#ifndef _JUST_EXPORT_I_DEBUG_H_
+#define _JUST_EXPORT_I_DEBUG_H_
 
-#include "IPpboxTypes.h"
+#include "IJustTypes.h"
 
 JUST_FUNC_1(PP_err, JUST_ChangeDebugMode, (
     (PP_bool, mode)));
@@ -34,4 +34,4 @@ JUST_FUNC_2(PP_err, JUST_SetLogHook, (
     (JUST_LogHook, hook),
     (PP_uint, level)));
 
-#endif // _JUST_JUST_I_DEBUG_H_
+#endif // _JUST_EXPORT_I_DEBUG_H_

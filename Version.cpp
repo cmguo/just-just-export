@@ -1,5 +1,5 @@
 // Version.cpp
 
-#include "just/just/Common.h"
+#include "just/export/Common.h"
 #define VERSION_SOURCE
-#include "just/just/Version.h"
+#include "just/export/Version.h"

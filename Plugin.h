@@ -1,9 +1,9 @@
 // Plugin.h
 
-#ifndef _JUST_JUST_PLUGIN_H_
-#define _JUST_JUST_PLUGIN_H_
+#ifndef _JUST_EXPORT_PLUGIN_H_
+#define _JUST_EXPORT_PLUGIN_H_
 
-#include "just/just/IPlugin.h"
+#include "just/export/IPlugin.h"
 
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -63,4 +63,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_PLUGIN_H_
+#endif // _JUST_EXPORT_PLUGIN_H_

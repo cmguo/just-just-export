@@ -1,7 +1,7 @@
 // IBlob.cpp
 
-#include "just/just/Common.h"
-#include "just/just/IBlob.h"
+#include "just/export/Common.h"
+#include "just/export/IBlob.h"
 using namespace just::error;
 
 #include <just/common/BlobManager.h>

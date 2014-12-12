@@ -1,7 +1,7 @@
 // Core.h
 
-#ifndef _JUST_JUST_CORE_H_
-#define _JUST_JUST_CORE_H_
+#ifndef _JUST_EXPORT_CORE_H_
+#define _JUST_EXPORT_CORE_H_
 
 #include <just/data/DataModule.h>
 #include <just/demux/DemuxModule.h>
@@ -22,4 +22,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_CORE_H_
+#endif // _JUST_EXPORT_CORE_H_

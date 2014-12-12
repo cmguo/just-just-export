@@ -1,9 +1,9 @@
 // ICallback.h
 
-#ifndef _JUST_JUST_I_CALLBACK_H_
-#define _JUST_JUST_I_CALLBACK_H_
+#ifndef _JUST_EXPORT_I_CALLBACK_H_
+#define _JUST_EXPORT_I_CALLBACK_H_
 
-#include "IPpboxTypes.h"
+#include "IJustTypes.h"
 
 #include <stdarg.h>
 
@@ -24,4 +24,4 @@ JUST_FUNC_3(PP_handle, JUST_ScheduleCallback, (
 JUST_FUNC_1(PP_err, JUST_CancelCallback, (
     (PP_handle, handle)));
 
-#endif // _JUST_JUST_I_CALLBACK_H_
+#endif // _JUST_EXPORT_I_CALLBACK_H_

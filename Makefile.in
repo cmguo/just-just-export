@@ -16,7 +16,7 @@ PROJECT_VERSION			:=
 
 ## 项目版本定义文件
 
-PROJECT_VERSION_HEADER		:= just/just/Define.h
+PROJECT_VERSION_HEADER		:= just/export/Define.h
 
 ## 指定源文件目录（该项目源文件的总目录，相对于源文件根目录ROOT_SOURCE_DIRECTORY，默认为LOCAL_NAME）
 
@@ -36,7 +36,7 @@ PROJECT_HEADER_DIRECTORY	:= .
 
 ## 项目预编译头文件
 
-PROJECT_COMMON_HEADERS  	:= just/just/Common.h
+PROJECT_COMMON_HEADERS  	:= just/export/Common.h
 
 ## 额外包含目录（多个，相对于包含根目录ROOT_INCLUDE_DIRECTORY）
 
@@ -79,4 +79,4 @@ PROJECT_DEPENDS			:= \
 
 PROJECT_DEPEND_LIBRARYS		:= $(PROJECT_DEPEND_LIBRARYS)
 
-PROJECT_VERSION_SCRIPT		:= Ppbox.map
+PROJECT_VERSION_SCRIPT		:= Just.map

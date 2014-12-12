@@ -1,6 +1,6 @@
 // IDebug.cpp
 
-#include "just/just/Common.h"
+#include "just/export/Common.h"
 #include <just/common/Debuger.h>
 
 #include <framework/process/MessageQueue.h>

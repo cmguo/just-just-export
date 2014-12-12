@@ -1,7 +1,7 @@
 // CxxTypeBind.h
 
-#ifndef _JUST_JUST_DETAIL_CXX_TYPE_BIND_H_
-#define _JUST_JUST_DETAIL_CXX_TYPE_BIND_H_
+#ifndef _JUST_EXPORT_DETAIL_CXX_TYPE_BIND_H_
+#define _JUST_EXPORT_DETAIL_CXX_TYPE_BIND_H_
 
 namespace just
 {
@@ -53,4 +53,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_DETAIL_CXX_TYPE_BIND_H_
+#endif // _JUST_EXPORT_DETAIL_CXX_TYPE_BIND_H_

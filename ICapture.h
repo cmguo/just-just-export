@@ -1,7 +1,7 @@
 // IDemuxer.h
 
-#ifndef _JUST_JUST_I_CAPTURE_H_
-#define _JUST_JUST_I_CAPTURE_H_
+#ifndef _JUST_EXPORT_I_CAPTURE_H_
+#define _JUST_EXPORT_I_CAPTURE_H_
 
 #include "IGeneric.h"
 #include "IFormat.h"
@@ -43,4 +43,4 @@ JUST_FUNC_2(PP_err, JUST_CapturePutSample, (
 JUST_FUNC_1(PP_err, JUST_CaptureDestroy, (
     (PP_handle, handle)));
 
-#endif // _JUST_JUST_I_CAPTURE_H_
+#endif // _JUST_EXPORT_I_CAPTURE_H_

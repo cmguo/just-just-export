@@ -1,9 +1,9 @@
 // IFormat.h
 
-#ifndef _JUST_JUST_I_FORMAT_H_
-#define _JUST_JUST_I_FORMAT_H_
+#ifndef _JUST_EXPORT_I_FORMAT_H_
+#define _JUST_EXPORT_I_FORMAT_H_
 
-#include "IPpboxTypes.h"
+#include "IJustTypes.h"
 
 #ifdef BOOST_BIG_ENDIAN
 #define JUST_MAKE_FOURC_TYPE(c1, c2, c3, c4) \
@@ -190,4 +190,4 @@ JUST_STRUCT_7(JUST_DataStat, (
     (PP_uint, average_speed_sixty_seconds)   // 平均下载速度 <60s统计>
     ));
 
-#endif // _JUST_JUST_I_DEMUXER_H_
+#endif // _JUST_EXPORT_I_DEMUXER_H_

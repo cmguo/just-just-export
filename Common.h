@@ -2,7 +2,7 @@
 
 #include <just/common/Common.h>
 
-#include "just/just/Error.h"
+#include "just/export/Error.h"
 
 namespace just
 {
@@ -15,5 +15,5 @@ namespace just
 #  define JUST_DECL __attribute__ ((visibility("default")))
 #endif
 
-#include "just/just/IPpboxBoostTypes.h"
-#include "just/just/IPpbox.h"
+#include "just/export/IJustBoostTypes.h"
+#include "just/export/IJust.h"

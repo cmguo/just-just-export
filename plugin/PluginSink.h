@@ -1,9 +1,9 @@
 // PluginSink.h
 
-#ifndef _JUST_JUST_PLUGIN_PLUGIN_SINK_H_
-#define _JUST_JUST_PLUGIN_PLUGIN_SINK_H_
+#ifndef _JUST_EXPORT_PLUGIN_PLUGIN_SINK_H_
+#define _JUST_EXPORT_PLUGIN_PLUGIN_SINK_H_
 
-#include "just/just/Plugin.h"
+#include "just/export/Plugin.h"
 
 #include <util/stream/UrlSink.h>
 
@@ -17,4 +17,4 @@ namespace just
 
 }
 
-#endif // _JUST_JUST_PLUGIN_PLUGIN_SINK_H_
+#endif // _JUST_EXPORT_PLUGIN_PLUGIN_SINK_H_

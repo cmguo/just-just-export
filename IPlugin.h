@@ -1,9 +1,9 @@
 // IPlugin.h
 
-#ifndef _JUST_JUST_I_PLUGIN_H_
-#define _JUST_JUST_I_PLUGIN_H_
+#ifndef _JUST_EXPORT_I_PLUGIN_H_
+#define _JUST_EXPORT_I_PLUGIN_H_
 
-#include "IPpboxTypes.h"
+#include "IJustTypes.h"
 #include "IFormat.h"
 
 #include <stdarg.h>
@@ -24,4 +24,4 @@ JUST_FUNC_2(PP_err, PPBBOX_PluginUnregister, (
     (PP_str, factory), 
     (PP_str, name)));
 
-#endif // _JUST_JUST_I_PLUGIN_H_
+#endif // _JUST_EXPORT_I_PLUGIN_H_

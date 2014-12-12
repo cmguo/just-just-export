@@ -1,7 +1,7 @@
 // IDispatch.cpp
 
-#include "just/just/Common.h"
-#include "just/just/Callback.h"
+#include "just/export/Common.h"
+#include "just/export/Callback.h"
 
 #include <just/dispatch/DispatchModule.h>
 #include <just/dispatch/DispatcherBase.h>

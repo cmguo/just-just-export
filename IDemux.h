@@ -1,7 +1,7 @@
 // IDemux.h
 
-#ifndef _JUST_JUST_I_DEMUX_H_
-#define _JUST_JUST_I_DEMUX_H_
+#ifndef _JUST_EXPORT_I_DEMUX_H_
+#define _JUST_EXPORT_I_DEMUX_H_
 
 #include "IGeneric.h"
 #include "IFormat.h"
@@ -83,4 +83,4 @@ JUST_FUNC_1(PP_err, JUST_GetPlayStat, (
 JUST_FUNC_1(PP_err, JUST_GetDataStat, (
     (JUST_DataStat *, stat)));
 
-#endif // _JUST_JUST_I_DEMUX_H_
+#endif // _JUST_EXPORT_I_DEMUX_H_

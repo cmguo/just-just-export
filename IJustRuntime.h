@@ -1,7 +1,7 @@
 // just_runtime.h
 
-#ifndef _PLUGINS_JUST_JUST_RUNTIME_H_
-#define _PLUGINS_JUST_JUST_RUNTIME_H_
+#ifndef _PLUGINS_JUST_EXPORT_RUNTIME_H_
+#define _PLUGINS_JUST_EXPORT_RUNTIME_H_
 
 #include <assert.h>
 #include <stdlib.h>
@@ -81,7 +81,7 @@ extern void JUST_Unload(void);
 #endif // JUST_DECLARE_ONLY
 #endif // JUST_FUNC
 
-#include "IPpboxTypes.h"
+#include "IJustTypes.h"
 
 static inline void void_defalut(void) { }
 static inline PP_err PP_err_defalut(void) { return just_other_error; }
@@ -91,7 +91,7 @@ static inline PP_ushort PP_ushort_defalut(void) { return 0; }
 static inline PP_uint PP_uint_defalut(void) { return 0; }
 static inline PP_ulong PP_ulong_defalut(void) { return 0; }
 
-#include "IPpbox.h"
+#include "IJust.h"
 
 #include "Name.h"
 
@@ -131,4 +131,4 @@ inline HMODULE JUST_Load(
 
 #endif // JUST_DECLARE_ONLY
 
-#endif // _PLUGINS_JUST_JUST_RUNTIME_H_
+#endif // _PLUGINS_JUST_EXPORT_RUNTIME_H_

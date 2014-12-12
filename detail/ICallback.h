@@ -1,7 +1,7 @@
 // ICallback.h
 
-#ifndef _JUST_JUST_DETAIL_I_CALLBACK_H_
-#define _JUST_JUST_DETAIL_I_CALLBACK_H_
+#ifndef _JUST_EXPORT_DETAIL_I_CALLBACK_H_
+#define _JUST_EXPORT_DETAIL_I_CALLBACK_H_
 
 #define JUST_CALLBACK_0(type, name, fields) JUST_CALLBACK(type, name, 0, fields)
 #define JUST_CALLBACK_1(type, name, fields) JUST_CALLBACK(type, name, 1, fields)
@@ -16,4 +16,4 @@
 #  define JUST_CALLBACK(type, name, np, params) typedef type (*name)params
 #endif
 
-#endif // _JUST_JUST_DETAIL_I_CALLBACK_H_
+#endif // _JUST_EXPORT_DETAIL_I_CALLBACK_H_

@@ -1,9 +1,9 @@
-// IPpbox.cpp
+// IJust.cpp
 
-#include "just/just/Common.h"
+#include "just/export/Common.h"
 #define JUST_SOURCE
-#include "just/just/IPlugin.h"
-#include "just/just/plugin/PluginSink.h"
+#include "just/export/IPlugin.h"
+#include "just/export/plugin/PluginSink.h"
 using namespace just::error;
 
 #include <boost/bind.hpp>

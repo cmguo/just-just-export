@@ -1,9 +1,9 @@
 // CxxValueUrl.h
 
-#ifndef _JUST_JUST_DETAIL_CXX_VALUE_URL_H_
-#define _JUST_JUST_DETAIL_CXX_VALUE_URL_H_
+#ifndef _JUST_EXPORT_DETAIL_CXX_VALUE_URL_H_
+#define _JUST_EXPORT_DETAIL_CXX_VALUE_URL_H_
 
-#include "just/just/detail/CxxTypeBind.h"
+#include "just/export/detail/CxxTypeBind.h"
 
 #include <framework/string/Url.h>
 
@@ -48,4 +48,4 @@ namespace just
     
 } // namespace just
 
-#endif // _JUST_JUST_DETAIL_CXX_VALUE_URL_H_
+#endif // _JUST_EXPORT_DETAIL_CXX_VALUE_URL_H_

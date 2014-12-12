@@ -1,9 +1,9 @@
 // IEnum.h
 
-#ifndef _JUST_JUST_DETAIL_I_ENUM_H_
-#define _JUST_JUST_DETAIL_I_ENUM_H_
+#ifndef _JUST_EXPORT_DETAIL_I_ENUM_H_
+#define _JUST_EXPORT_DETAIL_I_ENUM_H_
 
-#include "just/just/detail/IPreprocessor.h"
+#include "just/export/detail/IPreprocessor.h"
 
 #define ENUM_NAME_VALUE(i, n, v) n = v,
 #define ENUMS_NAME_VALUE(ne, enums) LIST_PAIR_FORMAT(ENUM_NAME_VALUE, ne, enums)
@@ -32,4 +32,4 @@
 #  endif
 #endif
 
-#endif // _JUST_JUST_DETAIL_I_ENUM_H_
+#endif // _JUST_EXPORT_DETAIL_I_ENUM_H_

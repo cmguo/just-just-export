@@ -1,7 +1,7 @@
-// IPpboxTypes.h
+// IJustTypes.h
 
-#ifndef _JUST_JUST_I_JUST_TYPES_H_
-#define _JUST_JUST_I_JUST_TYPES_H_
+#ifndef _JUST_EXPORT_I_JUST_TYPES_H_
+#define _JUST_EXPORT_I_JUST_TYPES_H_
 
 #ifndef DEFINED_PP_BOOL
 #define DEFINED_PP_BOOL
@@ -78,4 +78,4 @@ enum JUST_ErrorEnum
     just_other_error = 1024, 
 };
 
-#endif // _JUST_JUST_I_JUST_TYPES_H_
+#endif // _JUST_EXPORT_I_JUST_TYPES_H_

@@ -1,9 +1,9 @@
 // IInterface.h
 
-#ifndef _JUST_JUST_DETAIL_I_INTERFACE_H_
-#define _JUST_JUST_DETAIL_I_INTERFACE_H_
+#ifndef _JUST_EXPORT_DETAIL_I_INTERFACE_H_
+#define _JUST_EXPORT_DETAIL_I_INTERFACE_H_
 
-#include "just/just/detail/IPreprocessor.h"
+#include "just/export/detail/IPreprocessor.h"
 
 #define METHOD_PARAM_TYPE_NAME(i, t, n) BOOST_PP_COMMA_IF(i) t n
 #define METHOD_PARAM_TYPE(i, t, n) BOOST_PP_COMMA_IF(i) t
@@ -28,4 +28,4 @@
 #  endif
 #endif
 
-#endif // _JUST_JUST_DETAIL_I_INTERFACE_H_
+#endif // _JUST_EXPORT_DETAIL_I_INTERFACE_H_

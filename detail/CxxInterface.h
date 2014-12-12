@@ -1,7 +1,7 @@
 // Interface.h
 
-#include "just/just/detail/IPreprocessor.h"
-#include "just/just/detail/CxxValue.h"
+#include "just/export/detail/IPreprocessor.h"
+#include "just/export/detail/CxxValue.h"
 
 #define PARAM_CXX_TYPE_NAME(i, t, n) BOOST_PP_COMMA_IF(i) TypeBind<t>::xtype_t n
 #define PARAM_CXX_TYPE(i, t, n) BOOST_PP_COMMA_IF(i) TypeBind<t>::xtype_t

@@ -1,6 +1,6 @@
-// IPpbox.cpp
+// IJust.cpp
 
-#include "just/just/Common.h"
+#include "just/export/Common.h"
 
 #include <just/certify/CertifyError.h>
 #include <just/demux/base/DemuxError.h>

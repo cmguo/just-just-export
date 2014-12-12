@@ -1,7 +1,7 @@
 // IDemux.cpp
 
-#include "just/just/Common.h"
-#include "just/just/Callback.h"
+#include "just/export/Common.h"
+#include "just/export/Callback.h"
 
 #include <just/demux/DemuxModule.h>
 #include <just/demux/base/DemuxerBase.h>

@@ -1,7 +1,7 @@
 // Server.h
 
-#ifndef _JUST_JUST_SERVER_H_
-#define _JUST_JUST_SERVER_H_
+#ifndef _JUST_EXPORT_SERVER_H_
+#define _JUST_EXPORT_SERVER_H_
 
 #ifndef JUST_DISABLE_CERTIFY 
 #  include <just/certify/Certifier.h>
@@ -28,4 +28,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_SERVER_H_
+#endif // _JUST_EXPORT_SERVER_H_

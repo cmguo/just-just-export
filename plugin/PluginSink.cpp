@@ -1,16 +1,16 @@
 // PluginSink.cpp
 
-#include "just/just/Common.h"
-#include "just/just/detail/IInterface.h"
-#include "just/just/plugin/PluginSink.h"
-#include "just/just/plugin/IPluginSink.h"
+#include "just/export/Common.h"
+#include "just/export/detail/IInterface.h"
+#include "just/export/plugin/PluginSink.h"
+#include "just/export/plugin/IPluginSink.h"
 
 #include <boost/bind.hpp>
 
-#include "just/just/detail/CxxInterface.h"
-#include "just/just/detail/CxxValueError.h"
-#include "just/just/detail/CxxValueUrl.h"
-#include "just/just/detail/CxxValueBuffer.h"
+#include "just/export/detail/CxxInterface.h"
+#include "just/export/detail/CxxValueError.h"
+#include "just/export/detail/CxxValueUrl.h"
+#include "just/export/detail/CxxValueBuffer.h"
 
 namespace just
 {
@@ -32,8 +32,8 @@ namespace just
         }
 
     public:
-#undef _JUST_JUST_PLUGIN_I_PLUGIN_SINK_H_
-#include "just/just/plugin/IPluginSink.h"
+#undef _JUST_EXPORT_PLUGIN_I_PLUGIN_SINK_H_
+#include "just/export/plugin/IPluginSink.h"
     };
 
     util::stream::UrlSink * create_url_sink(

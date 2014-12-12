@@ -1,7 +1,7 @@
 // Error.h
 
-#ifndef _JUST_JUST_ERROR_H_
-#define _JUST_JUST_ERROR_H_
+#ifndef _JUST_EXPORT_ERROR_H_
+#define _JUST_EXPORT_ERROR_H_
 
 namespace just
 {
@@ -34,7 +34,7 @@ namespace just
             public:
                 const char* name() const
                 {
-                    return "just/just";
+                    return "just/export";
                 }
 
                 std::string message(int value) const
@@ -133,4 +133,4 @@ namespace boost
     }
 }
 
-#endif // _JUST_JUST_ERROR_H_
+#endif // _JUST_EXPORT_ERROR_H_

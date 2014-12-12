@@ -1,7 +1,7 @@
 // IPluginSink.h
 
-#ifndef _JUST_JUST_PLUGIN_I_PLUGIN_SINK_H_
-#define _JUST_JUST_PLUGIN_I_PLUGIN_SINK_H_
+#ifndef _JUST_EXPORT_PLUGIN_I_PLUGIN_SINK_H_
+#define _JUST_EXPORT_PLUGIN_I_PLUGIN_SINK_H_
 
 #include "../IPlugin.h"
 #include "../IFormat.h"
@@ -34,4 +34,4 @@ JUST_INTERFACE(JUST_PluginUrlSink, JUST_PluginSink, 4, (
         (JUST_Error const *, ec)))
 ))
 
-#endif // _JUST_JUST_PLUGIN_I_PLUGIN_SINK_H_
+#endif // _JUST_EXPORT_PLUGIN_I_PLUGIN_SINK_H_

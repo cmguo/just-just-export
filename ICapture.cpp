@@ -1,8 +1,8 @@
 // ICapture.cpp
 
-#include "just/just/Common.h"
-#include "just/just/ICapture.h"
-#include "just/just/Callback.h"
+#include "just/export/Common.h"
+#include "just/export/ICapture.h"
+#include "just/export/Callback.h"
 using namespace just::error;
 
 #include <just/capture/CaptureModule.h>

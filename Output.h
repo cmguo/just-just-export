@@ -1,7 +1,7 @@
 // Output.h
 
-#ifndef _JUST_JUST_OUTPUT_H_
-#define _JUST_JUST_OUTPUT_H_
+#ifndef _JUST_EXPORT_OUTPUT_H_
+#define _JUST_EXPORT_OUTPUT_H_
 
 #ifndef JUST_DISABLE_DOWNLOAD
 #  include <just/download/DownloadModule.h>
@@ -44,4 +44,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_OUTPUT_H_
+#endif // _JUST_EXPORT_OUTPUT_H_

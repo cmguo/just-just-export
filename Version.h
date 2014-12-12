@@ -1,9 +1,9 @@
 // Version.h
 
-#ifndef _JUST_JUST_VERSION_H_
-#define _JUST_JUST_VERSION_H_
+#ifndef _JUST_EXPORT_VERSION_H_
+#define _JUST_EXPORT_VERSION_H_
 
-#include "just/just/Define.h"
+#include "just/export/Define.h"
 
 #include <framework/system/AutoVersion.h>
 /*
@@ -43,4 +43,4 @@
 #  include <just/rtspd/Version.h>
 #endif
 */
-#endif // _JUST_JUST_VERSION_H_
+#endif // _JUST_EXPORT_VERSION_H_

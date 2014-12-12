@@ -1,7 +1,7 @@
 // IDownload.h
 
-#ifndef _JUST_JUST_I_DOWNLOAD_H_
-#define _JUST_JUST_I_DOWNLOAD_H_
+#ifndef _JUST_EXPORT_I_DOWNLOAD_H_
+#define _JUST_EXPORT_I_DOWNLOAD_H_
 
 #include "IGeneric.h"
 
@@ -27,4 +27,4 @@ JUST_FUNC_2(PP_err, JUST_GetDownloadInfo, (
     (PP_handle, handle),
     (JUST_DownloadStatistic *, stat)));
 
-#endif // _JUST_JUST_I_DOWNLOAD_H_
+#endif // _JUST_EXPORT_I_DOWNLOAD_H_

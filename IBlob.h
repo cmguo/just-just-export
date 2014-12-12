@@ -1,9 +1,9 @@
 // IBlob.h
 
-#ifndef _JUST_JUST_I_BLOB_H_
-#define _JUST_JUST_I_BLOB_H_
+#ifndef _JUST_EXPORT_I_BLOB_H_
+#define _JUST_EXPORT_I_BLOB_H_
 
-#include "IPpboxTypes.h"
+#include "IJustTypes.h"
 #include "IFormat.h"
 
 JUST_FUNC_3(PP_err, JUST_InsertBlob, (
@@ -18,4 +18,4 @@ JUST_FUNC_2(PP_err, JUST_GetBlob, (
 JUST_FUNC_1(PP_err, JUST_RemoveBlob, (
     (PP_str, key)));
 
-#endif // _JUST_JUST_I_BLOB_H_
+#endif // _JUST_EXPORT_I_BLOB_H_

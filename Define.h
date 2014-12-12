@@ -1,7 +1,7 @@
 // Define.h
 
-#ifndef _JUST_JUST_DEFINE_H_
-#define _JUST_JUST_DEFINE_H_
+#ifndef _JUST_EXPORT_DEFINE_H_
+#define _JUST_EXPORT_DEFINE_H_
 
 #define LIB
 
@@ -23,4 +23,4 @@
 
 #endif
 
-#endif // _JUST_JUST_DEFINE_H_
+#endif // _JUST_EXPORT_DEFINE_H_

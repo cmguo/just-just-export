@@ -1,7 +1,7 @@
 // IPreprocessor.h
 
-#ifndef _JUST_JUST_DETAIL_I_PREPROCESSOR_H_
-#define _JUST_JUST_DETAIL_I_PREPROCESSOR_H_
+#ifndef _JUST_EXPORT_DETAIL_I_PREPROCESSOR_H_
+#define _JUST_EXPORT_DETAIL_I_PREPROCESSOR_H_
 
 #include <boost/preprocessor/tuple/to_seq.hpp>
 #include <boost/preprocessor/seq/for_each_i.hpp>
@@ -17,4 +17,4 @@
     BOOST_PP_TUPLE_ELEM(2, 0, f_d)(i, BOOST_PP_TUPLE_ELEM(2, 1, f_d), BOOST_PP_TUPLE_ELEM(2, 0, e), BOOST_PP_TUPLE_ELEM(2, 1, e))
 #define LIST_DATA_PAIR_FORMAT(f, d, n, items) BOOST_PP_SEQ_FOR_EACH_I(PAIR_DATA_FOMART, (f, d), BOOST_PP_TUPLE_TO_SEQ(n, items))
 
-#endif // _JUST_JUST_DETAIL_I_PREPROCESSOR_H_
+#endif // _JUST_EXPORT_DETAIL_I_PREPROCESSOR_H_

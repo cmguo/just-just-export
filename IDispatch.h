@@ -1,9 +1,9 @@
 // IDispatch.h
 
-#ifndef _JUST_JUST_I_DISPATCH_H_
-#define _JUST_JUST_I_DISPATCH_H_
+#ifndef _JUST_EXPORT_I_DISPATCH_H_
+#define _JUST_EXPORT_I_DISPATCH_H_
 
-#include "IPpbox.h"
+#include "IJust.h"
 #include "IFormat.h"
 
 #if __cplusplus
@@ -66,4 +66,4 @@ extern "C" {
 }
 #endif // __cplusplus
 
-#endif // _JUST_JUST_I_DISPATCH_H_
+#endif // _JUST_EXPORT_I_DISPATCH_H_

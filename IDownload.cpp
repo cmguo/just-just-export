@@ -1,8 +1,8 @@
 // IDownload.cpp
 
-#include "just/just/Common.h"
-#include "just/just/IDownload.h"
-#include "just/just/Callback.h"
+#include "just/export/Common.h"
+#include "just/export/IDownload.h"
+#include "just/export/Callback.h"
 using namespace just::error;
 
 #include <just/download/DownloadModule.h>

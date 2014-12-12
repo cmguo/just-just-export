@@ -1,7 +1,7 @@
 // P2p.h
 
-#ifndef _JUST_JUST_P2P_H_
-#define _JUST_JUST_P2P_H_
+#ifndef _JUST_EXPORT_P2P_H_
+#define _JUST_EXPORT_P2P_H_
 
 #ifndef JUST_DISABLE_PEER 
 #  include <just/peer/PeerModule.h>
@@ -26,4 +26,4 @@ namespace just
 
 } // namespace just
 
-#endif // _JUST_JUST_P2P_H_
+#endif // _JUST_EXPORT_P2P_H_
