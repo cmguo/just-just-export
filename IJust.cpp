@@ -57,7 +57,7 @@ namespace just
 
             just::common::log_versions();
 
-            std::string just_name = "Just_" + framework::filesystem::bin_file().stem();
+            std::string just_name = "Just_" + framework::filesystem::bin_file().stem().string();
             just::common::CommonModule & common = 
                 util::daemon::use_module<just::common::CommonModule>(*this, just_name);
             common.set_version(just::version());
@@ -103,7 +103,7 @@ namespace just
                     util::daemon::use_module<just::dac::DacModule>(*this);
                 dac.set_auth_code(gid, pid, auth);
 #endif
-                ec = start(1);
+                start(ec);
             }
 
             return last_error(__FUNCTION__, ec);
@@ -117,7 +117,7 @@ namespace just
             if (!is_started()) {
                 ec = not_start;
             } else {
-                stop();
+                stop(ec);
             }
 
             return last_error(__FUNCTION__, ec);
