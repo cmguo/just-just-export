@@ -32,7 +32,7 @@ namespace just
                 : public boost::system::error_category
             {
             public:
-                const char* name() const
+                const char* name() const BOOST_SYSTEM_NOEXCEPT
                 {
                     return "just/export";
                 }
