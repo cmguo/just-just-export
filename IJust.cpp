@@ -103,7 +103,7 @@ namespace just
                     util::daemon::use_module<just::dac::DacModule>(*this);
                 dac.set_auth_code(gid, pid, auth);
 #endif
-                start(ec);
+                start(1, ec);
             }
 
             return last_error(__FUNCTION__, ec);
