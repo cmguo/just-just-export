@@ -3,11 +3,14 @@
 #ifndef _JUST_EXPORT_P2P_H_
 #define _JUST_EXPORT_P2P_H_
 
-#ifndef JUST_DISABLE_PEER 
+#ifndef JUST_DISABLE_PEER
 #  include <just/peer/PeerModule.h>
 #endif
-#ifndef JUST_DISABLE_LIVE 
+#ifndef JUST_DISABLE_LIVE
 #  include <just/live/LiveModule.h>
+#endif
+#ifndef JUST_DISABLE_TRIP
+#  include <just/trip/TripModule.h>
 #endif
 
 namespace just
@@ -21,6 +24,9 @@ namespace just
 #endif
 #ifndef JUST_DISABLE_LIVE
         util::daemon::use_module<just::live::LiveModule>(daemon);
+#endif
+#ifndef JUST_DISABLE_TRIP
+        util::daemon::use_module<just::trip::TripModule>(daemon);
 #endif
     }
 

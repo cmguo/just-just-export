@@ -53,7 +53,6 @@ namespace just
             CaptureSource* handle = module_.create(playlink, ec);
             if (handle && dest) {
                 framework::string::Url url(dest);
-                playlink.encode();
                 url.param("playlink", playlink.to_string());
                 download_module_.open(url, 
                     boost::bind(&ICapture::download_finish, this, _1, _2));

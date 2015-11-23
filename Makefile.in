@@ -70,6 +70,7 @@ PROJECT_DEPENDS			:= \
 				/just/dac \
 				/just/cdn \
 				/just/peer \
+				/just/trip \
 				/just/live \
 				/just/certify \
 				/just/common \
