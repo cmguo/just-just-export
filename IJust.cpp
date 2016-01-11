@@ -189,7 +189,10 @@ namespace just
             {
                 return just_logic_error;
             }
-            config().set(section,key,value);
+            if (NULL == module)
+                config().set_force(section,key,value);
+            else
+                config().set_ext_config(module, section,key,value);
             return just_success;
         }
 
