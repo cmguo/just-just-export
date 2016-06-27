@@ -32,10 +32,12 @@ static inline HMODULE LoadLibraryA(
 }
 #endif
 
-#ifdef __cplusplus
-#  define JUST_LIB_NAME just::name_string()
-#else
-#  define JUST_LIB_NAME name_string()
+#ifndef JUST_LIB_NAME
+#  ifdef __cplusplus
+#    define JUST_LIB_NAME just::name_string()
+#  else
+#    define JUST_LIB_NAME name_string()
+#  endif
 #endif
 
 #ifdef __cplusplus

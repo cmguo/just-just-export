@@ -7,6 +7,7 @@
 		JUST_GetLastError;
 		JUST_GetLastErrorMsg;
 		JUST_SetConfig;
+		JUST_GetConfig;
 		JUST_ChangeDebugMode;
 		JUST_GetDebugMessage;
 		JUST_SubmitMessage;

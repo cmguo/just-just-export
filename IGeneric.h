@@ -28,6 +28,11 @@ JUST_FUNC_4(PP_err, JUST_SetConfig, (
     (PP_str, key), 
     (PP_str, value)));
 
+JUST_FUNC_3(PP_str, JUST_GetConfig, (
+    (PP_str, module), 
+    (PP_str, section), 
+    (PP_str, key)));
+
 JUST_FUNC_2(PP_err, JUST_SubmitMessage, (
     (PP_str, msg), 
     (PP_uint, size)));

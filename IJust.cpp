@@ -2,6 +2,8 @@
 
 #include "just/export/Common.h"
 #include "just/export/Version.h"
+#undef _JUST_EXPORT_DEFINE_H_
+#include "just/export/Name.h"
 #include "just/export/IJust.h"
 using namespace just::error;
 
@@ -25,6 +27,8 @@ using namespace just::common;
 #include <framework/logger/StreamRecord.h>
 #include <framework/logger/Section.h>
 #include <framework/filesystem/Path.h>
+#include <framework/string/Format.h>
+#include <framework/string/Parse.h>
 using namespace framework::logger;
 
 #include <boost/asio/error.hpp>
@@ -61,6 +65,12 @@ namespace just
             just::common::CommonModule & common = 
                 util::daemon::use_module<just::common::CommonModule>(*this, just_name);
             common.set_version(just::version());
+
+            static framework::system::Version version = just::version();
+            static std::string libname = just::name_string();
+            config().register_module("just")
+                << CONFIG_PARAM_RDONLY(version)
+                << CONFIG_PARAM_RDONLY(libname);
 
             //util::daemon::use_module<just::common::ConfigMgr>(*this);
             util::daemon::use_module<just::common::Debuger>(*this);
@@ -196,6 +206,23 @@ namespace just
             return just_success;
         }
 
+        PP_str get_config(
+            PP_str module, 
+            PP_str section, 
+            PP_str key) 
+        {
+            if (NULL == section || NULL == key) {
+                return NULL;
+            }
+            static std::string value;
+            value.clear();
+            if (NULL == module)
+                config().get(section, key, value);
+            else
+                config().get_ext_config(module, section, key, value);
+            return value.c_str();
+        }
+
         PP_err submit_msg(
             PP_str msg, 
             boost::int32_t size)
@@ -270,6 +297,14 @@ extern "C" {
         PP_str value)
     {
         return the_just().set_config(module, section, key, value);
+    }
+
+    JUST_DECL PP_str JUST_GetConfig(
+        PP_str module, 
+        PP_str section, 
+        PP_str key)
+    {
+        return the_just().get_config(module, section, key);
     }
 
     JUST_DECL PP_err JUST_SubmitMessage(
