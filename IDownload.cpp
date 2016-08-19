@@ -46,20 +46,20 @@ namespace just
         }
 
         PP_handle download_open(
-            PP_str playlink,
+            PP_str url,
             PP_str format,
             PP_str filename,
             JUST_Callback resp)
         {
             error_code ec;
-            framework::string::Url url(filename);
+            framework::string::Url url_file(filename);
             framework::string::Url url_format(std::string("format:///?format=") + format);
-            url.param("playlink", playlink);
+            url_file.param("url", url);
             for (framework::string::Url::param_iterator iter = url_format.param_begin(); 
                 iter != url_format.param_end(); ++iter) {
-                    url.param(iter->key(), iter->value());
+                    url_file.param(iter->key(), iter->value());
             }
-            Downloader* hander = download_manager_.open(url, 
+            Downloader* hander = download_manager_.open(url_file, 
                     boost::bind(&IDownload::download_open_callback, resp, _1, _2));
             return (PP_handle)hander;
         }
@@ -125,12 +125,12 @@ extern "C" {
 
     //打开一个下载用例
     JUST_DECL PP_handle JUST_DownloadOpen(
-        PP_str playlink,
+        PP_str url,
         PP_str format,
         PP_str save_filename,
         JUST_Callback resp)
     {
-        return downloader().download_open(playlink, format, save_filename, resp);
+        return downloader().download_open(url, format, save_filename, resp);
     }
 
     //关闭指定的下载用例

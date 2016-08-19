@@ -14,12 +14,12 @@ extern "C" {
 
     JUST_FUNC_3(PP_err, JUST_DispatchOpen, (
         (PP_handle, handle), 
-        (PP_str, playlink), 
+        (PP_str, url), 
         (PP_str, format)));
 
     JUST_FUNC_5(PP_err, JUST_DispatchAsyncOpen, (
         (PP_handle, handle), 
-        (PP_str, playlink), 
+        (PP_str, url), 
         (PP_str, format), 
         (PP_context, ctx), 
         (JUST_Callback, callback)));

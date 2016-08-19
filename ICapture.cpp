@@ -49,11 +49,11 @@ namespace just
             PP_str dest)
         {
             error_code ec;
-            framework::string::Url playlink(std::string("capture:///") + name);
-            CaptureSource* handle = module_.create(playlink, ec);
+            framework::string::Url url(std::string("capture:///") + name);
+            CaptureSource* handle = module_.create(url, ec);
             if (handle && dest) {
                 framework::string::Url url(dest);
-                url.param("playlink", playlink.to_string());
+                url.param("url", url.to_string());
                 download_module_.open(url, 
                     boost::bind(&ICapture::download_finish, this, _1, _2));
             }

@@ -77,13 +77,13 @@ namespace just
 
         PP_err open(
             PP_handle handle, 
-            PP_str playlink, 
+            PP_str url, 
             PP_str format)
         {
             LOG_SECTION();
-            LOG_INFO("open playlink: " << playlink);
+            LOG_INFO("open url: " << url);
 
-            Cache * cache = (Cache *)handle;
+            //Cache * cache = (Cache *)handle;
             error_code ec;
             //cache->dispatcher->o
             return last_error(__FUNCTION__, ec);
@@ -101,18 +101,18 @@ namespace just
 
         PP_err async_open(
             PP_handle handle, 
-            PP_str playlink, 
+            PP_str url, 
             PP_str format, 
 			PP_context ctx, 
             JUST_Callback callback)
         {
             LOG_SECTION();
-            LOG_INFO("async_open playlink: " << playlink);
+            LOG_INFO("async_open url: " << url);
 
-            framework::string::Url url(std::string("disp:///play?") + format);
-            url.param("playlink", playlink);
+            framework::string::Url url_play(std::string("disp:///play?") + format);
+            url_play.param("url", url);
             Cache * cache = (Cache *)handle;
-            cache->dispatcher->async_open((url), 
+            cache->dispatcher->async_open(url_play, 
                 boost::bind(&IDispatch::handle_async_open, this, ctx, callback, _1));
             return just_success;
         }
@@ -352,20 +352,20 @@ extern "C" {
 
     JUST_DECL PP_err JUST_DispatchOpen(
         PP_handle handle, 
-        PP_str playlink, 
+        PP_str url, 
         PP_str format)
     {
-        return dispatch().open(handle, playlink, format);
+        return dispatch().open(handle, url, format);
     }
 
     JUST_DECL PP_err JUST_DispatchAsyncOpen(
         PP_handle handle, 
-        PP_str playlink, 
+        PP_str url, 
         PP_str format, 
         PP_context ctx, 
         JUST_Callback callback)
     {
-        return dispatch().async_open(handle, playlink, format, ctx, callback);
+        return dispatch().async_open(handle, url, format, ctx, callback);
     }
 
     JUST_DECL PP_err JUST_DispatchGetMediaInfo(

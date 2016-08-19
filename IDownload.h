@@ -7,7 +7,7 @@
 
 //打开一个下载用例
 JUST_FUNC_4(PP_handle, JUST_DownloadOpen, (
-    (PP_str, playlink),
+    (PP_str, url),
     (PP_str, format),
     (PP_str, save_filename),
     (JUST_Callback, resp)));

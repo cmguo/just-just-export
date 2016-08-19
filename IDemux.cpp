@@ -90,17 +90,17 @@ namespace just
         }
 
         PP_err open(
-            PP_str playlink)
+            PP_str url)
         {
-            return open_ex(playlink, "format=raw");
+            return open_ex(url, "format=raw");
         }
 
         PP_err open_ex(
-            PP_str playlink, 
+            PP_str url, 
             PP_str format)
         {
             LOG_SECTION();
-            LOG_INFO("open playlink: " << playlink << ", format: " << format);
+            LOG_INFO("open url: " << url << ", format: " << format);
 
             error_code ec;
             boost::mutex::scoped_lock lock(mutex_);
@@ -109,7 +109,7 @@ namespace just
             } else {
                 boost::shared_ptr<Cache> cache(new Cache);
                 cache_ = cache;
-                framework::string::Url play_link(playlink);
+                framework::string::Url play_link(url);
                 framework::string::Url config(std::string("config:///interface?") + format);
                 cache->demuxer = demux_mod_.create(play_link, config, ec);
                 if (cache->demuxer) {
@@ -143,10 +143,10 @@ namespace just
 #endif
 
         PP_err async_open(
-            PP_str playlink, 
+            PP_str url, 
             JUST_Open_Callback callback)
         {
-            return async_open(playlink, "format=raw", 
+            return async_open(url, "format=raw", 
 #ifndef JUST_ENABLE_REDIRECT_CALLBACK
                 boost::bind(callback, _1));
 #else
@@ -165,12 +165,12 @@ namespace just
 #endif
 
         PP_err async_open_ex(
-            PP_str playlink, 
+            PP_str url, 
             PP_str format, 
 			PP_context user_data, 
             JUST_Callback callback)
         {
-            return async_open(playlink, format, 
+            return async_open(url, format, 
 #ifndef JUST_ENABLE_REDIRECT_CALLBACK
                 boost::bind(callback, user_data, _1));
 #else
@@ -179,12 +179,12 @@ namespace just
         }
 
         PP_err async_open(
-            PP_str playlink, 
+            PP_str url, 
             PP_str format, 
             boost::function<void (error::errors)> const & callback)
         {
             LOG_SECTION();
-            LOG_INFO("async_open playlink: " << playlink << ", format: " << format);
+            LOG_INFO("async_open url: " << url << ", format: " << format);
 
             error_code ec;
             boost::mutex::scoped_lock lock(mutex_);
@@ -192,7 +192,7 @@ namespace just
                 ec = just::error::already_open;
             } else {
                 cache_.reset(new Cache);
-                framework::string::Url play_link(playlink);
+                framework::string::Url play_link(url);
                 framework::string::Url config(std::string("config:///interface?") + format);
                 cache_->demuxer = demux_mod_.create(play_link, config, ec);
                 if (cache_->demuxer) {
@@ -507,32 +507,32 @@ extern "C" {
 #endif // __cplusplus
 
     JUST_DECL PP_err JUST_Open(
-        PP_str playlink)
+        PP_str url)
     {
-        return demuxer().open(playlink);
+        return demuxer().open(url);
     }
 
     JUST_DECL PP_err JUST_AsyncOpen(
-        PP_str playlink, 
+        PP_str url, 
         JUST_Open_Callback callback)
     {
-        return demuxer().async_open(playlink, callback);
+        return demuxer().async_open(url, callback);
     }
 
     JUST_DECL PP_err JUST_OpenEx(
-        PP_str playlink, 
+        PP_str url, 
         PP_str format)
     {
-        return demuxer().open_ex(playlink, format);
+        return demuxer().open_ex(url, format);
     }
 
     JUST_DECL PP_err JUST_AsyncOpenEx(
-        PP_str playlink, 
+        PP_str url, 
         PP_str format, 
 		PP_context user_data, 
         JUST_Callback callback)
     {
-        return demuxer().async_open_ex(playlink, format, user_data, callback);
+        return demuxer().async_open_ex(url, format, user_data, callback);
     }
 
     JUST_DECL PP_uint JUST_GetStreamCount()

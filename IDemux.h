@@ -8,20 +8,20 @@
 
 //打开一个视频
 JUST_FUNC_1(PP_err, JUST_Open, (
-    (PP_str, playlink)));
+    (PP_str, url)));
 
 JUST_FUNC_2(PP_err, JUST_OpenEx, (
-    (PP_str, playlink), 
+    (PP_str, url), 
     (PP_str, format)));
 
 JUST_CALLBACK_1(void, JUST_Open_Callback, (PP_err));
 
 JUST_FUNC_2(PP_err, JUST_AsyncOpen, (
-    (PP_str, playlink), 
+    (PP_str, url), 
     (JUST_Open_Callback, callback)));
 
 JUST_FUNC_4(PP_err, JUST_AsyncOpenEx, (
-    (PP_str, playlink), 
+    (PP_str, url), 
     (PP_str, format), 
     (PP_context, user_data), 
     (JUST_Callback, callback)));
