@@ -35,11 +35,12 @@ JUST_ENUM_6(JUST_VideoSubType, (
     (RGBT, JUST_MAKE_FOURC_TYPE('R', 'G', 'B', 'T'))
     ));
 
-JUST_ENUM_8(JUST_AudioSubType, (
+JUST_ENUM_9(JUST_AudioSubType, (
     //(NONE, 0),
     (MP4A, JUST_MAKE_FOURC_TYPE('M', 'P', '4', 'A')),
     (MP3,  JUST_MAKE_FOURC_TYPE('M', 'P', '3', 0)),
     (MP2,  JUST_MAKE_FOURC_TYPE('M', 'P', '2', 0)),
+    (MP1A,  JUST_MAKE_FOURC_TYPE('M', 'P', '1', 'A')),
     (WMA2, JUST_MAKE_FOURC_TYPE('W', 'M', 'A', '2')),
     (AC3,  JUST_MAKE_FOURC_TYPE('A', 'C', '3', 0)), 
     (EAC3, JUST_MAKE_FOURC_TYPE('E', 'A', 'C', '3')), 
