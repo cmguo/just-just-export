@@ -129,6 +129,36 @@ namespace just
 #endif
         }
 
+		
+        PP_err async_switch_source(
+            PP_handle handle, 
+            PP_str url, 
+            PP_str format, 
+            PP_context ctx, 
+            JUST_Callback callback)
+        {
+            LOG_SECTION();
+            LOG_INFO("switch_source url: " << url);
+            framework::string::Url url_play(std::string("disp:///play?") + format);
+            url_play.param("url", url);
+            Cache * cache = (Cache *)handle;
+            cache->dispatcher->async_switch_source(url_play,
+                boost::bind(&IDispatch::handle_async_switch, this, ctx, callback, _1));
+            return just_success;
+        }
+
+    void handle_async_switch(
+        PP_context ctx, 
+        JUST_Callback callback, 
+        boost::system::error_code const & ec)
+    {
+#ifndef JUST_ENABLE_REDIRECT_CALLBACK
+        callback(ctx, async_last_error(__FUNCTION__, ec));
+#else
+        redirect_open_callback(callback, ctx, async_last_error(__FUNCTION__, ec));
+#endif
+    }
+
         PP_err get_media_info(
             PP_handle handle, 
             JUST_MediaInfo & info)
@@ -366,6 +396,16 @@ extern "C" {
         JUST_Callback callback)
     {
         return dispatch().async_open(handle, url, format, ctx, callback);
+    }
+
+    JUST_DECL PP_err JUST_DispatchAsyncSwitchSource(
+        PP_handle handle, 
+        PP_str url, 
+        PP_str format, 
+        PP_context ctx, 
+        JUST_Callback callback)
+    {
+        return dispatch().async_switch_source(handle, url, format, ctx, callback);
     }
 
     JUST_DECL PP_err JUST_DispatchGetMediaInfo(

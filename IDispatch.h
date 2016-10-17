@@ -23,6 +23,12 @@ extern "C" {
         (PP_str, format), 
         (PP_context, ctx), 
         (JUST_Callback, callback)));
+    JUST_FUNC_5(PP_err, JUST_DispatchAsyncSwitchSource, (
+        (PP_handle, handle), 
+        (PP_str, url), 
+        (PP_str, format), 
+        (PP_context, ctx), 
+        (JUST_Callback, callback)));
 
     JUST_FUNC_2(PP_err, JUST_DispatchGetMediaInfo, (
         (PP_handle, handle), 

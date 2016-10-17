@@ -47,6 +47,7 @@
 		JUST_DispatchCreate;
 		JUST_DispatchOpen;
 		JUST_DispatchAsyncOpen;
+		JUST_DispatchAsyncSwitchSource;
 		JUST_DispatchPause;
 		JUST_DispatchResume;
 		JUST_DispatchSeek;
