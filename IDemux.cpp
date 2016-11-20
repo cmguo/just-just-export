@@ -9,7 +9,6 @@
 #include <just/mux/MuxModule.h>
 #include <just/mux/MuxerBase.h>
 #include <just/data/base/Error.h>
-#include <just/data/base/DataStat.h>
 #include <just/avbase/MediaInfo.h>
 #include <just/avbase/StreamStatus.h>
 using namespace just::data;
