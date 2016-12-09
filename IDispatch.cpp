@@ -16,6 +16,7 @@ using namespace framework::timer;
 
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
+#include <base/util/tools/Deleter.h>
 using namespace boost::system;
 
 extern void pool_dump();
@@ -327,7 +328,8 @@ namespace just
             if (!cache->sample.data.empty()) {
                 cache->dispatcher->free(cache->sample, ec);
             }
-            cache->dispatcher->close(ec);
+            cache->dispatcher->io_svc().post(
+                boost::bind(&DispatcherBase::close, cache->dispatcher, ec));
             return last_error(__FUNCTION__, ec);
         }
 
@@ -335,7 +337,8 @@ namespace just
             PP_handle handle)
         {
             Cache * cache = (Cache *)handle;
-            delete cache->dispatcher;
+            cache->dispatcher->io_svc().post(
+                boost::bind(util::tools::Deleter<DispatcherBase>(), cache->dispatcher));
             delete cache;
             return just_success;
         }
