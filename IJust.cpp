@@ -217,7 +217,7 @@ namespace just
             static std::string value;
             value.clear();
             if (NULL == module)
-                config().get(section, key, value);
+                config().get_force(section, key, value);
             else
                 config().get_ext_config(module, section, key, value);
             return value.c_str();

@@ -117,9 +117,10 @@ JUST_STRUCT_8(JUST_StreamInfo, (
     ));
 #endif
 
-JUST_ENUM_2(JUST_SampleFlag, (
+JUST_ENUM_3(JUST_SampleFlag, (
     (sync, 1),
-    (discontinuity, 2)
+    (discontinuity, 2),
+    (config,4)
 ));
 
 JUST_STRUCT_1(JUST_Error, (
