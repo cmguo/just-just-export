@@ -343,6 +343,18 @@ namespace just
             return just_success;
         }
 
+        PP_err dump(
+            PP_handle handle,
+            FILE *out,
+            int argc,
+            char ** argv)
+        {
+            LOG_DEBUG("[dump]");
+            Cache * cache = (Cache *)handle;
+            cache->dispatcher->dump(out, argc, argv);
+            return just_success;
+        }
+
         static error::errors async_last_error(
             PP_str log_title, 
             error_code const & ec)
@@ -477,6 +489,15 @@ extern "C" {
         PP_handle handle)
     {
         return dispatch().destroy(handle);
+    }
+
+    JUST_DECL PP_err JUST_DispatchDump(
+        PP_handle handle,
+        FILE * out,
+        int argc,
+        char ** argv)
+    {
+        return dispatch().dump(handle, out, argc, argv);
     }
 
 #if __cplusplus

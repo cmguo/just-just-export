@@ -68,6 +68,12 @@ extern "C" {
     JUST_FUNC_1(PP_err, JUST_DispatchDestroy, (
         (PP_handle, handle)));
 
+    JUST_FUNC_4(PP_err, JUST_DispatchDump, (
+        (PP_handle, handle),
+        (FILE *, out),
+        (int, argc),
+        (char **, argv)));
+
 #if __cplusplus
 }
 #endif // __cplusplus
