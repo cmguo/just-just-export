@@ -1,5 +1,8 @@
 // ICapture.cpp
 
+#ifndef JUST_DISABLE_DOWNLOAD
+#ifndef JUST_DISABLE_CAPTURE
+
 #include "just/export/Common.h"
 #include "just/export/ICapture.h"
 #include "just/export/Callback.h"
@@ -14,8 +17,6 @@ using namespace just::download;
 
 #include <boost/bind.hpp>
 using namespace boost::system;
-
-#ifndef JUST_DISABLE_CAPTURE
 
 namespace just
 {
@@ -241,5 +242,6 @@ extern "C" {
 }
 #endif // __cplusplus
 
+#endif
 #endif
 

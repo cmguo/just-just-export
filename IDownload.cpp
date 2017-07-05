@@ -1,5 +1,7 @@
 // IDownload.cpp
 
+#ifndef JUST_DISABLE_DOWNLOAD
+
 #include "just/export/Common.h"
 #include "just/export/IDownload.h"
 #include "just/export/Callback.h"
@@ -155,3 +157,4 @@ extern "C" {
 
 #endif
 
+#endif

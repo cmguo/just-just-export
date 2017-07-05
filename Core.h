@@ -5,8 +5,10 @@
 
 #include <just/data/DataModule.h>
 #include <just/demux/DemuxModule.h>
+#ifndef JUST_DISABLE_MERGE
 #include <just/merge/MergeModule.h>
-#  include <just/mux/MuxModule.h>
+#endif
+#include <just/mux/MuxModule.h>
 
 namespace just
 {
@@ -16,7 +18,9 @@ namespace just
     {
         util::daemon::use_module<just::data::DataModule>(daemon);
         util::daemon::use_module<just::demux::DemuxModule>(daemon);
+#ifndef JUST_DISABLE_MERGE
         util::daemon::use_module<just::merge::MergeModule>(daemon);
+#endif
         util::daemon::use_module<just::mux::MuxModule>(daemon);
     }
 

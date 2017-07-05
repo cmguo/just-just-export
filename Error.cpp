@@ -2,7 +2,9 @@
 
 #include "just/export/Common.h"
 
+#ifndef JUST_DISABLE_CERTIFY
 #include <just/certify/CertifyError.h>
+#endif
 #include <just/demux/base/DemuxError.h>
 #include <just/mux/MuxError.h>
 
@@ -31,8 +33,10 @@ namespace just
                 return operation_canceled;
             } else if (ec.category() == just::error::get_category()) {
                 return (error::errors)ec.value();
+#ifdef JUST_CERTIFY_ERROR_CERTIFY_ERRORS
             } else if (ec.category() == just::certify::error::get_category()) {
                 return certify_error;
+#endif
 #ifdef JUST_CERTIFY_ERROR_AUTH_ERRORS
             } else if (ec.category() == just::certify::error::get_auth_category()) {
                 return certify_error;
