@@ -58,6 +58,7 @@
 		JUST_DispatchGetDataStat;
 		JUST_DispatchClose;
 		JUST_DispatchDestroy;
+		JUST_DispatchDump;
 
 		JUST_CaptureCreate;
 		JUST_CaptureInit;
