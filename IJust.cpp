@@ -214,12 +214,16 @@ namespace just
             if (NULL == section || NULL == key) {
                 return NULL;
             }
-            static std::string value;
+            static boost::thread_specific_ptr<std::string> tp_string;
+            if(tp_string.get() == 0)
+                tp_string.reset(new std::string);
+            std::string &value = *(tp_string.get());
             value.clear();
             if (NULL == module)
                 config().get_force(section, key, value);
             else
                 config().get_ext_config(module, section, key, value);
+            LOG_DEBUG("[get_config]" << " str address " << tp_string.get() << " value: " << value.c_str());
             return value.c_str();
         }
 
