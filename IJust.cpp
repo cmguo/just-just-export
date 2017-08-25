@@ -33,6 +33,7 @@ using namespace framework::logger;
 
 #include <boost/asio/error.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/thread/tss.hpp>
 using namespace boost::system;
 
 FRAMEWORK_LOGGER_DECLARE_MODULE_LEVEL("just.IJust", framework::logger::Debug);
