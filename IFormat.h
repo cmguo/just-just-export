@@ -154,7 +154,7 @@ JUST_STRUCT_9(JUST_Sample, (
     (PP_uint, flags),            // Sample的标志
     (PP_ulong, time),             // Sample对应的时间戳, 单位是微妙
     (PP_ulong, decode_time),
-    (PP_uint, composite_time_delta),
+    (PP_int, composite_time_delta),
     (PP_uint, duration),
     (PP_uint, size),           // Sample的大小
     (PP_ubyte const *, buffer),    // Sample的内容
