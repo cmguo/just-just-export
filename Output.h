@@ -8,6 +8,7 @@
 #endif
 #ifndef JUST_DISABLE_HTTPD
 #  include <just/httpd/HttpdModule.h>
+#  include <just/httpd/HttpRecorderdModule.h>
 #endif
 #ifndef JUST_DISABLE_RTSPD
 #  include <just/rtspd/RtspdModule.h>
@@ -30,6 +31,7 @@ namespace just
 #endif
 #ifndef JUST_DISABLE_HTTPD
         util::daemon::use_module<just::httpd::HttpdModule>(daemon);
+        util::daemon::use_module<just::httpd::HttpRecorderdModule>(daemon);
 #endif
 #ifndef JUST_DISABLE_RTSPD
         util::daemon::use_module<just::rtspd::RtspdModule>(daemon);
