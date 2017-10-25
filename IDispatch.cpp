@@ -176,6 +176,7 @@ namespace just
                 info.bitrate = cache->media_info.bitrate;
                 info.format = cache->media_info.format_type.c_str();
                 info.format_data = cache->media_info.format_data.c_str();
+                info.flags = cache->media_info.flags;
             }
             return last_error(__FUNCTION__, ec);
         }

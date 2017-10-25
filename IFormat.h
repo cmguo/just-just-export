@@ -56,13 +56,24 @@ JUST_ENUM_5(JUST_FormatType, (
     (audio_adts, 2)
     ));
 
-JUST_STRUCT_6(JUST_MediaInfo, (
+JUST_STRUCT_7(JUST_MediaInfo, (
     (PP_ulong, file_size), 
     (PP_ulong, duration), 
     (PP_uint, head_size), 
     (PP_uint, bitrate), 
     (PP_str, format), 
-    (PP_str, format_data)
+    (PP_str, format_data),
+    (PP_uint,flags) 
+    ));
+
+JUST_ENUM_7(JUST_MediaInfoFlags, (
+    (seekable, 1),
+    (pauseable, 2),
+    (is_live, 4),
+    (multi_stream, 8),
+    (extend, 0xf00),
+    (segment, 0x100),
+    (packet, 0x200)
     ));
 
 JUST_STRUCT_4(JUST_VideoInfo, (
